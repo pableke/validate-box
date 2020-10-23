@@ -1,0 +1,38 @@
+{
+  "name": "validate-box",
+  "version": "0.0.1",
+  "description": "Same I18n validation on server and client",
+  "main": "./src/main.js",
+  "scripts": {
+    "static": "gulp",
+    "dev": "nodemon ./src/index.js",
+    "zip": "rm validate-box.zip & npm-pack-zip",
+    "test": "node ./src/index.js"
+  },
+  "keywords": [
+    "validate",
+    "validations",
+    "i18n",
+    "internationalization",
+    "date",
+    "number",
+    "float"
+  ],
+  "author": "Pablo Rosique Vidal",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pableke/validation-box.git"
+  },
+  "bugs": {
+    "url": "https://github.com/pableke/validation-box/issues"
+  },
+  "homepage": "https://github.com/pableke/validation-box#readme",
+  "devDependencies": {
+    "gulp": "^4.0.2",
+    "gulp-clean-css": "^4.3.0",
+    "gulp-concat": "^2.6.1",
+    "nodemon": "^2.0.6",
+    "npm-pack-zip": "^1.2.7"
+  }
+}
