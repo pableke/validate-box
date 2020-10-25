@@ -1,4 +1,4 @@
-# Validation-Box
+# Validate-Box
 Same I18n validation on server and client for web applications.
 
 ## How It Works

@@ -137,12 +137,31 @@ $(document).ready(function() {
 		ev.preventDefault();
 		let loading = $(".loading").show();
 		let fn = loaders[this.getAttribute("data-loader-name")] || setSuccess;
-		vb.fetch(this, mb.get("form")) //js ajax call
-			.then(res => { //spect text and load message
-				return res.ok ? res.text().then(fn) : res.text().then(setDanger);
-			})
-			.catch(setDanger) //error handler
-			.finally(() => loading.fadeOut()); //allways
+		let inputs = this.closest("form").elements;
+		if (vb.validate(inputs)) {
+			if (grecaptcha && elem.classList.contains("captcha")) {
+				grecaptcha.ready(function() {
+					grecaptcha.execute("6LeDFNMZAAAAAKssrm7yGbifVaQiy1jwfN8zECZZ", {
+						action: "submit"
+					}).then(token => {
+						return vb.fetch(ev.target, inputs, { token });
+					})
+					.then(res => { //text spected and load message
+						return res.ok ? res.text().then(fn) : res.text().then(setDanger);
+					})
+					.catch(setDanger)
+					.finally(() => loading.fadeOut()); //allways
+				});
+			}
+			else {
+				vb.fetch(ev.target, inputs)
+				.then(res => { //text spected and load message
+					return res.ok ? res.text().then(fn) : res.text().then(setDanger);
+				})
+				.catch(setDanger)
+				.finally(() => loading.fadeOut()); //allways
+			}
+		}
 	});
 
 	//Scroll body to top on click and toggle back-to-top arrow

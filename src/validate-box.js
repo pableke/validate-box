@@ -191,34 +191,27 @@ module.exports = function(opts) {
 		return ok;
 	}
 
-	this.fetch = function(elem, inputs, fd, errText) {
-		//let inputs = form.querySelectorAll("." + opts.prefixSubClass + elem.id);
-		//inputs = inputs.length ? inputs : form.elements;
-		if (this.validate(inputs)) {
-			let form = elem.closest("form"); //parent form tag
-			fd = fd || new FormData(form); //build pair key/value
-			let opts = { method: form.getAttribute("method") || "get", headers: {} }; //ajax options
-			opts.headers["Content-Type"] = form.getAttribute("enctype") || "application/x-www-form-urlencoded"; //encode
+	this.fetch = function(elem, inputs, data) {
+		const CT = "application/x-www-form-urlencoded";
+		const opts = { method: "get", headers: { "Content-Type": CT } };  //init options
+		let fd = new FormData(); //build pair key/value
+		inputs.forEach(el => { fd.append(el.name, el.value); });
+		for (let k in data) fd.append(k, data[k]); //add extra data to send
+		let form = elem.closest("form"); //parent form tag
+		if (form) {
+			opts.method = form.getAttribute("method") || "get"; //ajax options
+			opts.headers["Content-Type"] = form.getAttribute("enctype") || CT; //encode
 			opts.body = (opts.headers["Content-Type"] == "multipart/form-data") ? fd : new URLSearchParams(fd);
-			return fetch(elem.href || form.getAttribute("action"), opts)
-					.then(res => { if (res.ok) self.reset(inputs); self.focus(inputs); return res; });
-
-			/*if (grecaptcha && elem.classList.contains("captcha")) {
-				return new Promise((resolve, reject) => {
-					grecaptcha.ready(function() {
-						grecaptcha.execute("6LeDFNMZAAAAAKssrm7yGbifVaQiy1jwfN8zECZZ", {
-							action: "submit"
-						}).then(function(token) {
-							fd.append("token", token);
-							resolve();
-						});
-					});
-				}).then(fnFetch);
-			}
-			else
-				return fnFetch();*/
+			opts.url = elem.href || form.getAttribute("action");
 		}
-		//invalid inputs in form
-		return Promise.reject(errText || "Invallid Form!");
+		else {
+			opts.body = new URLSearchParams(fd);
+			opts.url = elem.href;
+		}
+		return fetch(opts.url, opts).then(res => {
+			res.ok && self.reset(inputs);
+			self.focus(inputs);
+			return res;
+		});
 	}
 }
