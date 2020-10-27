@@ -1,4 +1,5 @@
 # Validate-Box
+
 Same I18n validation on server and client for web applications.
 
 ## How It Works
@@ -17,7 +18,7 @@ Suitable for web applications with a great variety of forms.
 1. Install by npm:
 
     ```sh
-    $ npm install validation-box
+    $ npm install validate-box
     ```
 
 </details>

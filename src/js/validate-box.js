@@ -22,7 +22,10 @@ function ValidateBox(opts) {
 		//container
 		validators: {}
 	}
+
 	opts = Object.assign({}, SETTINGS, opts); //congig is optional
+	this.getConfig = function() { return opts; } //get current config
+	this.setConfig = function(data) { Object.assign(opts, data); return this; }
 
 	/*function isnum(str) { return !isNaN(str); } //0 = true
 	function intval(val) { return parseInt(val) || 0; }
@@ -42,7 +45,7 @@ function ValidateBox(opts) {
 		return (min <= size) && (size <= max);
 	}
 
-	this.regex = function(elemval) { return reTest(opts[attrval], elemval); }
+	this.regex = function(re, value) { return reTest(re, value); }
 	this.login = function(elemval) { return reTest(opts.RE_LOGIN, elemval); }
 	this.email = function(elemval) { return reTest(opts.RE_MAIL, elemval); }
 	this.digits = function(elemval) { return reTest(opts.RE_DIGITS, elemval); }
@@ -195,7 +198,11 @@ function ValidateBox(opts) {
 		const CT = "application/x-www-form-urlencoded";
 		const opts = { method: "get", headers: { "Content-Type": CT } };  //init options
 		let fd = new FormData(); //build pair key/value
-		inputs.forEach(el => { fd.append(el.name, el.value); });
+		let size = fnSize(inputs); //length
+		for (let i = 0; i < size; i++) {
+			let el = inputs[i]; //element
+			fd.append(el.name, el.value);
+		}
 		for (let k in data) fd.append(k, data[k]); //add extra data to send
 		let form = elem.closest("form"); //parent form tag
 		if (form) {

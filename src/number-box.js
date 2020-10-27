@@ -1,6 +1,6 @@
 
 //Number Box extensions
-module.exports = function() {
+module.exports = function NumberBox(lang) {
 	const self = this; //self instance
 	const RE_SECTION = /\D+/g; //remove no digits
 	const EMPTY = "";
@@ -88,4 +88,7 @@ module.exports = function() {
 	this.range = function(val, min, max) { return Math.max(Math.min(val, max), min); }
 	this.rand = function(min, max) { return Math.random() * (max - min) + min; }
 	this.round = fnRound;
+
+	//load default language
+	self.setI18n(lang);
 }

@@ -1,6 +1,6 @@
 
 //Date-Time Box extensions
-module.exports = function() {
+module.exports = function DateBox(lang) {
 	const self = this; //self instance
 	const sysdate = new Date(); //global sysdate
 	const auxdate = new Date(); //auxiliar date calc
@@ -210,4 +210,7 @@ module.exports = function() {
 	//update prototype
 	var dp = Date.prototype;
 	dp.toJSON = function() { return self.dfIso(this); }
+
+	//load default language
+	self.setI18n(lang);
 }

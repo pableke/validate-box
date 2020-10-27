@@ -126,42 +126,41 @@ $(document).ready(function() {
 
 	$("form").submit(function(ev) {
 		$(this.querySelectorAll(".invalid-feedback")).text(""); //clear previous messages
-		let ok = vb.validate(this.querySelectorAll("input:not([type=file]),textarea,select"));
-		return ok ? $(".loading").show() : setDanger(mb.get("form"));
-	}).each(function() { //show error messages from server
+		return vb.validate(this.elements) ? $(".loading").show() : setDanger(mb.get("form"));
+	}).each(function() {
+		//show error messages from server
 		$(this.querySelectorAll(".invalid-feedback:not(:empty)")).siblings(":input").addClass("is-invalid");
-	});
 
-	let loaders = {}; //response handler
-	$(".ajax-submit").click(function(ev) {
-		ev.preventDefault();
-		let loading = $(".loading").show();
-		let fn = loaders[this.getAttribute("data-loader-name")] || setSuccess;
-		let inputs = this.closest("form").elements;
-		if (vb.validate(inputs)) {
-			if (grecaptcha && elem.classList.contains("captcha")) {
-				grecaptcha.ready(function() {
-					grecaptcha.execute("6LeDFNMZAAAAAKssrm7yGbifVaQiy1jwfN8zECZZ", {
-						action: "submit"
-					}).then(token => {
-						return vb.fetch(ev.target, inputs, { token });
-					})
+		//initialize ajax call
+		let loaders = {}; //response handler
+		let inputs = this.elements;
+		$(".ajax-submit", this).click(function(ev) {
+			ev.preventDefault();
+			if (vb.validate(inputs)) {
+				let loading = $(".loading").show();
+				let fn = loaders[this.id] || setSuccess;
+				if (grecaptcha && this.classList.contains("captcha")) {
+					grecaptcha.ready(function() {
+						grecaptcha.execute("6LeDFNMZAAAAAKssrm7yGbifVaQiy1jwfN8zECZZ", {
+							action: "submit"
+						})
+						.then(token => vb.fetch(ev.target, inputs, { token }).finally(() => loading.fadeOut()))
+						.then(res => { //text spected and load message
+							return res.ok ? res.text().then(fn) : res.text().then(setDanger);
+						})
+						.catch(setDanger);
+					});
+				}
+				else {
+					vb.fetch(this, inputs)
 					.then(res => { //text spected and load message
 						return res.ok ? res.text().then(fn) : res.text().then(setDanger);
 					})
 					.catch(setDanger)
 					.finally(() => loading.fadeOut()); //allways
-				});
+				}
 			}
-			else {
-				vb.fetch(ev.target, inputs)
-				.then(res => { //text spected and load message
-					return res.ok ? res.text().then(fn) : res.text().then(setDanger);
-				})
-				.catch(setDanger)
-				.finally(() => loading.fadeOut()); //allways
-			}
-		}
+		});
 	});
 
 	//Scroll body to top on click and toggle back-to-top arrow
