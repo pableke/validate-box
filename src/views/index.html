@@ -11,7 +11,7 @@
 	<!-- Styles css bootstrap -->
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-	<link rel="stylesheet" type="text/css" href="src/css/style.min.css" />
+	<link rel="stylesheet" type="text/css" href="css/style.min.css" />
 
 	<!-- jQuery -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -24,70 +24,106 @@
 	<!-- SCROOLL REVEAL JS LIBRARY CDN -->
 	<script src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js"></script>
 	<!-- local JS -->
-	<script type="text/javascript" src="src/js/multi-box.min.js"></script>
+	<script type="text/javascript" src="js/multi-box.min.js"></script>
 </head>
 <body>
 
-	<div class="jumbotron m-4">
-		<h5>Contact Form</h5>
-		<hr class="my-4"/>
+<div class="jumbotron m-4">
+	<h5>Form</h5>
+	<hr class="my-4"/>
 
-		<form id="contact" action="/contact.html" method="post">
-			<div class="form-row m-3">
-				<div class="form-group col-md-3">
-					<label for="nombre" class="required">@lblNombre;:</label>
-					<div class="input-group">
-						<input type="text" id="nombre" name="nombre" value="" size="40" maxlength="200" class="form-control" tabindex="1" title="@titNombre;" placeholder="@phNombre;" />
-						<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fas fa-signature"></i></span></div>
-						<span class="invalid-feedback">@nombreErrText;</span>
-					</div>
-				</div>
-			</div>
-
-			<div class="form-group col-md-5">
-				<label for="email" class="required">@lblCorreo;</label>
+	<form id="test" action="/test.html" method="post">
+		<div class="form-row m-3">
+			<div class="form-group col-md-3">
+				<label for="name" class="required">Name:</label>
 				<div class="input-group">
-					<input type="text" id="email" name="email" value="" size="50" maxlength="200" tabindex="2" class="form-control" title="@titCorreo;" placeholder="@phCorreo;" />
-					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-envelope"></i></span></div>
-					<div class="invalid-feedback">@emailErrText;</div>
-				</div>
-				<small>@ejCorreo;</small>
-			</div>
-
-			<div class="form-row m-3">
-				<div class="form-group col-md-3">
-					<label for="asunto" class="required">@lblAsunto;:</label>
-					<input type="text" id="asunto" name="asunto" value="" size="40" maxlength="200" class="form-control" tabindex="3" title="@titAsunto;" placeholder="@phAsunto;" />
-					<span class="invalid-feedback">@asuntoErrText;</span>
+					<input type="text" id="name" name="name" value="" size="40" maxlength="200" class="form-control" tabindex="1" title="User name" placeholder="Joe" />
+					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fas fa-signature"></i></span></div>
+					<span class="invalid-feedback"></span>
 				</div>
 			</div>
+		</div>
 
-			<div class="form-group col-md-4">
-				<label for="info" class="required">Comentarios:</label>
-				<textarea id="info" class="form-control" tabindex="7" cols="62" rows="6" maxlength="600"></textarea>
-					<span class="invalid-feedback">@infoErrText;</span>
-				<p>Nº de caracteres restantes = <span id="counter-info">600</span></p>
+		<div class="form-group col-md-5">
+			<label for="email" class="required">E-Mail</label>
+			<div class="input-group">
+				<input type="text" id="email" name="email" value="" size="50" maxlength="200" tabindex="2" class="form-control" title="Type your email" placeholder="xxxx@yyyy.com" />
+				<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-envelope"></i></span></div>
+				<div class="invalid-feedback"></div>
 			</div>
+		</div>
 
-			<hr/>
-			<button type="submit" class="btn btn-primary ajax-submit" tabindex="100" title="@titAcceder;">@lblEnviar; &raquo;</button>
-			<button type="reset" class="btn btn-light ml-2" tabindex="101" title="@titRestaurar;">&olarr; @lblLimpiar;</button>
-			<!-- Example single danger button -->
-			<div class="btn-group ml-2">
-				<button type="button" class="btn btn-danger dropdown-toggle" tabindex="102" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-				<div class="dropdown-menu">
-					<a class="dropdown-item" href="#">Action</a>
-					<a class="dropdown-item" href="#">Another action</a>
-					<a class="dropdown-item" href="#">Something else here</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">Separated link</a>
-				</div>
+		<div class="form-group col-md-6">
+			<label for="ac1" class="required">jQuery Auto Suggest Textbox with Bootstrap 4</label>
+			<div class="input-group">
+				<div class="input-group-prepend"><span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span></div>
+				<input type="text" id="ac1" value="" size="15" tabindex="3" 
+					class="form-control input-lg autocomplete" placeholder="Search..." title="Autocomplete country textbox" />
+				<div class="input-group-append clear-input d-none"><button class="btn btn-outline-secondary" type="button" id="button-addon2">&times;</button></div>
+				<input type="hidden" id="idUsuario" name="idUsuario" value="kk" />
 			</div>
-			<button href="contact.html?number=14,63" class="ajax btn btn-success ml-2" tabindex="103">Ajax Send &raquo;</button>
-		</form>
+		</div>
 
-		<div append="src/tpl/forms/public/links.html" />
-	</div>
-    
+		<div class="form-group col-md-2">
+			<label for="date" class="required">Date:</label>
+			<div class="input-group">
+				<input type="text" id="date" name="date" value="" size="40" maxlength="10" tabindex="3" 
+					class="form-control datepicker" placeholder="format-lang" />
+				<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fa fa-calendar"></i></span></div>
+				<div class="invalid-feedback"></div>
+			</div>
+			<small>ej: @ejDate;</small>
+		</div>
+
+		<div class="form-group col-md-2">
+			<label for="time">Time:</label>
+			<div class="input-group">
+				<input id="time" type="text" value="" tabindex="4" class="form-control date datepicker" />
+				<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span></div>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="f1">Date Range:</label>
+			<div class="input-group">
+				<input type="text" id="f1" name="f1" class="form-control" value="2012-04-05" tabindex="5" />
+				<div class="input-group-append"><span class="input-group-text" id="basic-addon2">...</span></div>
+				<input type="text" id="f2" name="f2" class="form-control" value="2012-04-19" tabindex="6" />
+			</div>
+		</div>
+
+		<div class="form-row m-3">
+			<div class="form-group col-md-3">
+				<label for="subject" class="required">Subject:</label>
+				<input type="text" id="subject" name="subject" value="" size="40" maxlength="200" class="form-control" tabindex="3" placeholder="Type a resume" />
+				<span class="invalid-feedback"></span>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="info" class="required">Comentarios:</label>
+			<textarea id="info" class="form-control" tabindex="7" cols="62" rows="6" maxlength="600"></textarea>
+				<span class="invalid-feedback"></span>
+			<p>Nº de caracteres restantes = <span id="counter-info">600</span></p>
+		</div>
+
+		<hr/>
+		<button type="submit" class="btn btn-primary" tabindex="100">Send &raquo;</button>
+		<button type="reset" class="btn btn-light ml-2" tabindex="101">&olarr; Clear</button>
+		<!-- Example single danger button -->
+		<div class="btn-group ml-2">
+			<button type="button" class="btn btn-danger dropdown-toggle" tabindex="102" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+			<div class="dropdown-menu">
+				<a class="dropdown-item" href="#">Action</a>
+				<a class="dropdown-item" href="#">Another action</a>
+				<a class="dropdown-item" href="#">Something else here</a>
+				<div class="dropdown-divider"></div>
+				<a class="dropdown-item" href="#">Separated link</a>
+			</div>
+		</div>
+		<button href="contact.html?number=14,63" class="ajax-submit btn btn-success ml-2" tabindex="103">Ajax Send &raquo;</button>
+	</form>
+</div>
+
 </body>
 </html>

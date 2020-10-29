@@ -4,21 +4,85 @@ Same I18n validation on server and client for web applications.
 
 ## How It Works
 
-1. Validate inputs in form HTML.
+1. Validate inputs in HTML form.
 2. Fetch response to server optionally by ajax.
 
 ## Usage
 
 ### JS Applications
 
-Suitable for web applications with a great variety of forms.
+Suitable for web apps with a great variety of forms.
 
 <details><summary><b>Show instructions</b></summary>
 
 1. Install by npm:
 
-    ```sh
+    ```
     $ npm install validate-box
     ```
 
 </details>
+
+## Config
+
+Tree-Ss cahe index template, charset and static file age
+
+1. trees.start():
+
+	```
+	const fs = require("fs"); //file system
+	const url = require("url"); //url parser
+	const http = require("http"); //http server
+	const qs = require("querystring"); //parse post data
+	const valid = require("validate-box"); //validator
+
+	const _maxFieldsSize= 20 * 1024 * 1024; //20mb
+
+	//create server instance
+	const server = http.createServer(function(req, res) {
+		let parts = url.parse(req.url.toLowerCase(), true); //parse url
+		let pathname = parts.pathname; //https://example.org/abc/xyz?123 = /abc/xyz
+		//Static request => res.end()
+		if (pathname.indexOf("/favicon.ico") > -1)
+			return res.end(); //ignore icon request
+		if ((pathname.indexOf("/css/") > -1) || (pathname.indexOf("/js/") > -1))
+			return res.end(fs.readFileSync(__dirname + pathname).toString());
+
+		valid.setI18n(parts.query.lang);
+		if (req.method == "POST") { //post request
+			let rawData = ""; //buffer
+			req.on("data", function(chunk) {
+				rawData += chunk;
+				if (rawData.length > _maxFieldsSize) { //20mb
+					delete rawData; //free body memory
+					req.connection.destroy(); //FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
+				}
+			});
+			req.on("end", function() {
+				req.body = (req.headers["content-type"] == "application/json") ? JSON.parse(rawData) : qs.parse(rawData);
+				console.log("----------", "Validating", "----------");
+				console.log(req.body);
+				console.log("----------", "Results", "----------");
+				let fields = req.body; //request fields
+				let error = valid.vb.size(fields.name, 1, 200) ? null : "Field name ame tot valid";
+				error = valid.vb.size(fields.subject, 0, 200) ? error : "Field subject not valid";
+				error = (fields.email && valid.vb.email(fields.email)) ? error : "Invalid email format";
+				error = fields.idUsuario ? error : "User is required";
+				let id = error ? 0 : valid.nf.toFloat(fields.idUsuario);
+				if (id <= 0) error = "User not found";
+				console.log("Error:", error);
+				res.end(error);
+			});
+		}
+		else //get request
+			res.end(fs.readFileSync("src/views/index.html"), "text/html", () => {
+				console.log(req.url, "->", "src/views/index.html");
+			});
+	});
+	```
+
+### test
+
+```
+npm test
+```

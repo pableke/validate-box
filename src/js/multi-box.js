@@ -848,6 +848,8 @@ $(document).ready(function() {
 					.finally(() => loading.fadeOut()); //allways
 				}
 			}
+			else
+				setDanger(mb.get("form"));
 		});
 	});
 
