@@ -16,8 +16,8 @@ $(document).ready(function() {
 		});
 		//add triangles in the second tree level deep
 		let triangles = $("li>ul", menu).find("ul.sub-menu").prev().append(' <b class="nav-tri">&rtrif;</b>').find("b.nav-tri");
-		$(menu.children).remove("[parent][parent!='']"); //remove sub-levels
-		$("a.nav-link").hover(function() {
+		$(menu.children, menu).remove("[parent][parent!='']"); //remove sub-levels
+		$("a.nav-link", menu).hover(function() {
 			triangles.html("&rtrif;");
 			$("b.nav-tri", this).html("&dtrif;");
 			$(this).parents("ul.sub-menu").each(function() {
