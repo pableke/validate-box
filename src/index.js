@@ -32,16 +32,20 @@ const server = http.createServer(function(req, res) {
 			req.body = (req.headers["content-type"] == "application/json") ? JSON.parse(rawData) : qs.parse(rawData);
 			console.log("----------", "Validating", "----------");
 			console.log(req.body);
-			console.log("----------", "Results", "----------");
+
+			let error = {}; //err container
 			let fields = req.body; //request fields
-			let error = valid.vb.size(fields.name, 1, 200) ? null : "Field name ame tot valid";
-			error = valid.vb.size(fields.subject, 0, 200) ? error : "Field subject not valid";
-			error = (fields.email && valid.vb.email(fields.email)) ? error : "Invalid email format";
-			error = fields.idUsuario ? error : "User is required";
-			let id = error ? 0 : valid.nf.toFloat(fields.idUsuario);
-			if (id <= 0) error = "User not found";
-			console.log("Error:", error);
-			res.end(error);
+			error.name = valid.vb.size(fields.name, 1, 200) || "Field name ame tot valid";
+			error.subject = valid.vb.size(fields.subject, 0, 200) || "Field subject not valid";
+			error.email = (fields.email && valid.vb.email(fields.email)) || "Invalid email format";
+			error.idUsuario = fields.idUsuario || "User is required";
+			error.id = error.idUsuario ? valid.nb.toFloat(fields.idUsuario) : 0;
+			if (error.id <= 0)
+				error.idUsuario = "User not found";
+			res.end(JSON.stringify(error), "application/json", () => {
+				console.log("----------", "Results", "----------");
+				console.log("Error:", error);
+			});
 		});
 	}
 	else //get request
