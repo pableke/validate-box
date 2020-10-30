@@ -25,7 +25,7 @@ function ValidateBox(opts) {
 
 	opts = Object.assign({}, SETTINGS, opts); //congig is optional
 	this.getConfig = function() { return opts; } //get current config
-	this.setConfig = function(data) { Object.assign(opts, data); return this; }
+	this.setConfig = function(data) { Object.assign(opts, data); return self; }
 
 	/*function isnum(str) { return !isNaN(str); } //0 = true
 	function intval(val) { return parseInt(val) || 0; }

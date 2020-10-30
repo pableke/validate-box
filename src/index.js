@@ -44,7 +44,7 @@ const server = http.createServer(function(req, res) {
 				error.idUsuario = "User not found";
 			res.end(JSON.stringify(error), "application/json", () => {
 				console.log("----------", "Results", "----------");
-				console.log("Error:", error);
+				console.log(error);
 			});
 		});
 	}
