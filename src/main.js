@@ -15,4 +15,4 @@ vb.setI18n = function(lang) {
 	return this;
 }
 
-module.exports = vb.setConfig;
+module.exports = vb;
