@@ -33,6 +33,9 @@ module.exports = function DateBox(lang) {
 
 	const langs = {
 		en: { //english
+			closeText: "close", prevText: "prev", nextText: "next", currentText: "current", ancientText: "ancient", 
+			lastYear: "last year", currentYear: "this year", lastMonth: "last month", currentMonth: "this month", lastWeek: "last week", currentWeek: "this week", 
+			yesterdayText: "yesterday", todayText: "today", lastHours: "two hours ago", currentHour: "one hour ago", justNow: "just now", 
 			monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 			dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -53,6 +56,9 @@ module.exports = function DateBox(lang) {
 		},
 
 		es: { //spain
+			closeText: "cerrar", prevText: "prev.", nextText: "sig.", currentText: "actual", ancientText: "antiguo", 
+			lastYear: "el año pasado", currentYear: "este año", lastMonth: "el mes pasado", currentMonth: "este mes", lastWeek: "la semana pasada", currentWeek: "esta semana", 
+			yesterdayText: "ayer", todayText: "hoy", lastHours: "hace dos horas", currentHour: "hace una hora", justNow: "justo ahora", 
 			monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
 			monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
 			dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
@@ -206,6 +212,17 @@ module.exports = function DateBox(lang) {
 	this.rand = function(d1, d2) { let t1 = d1.getTime(); return new Date(intval(Math.random() * (d2.getTime() - t1) + t1)); }
 	this.min = function(d1, d2) { return (d1 && d2) ? ((d1 < d2) ? d1 : d2) : nvl(d1, d2); }
 	this.max = function(d1, d2) { return (d1 && d2) ? ((d1 < d2) ? d2 : d1) : nvl(d1, d2); }
+	this.timeAgo = function(date, values) {
+		let diff = self.diff(date);
+		if (diff[0] > 2) return _lang.ancientText;
+		if (diff[0] == 1) return _lang.lastYear;
+		if (diff[1] > 2) return _lang.currentYear;
+		if (diff[1] == 1) return _lang.lastMonth;
+		if (diff[2] > 14) return _lang.currentMonth;
+		if (diff[2] > 7) return _lang.lastWeek;
+		if (diff[2] > 1) return _lang.currentWeek;
+		return _lang.justNow;
+	}
 
 	//update prototype
 	var dp = Date.prototype;

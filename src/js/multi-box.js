@@ -241,6 +241,13 @@ function DateBox(lang) {
 
 	const langs = {
 		en: { //english
+			closeText: "close", prevText: "prev", nextText: "next", currentText: "current",
+			ancientText: "ancient", lastYear: "last year", currentYear: "this year", nextYear: "next year", 
+			lastMonth: "last month", currentMonth: "this month", nextMonth: "next month", 
+			lastWeek: "last week", currentWeek: "this week", nextWeek: "next week", 
+			yesterdayText: "yesterday", todayText: "today", tomorrowText: "tomorrow", 
+			lastHour: "last hour", currentHour: "less than an hour", nextHour: "next hour", 
+			last30Min: "less than half an hour", justNow: "just now", next30Min: "next half hour", futureText: "in a future", 
 			monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
 			monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
 			dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -261,6 +268,13 @@ function DateBox(lang) {
 		},
 
 		es: { //spain
+			closeText: "cerrar", prevText: "prev.", nextText: "sig.", currentText: "actual", 
+			ancientText: "antiguo", lastYear: "el año pasado", currentYear: "este año", nextYear: "el año que viene", 
+			lastMonth: "el mes pasado", currentMonth: "este mes", nextMonth: "el mes que viene", 
+			lastWeek: "la semana pasada", currentWeek: "esta semana", nextWeek: "la semana que viene", 
+			yesterdayText: "ayer", todayText: "hoy", tomorrowText: "mañana", 
+			lastHour: "hace una hora", currentHour: "en menos de una hora", nextHour: "en la siguiente hora",
+			last30Min: "hace menos de media hora", justNow: "justo ahora", next30Min: "en la siguiente media hora", futureText: "en un futuro",
 			monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
 			monthNamesShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
 			dayNames: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
@@ -346,8 +360,8 @@ function DateBox(lang) {
 	this.daysInMonth = function(date) { date = date || sysdate; return daysInMonth(date.getFullYear(), date.getMonth()); }
 	this.dayOfYear = function(date) { date = date || sysdate; return dayOfYear(date.getFullYear(), date.getMonth(), date.getDate()); }
 	this.daysInYear = function(date) { return isLeapYear((date || sysdate).getFullYear()) ? 366 : 365; }
-	this.weekOfYear = function(date) { return Math.ceil((fnDay1(date.getFullYear(), 0) + self.dayOfYear(date)) / 7); }
-	this.weekOfMonth = function(date) { return Math.ceil((fnDay1(date.getFullYear(), date.getMonth()) + date.getDate()) / 7); }
+	this.weekOfYear = function(date) { date = date || sysdate; return Math.ceil((fnDay1(date.getFullYear(), 0) + self.dayOfYear(date)) / 7); }
+	this.weekOfMonth = function(date) { date = date || sysdate; return Math.ceil((fnDay1(date.getFullYear(), date.getMonth()) + date.getDate()) / 7); }
 	this.endDay = function(date) { date && date.setHours(23, 59, 59, 999); return self; } //last moment of day
 
 	//format output functions
@@ -378,42 +392,89 @@ function DateBox(lang) {
 	this.tHelper = function(val) { return val && val.replace(/(\d\d)(\d+)$/g, "$1:$2").replace(/[^\d\:]/g, ""); } //time helper
 
 	this.addMilliseconds = function(date, val) { date && date.setMilliseconds(date.getMilliseconds() + val); return self; }
+	this.addMinutes = function(date, val) { date && date.setMinutes(date.getMinutes() + val); return self; }
 	this.addHours = function(date, val) { date && date.setHours(date.getHours() + val); return self; }
 	this.addDays = function(date, val) { date && date.setDate(date.getDate() + val); return self; }
 	this.addDate = self.addDays; //sinonym
+	this.addMonths = function(date, val) { date && date.setMonth(date.getMonth() + val); return self; }
 	this.toArray = function(date) {
 		return [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()];
 	}
 
-	const ajustes = [0, 12, 0, 24, 60, 60, 1000]; //years, months, days, hours...
-	function fnAjustar(result, i, val) {
-		result[i] -= val;
-		if (result[i] < 0) {
-			result[i] += ajustes[i];
-			fnAjustar(result, i-1, 1);
-		}
-	}
 	this.diff = function(d1, d2) {
 		d2 = d2 || sysdate;
-		if (d1 > d2) //swap
-			return self.diff(d2, d1);
-		var result = self.toArray(d2); //date parts
-		ajustes[2] = self.daysInMonth(d1) - d1.getDate() + d2.getDate();
-		self.toArray(d1).forEach((p, i) => { fnAjustar(result, i, p); });
-		return result;
+		let _diff = Math.abs(d1 - d2);
+		let ms = _diff % 1000;
+		_diff = (_diff - ms) / 1000;
+		let ss = _diff % 60;
+		_diff = (_diff - ss) / 60;
+		let MM = _diff % 60;
+		_diff = (_diff - MM) / 60;
+		let hh = _diff % 24;
+		let dd = (d1.getMonth() == d2.getMonth()) ? Math.abs(d1.getDate() - d2.getDate()) : (self.daysInMonth(d1) - d1.getDate());
+		let mm = Math.abs(d1.getMonth() - d2.getMonth());
+		let yyyy = Math.abs(d1.getFullYear() - d2.getFullYear());
+		return [yyyy, mm, dd, hh, MM, ss, ms];
 	}
 	this.diffDays = function(d1, d2) { return d2 ? (Math.abs(d2.getTime() - d1.getTime()) / 864e5) : 0; } //(1000 * 3600 * 24)
 	this.diffHours = function(d1, d2) { return d2 ? (Math.abs(d2.getTime() - d1.getTime()) / 36e5) : 0; } //(1000 * 3600)
 	this.inYear = function(d1, d2) { return d1 && d2 && (d1.getFullYear() == d2.getFullYear()); }
 	this.inMonth = function(d1, d2) { return self.inYear(d1, d2) && (d1.getMonth() == d2.getMonth()); }
-	this.inWeek = function(d1, d2) { return self.inMonth(d1, d2) && (self.weekOfYear(d1) == self.weekOfYear(d2)); }
+	this.inWeek = function(d1, d2) { return self.inYear(d1, d2) && (self.weekOfYear(d1) == self.weekOfYear(d2)); }
 	this.inDay = function(d1, d2) { return self.inMonth(d1, d2) && (d1.getDate() == d2.getDate()); }
 	this.inHour = function(d1, d2) { return self.inDay(d1, d2) && (d1.getHours() == d2.getHours()); }
+	this.inMinute = function(d1, d2) { return self.inHour(d1, d2) && (d1.getMinutes() == d2.getMinutes()); }
 	this.between = function(date, dMin, dMax) { dMin = dMin || date; dMax = dMax || date; return (dMin <= date) && (date <= dMax); }
 	this.range = function(date, dMin, dMax) { return (dMin && (date < dMin)) ? dMin : ((dMax && (dMax < date)) ? dMax : date); }
 	this.rand = function(d1, d2) { let t1 = d1.getTime(); return new Date(intval(Math.random() * (d2.getTime() - t1) + t1)); }
 	this.min = function(d1, d2) { return (d1 && d2) ? ((d1 < d2) ? d1 : d2) : nvl(d1, d2); }
 	this.max = function(d1, d2) { return (d1 && d2) ? ((d1 < d2) ? d2 : d1) : nvl(d1, d2); }
+
+	let _tempdate = new Date();
+	this.timeAgo = function(date) {
+		if (date > sysdate) return self.timeTo(date);
+		if (self.inMinute(date, sysdate)) return _lang.justNow;
+		self.init(_tempdate, date).addMinutes(_tempdate, 30);
+		if (_tempdate > sysdate) return _lang.last30Min;
+		self.init(_tempdate, date).addHours(_tempdate, 1);
+		if (_tempdate > sysdate) return _lang.currentHour;
+		if (self.inHour(_tempdate, sysdate)) return _lang.lastHour;
+		if (self.inDay(date, sysdate)) return _lang.todayText;
+		self.init(_tempdate, date).addDays(_tempdate, 1);
+		if (self.inDay(_tempdate, sysdate)) return _lang.yesterdayText;
+		if (self.inWeek(date, sysdate)) return _lang.currentWeek;
+		self.init(_tempdate, date).addDays(_tempdate, 7);
+		if (self.inWeek(_tempdate, sysdate)) return _lang.lastWeek;
+		if (self.inMonth(date, sysdate)) return _lang.currentMonth;
+		self.init(_tempdate, date).addMonths(_tempdate, 1);
+		if (self.inMonth(_tempdate, sysdate)) return _lang.lastMonth;
+		if (self.inYear(date, sysdate)) return _lang.currentYear;
+		self.init(_tempdate, date).addMonths(_tempdate, 12);
+		if (self.inYear(_tempdate, sysdate)) return _lang.lastYear;
+		return _lang.ancientText;
+	}
+	this.timeTo = function(date) {
+		if (date < sysdate) return self.timeAgo(date);
+		if (self.inMinute(date, sysdate)) return _lang.justNow;
+		self.init(_tempdate).addMinutes(_tempdate, 30);
+		if (_tempdate > date) return _lang.next30Min;
+		self.init(_tempdate).addHours(_tempdate, 1);
+		if (_tempdate > date) return _lang.currentHour;
+		if (self.inHour(_tempdate, date)) return _lang.nextHour;
+		if (self.inDay(date, sysdate)) return _lang.todayText;
+		self.init(_tempdate).addDays(_tempdate, 1);
+		if (self.inDay(_tempdate, date)) return _lang.tomorrowText;
+		if (self.inWeek(date, sysdate)) return _lang.currentWeek;
+		self.init(_tempdate).addDays(_tempdate, 7);
+		if (self.inWeek(_tempdate, date)) return _lang.nextWeek;
+		if (self.inMonth(date, sysdate)) return _lang.currentMonth;
+		self.init(_tempdate).addMonths(_tempdate, 1);
+		if (self.inMonth(_tempdate, date)) return _lang.nextMonth;
+		if (self.inYear(date, sysdate)) return _lang.currentYear;
+		self.init(_tempdate).addMonths(_tempdate, 12);
+		if (self.inYear(_tempdate, date)) return _lang.nextYear;
+		return _lang.futureText;
+	}
 
 	//update prototype
 	var dp = Date.prototype;

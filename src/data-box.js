@@ -40,6 +40,7 @@ module.exports = function() {
 	this.isect = function(a1, a2, fn) { return (a2 && fn) ? a1.filter(a => { return (a2.findIndex(b => { return fn(a, b); }) >= 0); }) : a1; }
 	this.usect = function(a1, a2, fn) { return (a2 && fn) ? a1.concat(a2.filter(b => { return (a1.findIndex(a => { return fn(a, b); }) < 0); })) : a1; }
 	this.sortBy = function(arr, name) { return name ? self.sort(arr, (a, b) => { return cmp(a[name], b[name]); }) : arr; }
+	this.reduce = function(arr, fn) { return arr ? arr.reduce(fn, {}) : {}; }
 	this.sort = function(arr, fn) { return arr ? arr.sort(fn || cmp) : arr; }
 	this.clone = function(arr) { return arr ? arr.slice() : []; }
 	this.each = function(arr, fn) { //iterator
@@ -76,10 +77,9 @@ module.exports = function() {
 	}
 
 	var pkName, fkName, fnGroup;
-	this.reduce = function(data, onGroup) {
+	this.resume = function(data, onGroup) {
 		fnGroup = onGroup || fnTrue;
 		let parts = []; //container
-
 		let size = fnSize(data);
 		(size > 0) && parts.push(data[0]);
 		for (let i = 1; i < size; i++) {
