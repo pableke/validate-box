@@ -195,18 +195,30 @@ module.exports = function DateBox(lang) {
 
 	this.diff = function(d1, d2) {
 		d2 = d2 || sysdate;
-		let _diff = Math.abs(d1 - d2);
-		let ms = _diff % 1000;
-		_diff = (_diff - ms) / 1000;
-		let ss = _diff % 60;
-		_diff = (_diff - ss) / 60;
-		let MM = _diff % 60;
-		_diff = (_diff - MM) / 60;
-		let hh = _diff % 24;
-		let dd = (d1.getMonth() == d2.getMonth()) ? Math.abs(d1.getDate() - d2.getDate()) : (self.daysInMonth(d1) - d1.getDate());
-		let mm = Math.abs(d1.getMonth() - d2.getMonth());
-		let yyyy = Math.abs(d1.getFullYear() - d2.getFullYear());
-		return [yyyy, mm, dd, hh, MM, ss, ms];
+		if (d1 > d2)
+			return self.diff(d2, d1);
+		let ms = Math.abs(d1.getMilliseconds() - d2.getMilliseconds());
+		let ss = Math.abs(d1.getSeconds() - d2.getSeconds());
+		let MM = Math.abs(d1.getMinutes() - d2.getMinutes());
+		let hh = Math.abs(d1.getHours() - d2.getHours());
+		let mm = d2.getMonth() - d1.getMonth();
+		let yyyy = d2.getFullYear() - d1.getFullYear();
+		if (yyyy > 0) { //adjust mm and yyyy
+			var _aux = (yyyy > 1) ? (12 - d1.getMonth()) : ((12 - d1.getMonth()) + d2.getMonth());
+			if (12 > _aux) {
+				mm = _aux
+				yyyy--;
+			}
+			else
+				mm = (_aux % 12);
+		}
+		if (mm == 0) //same month => nothing to adjust
+			return [yyyy, mm, Math.abs(d2.getDate() - d1.getDate()), hh, MM, ss, ms];
+		if (mm > 1) //adjust month and days
+			return [yyyy, --mm, d2.getDate(), hh, MM, ss, ms];
+		let _max = self.daysInMonth(d1); //get the number of days in d1
+		_aux = ((_max - d1.getDate()) + d2.getDate()); //days between d1 and d2
+		return (_max > _aux) ? [yyyy, --mm, _aux, hh, MM, ss, ms] : [yyyy, mm, (_aux % _max), hh, MM, ss, ms];
 	}
 	this.diffDays = function(d1, d2) { return d2 ? (Math.abs(d2.getTime() - d1.getTime()) / 864e5) : 0; } //(1000 * 3600 * 24)
 	this.diffHours = function(d1, d2) { return d2 ? (Math.abs(d2.getTime() - d1.getTime()) / 36e5) : 0; } //(1000 * 3600)
