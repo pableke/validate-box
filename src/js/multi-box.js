@@ -857,8 +857,9 @@ function ValidateBox(opts) {
 	}
 
 	this.iban = function(IBAN) {
+		if (fnSize(IBAN) < 24) return false;
 		//Se pasa a Mayusculas y se quita los espacios en blanco
-		IBAN = IBAN.toUpperCase().trim().replace(/\s+/g, "");
+		IBAN = IBAN.trim().replace(/\s+/g, "").toUpperCase();
 		if (fnSize(IBAN) != 24) return false;
 
 		// Se coge las primeras dos letras y se pasan a números
@@ -937,7 +938,7 @@ function ValidateBox(opts) {
 		return self.each(list, el => { el.value = ""; });
 	}
 
-	const errors = { errno: 0 };
+	const errors = { errno: 0 }; //container
 	this.isOk = function() { return errors.errno == 0; }
 	this.isError = function() { return errors.errno > 0; }
 	this.hasError = function(name) { return !!errors[name]; }
@@ -1062,7 +1063,8 @@ $(document).ready(function() {
 	//messages handlers
 	function setDanger(msg) { return !alerts.addClass("d-none").filter(".alert-danger").removeClass("d-none").find(".alert-text").html(msg); }
 	function setSuccess(msg) { return !alerts.addClass("d-none").filter(".alert-success").removeClass("d-none").find(".alert-text").html(msg); }
-	function setError(el, name) { return !$(el).siblings(".invalid-feedback").html(mb.get(name)); }
+	function setMsgErr(el, msg) { msg && $(el).siblings(".invalid-feedback").html(msg); return false; }
+	function setError(el, name) { return setMsgErr(el, mb.get(name)); }
 	function fnRequired(val, el) { return val || setError(el, "required"); }
 
 	//Autocomplete inputs
@@ -1134,8 +1136,13 @@ $(document).ready(function() {
 
 		//initialize ajax call
 		let loaders = {}; //response handler
-		let inputs = this.elements;
+		let inputs = this.elements; //list
 		$(".ajax-submit", this).click(function(ev) {
+			function showErrors(errors) {
+				vb.each(inputs, el => { setMsgErr(errors[el.id]); });
+				setDanger(errors.message);
+			}
+
 			ev.preventDefault();
 			if (vb.validate(inputs)) {
 				let loading = $(".loading").show();
@@ -1149,7 +1156,7 @@ $(document).ready(function() {
 						.then(res => { //text spected and load message
 							return res.ok ? res.text().then(fn) : res.text().then(setDanger);
 						})
-						.catch(setDanger);
+						.catch(showErrors);
 					});
 				}
 				else {
@@ -1157,7 +1164,7 @@ $(document).ready(function() {
 					.then(res => { //text spected and load message
 						return res.ok ? res.text().then(fn) : res.text().then(setDanger);
 					})
-					.catch(setDanger)
+					.catch(showErrors)
 					.finally(() => loading.fadeOut()); //allways
 				}
 			}

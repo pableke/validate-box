@@ -96,8 +96,9 @@ module.exports = function(opts) {
 	}
 
 	this.iban = function(IBAN) {
+		if (fnSize(IBAN) < 24) return false;
 		//Se pasa a Mayusculas y se quita los espacios en blanco
-		IBAN = IBAN.toUpperCase().trim().replace(/\s+/g, "");
+		IBAN = IBAN.trim().replace(/\s+/g, "").toUpperCase();
 		if (fnSize(IBAN) != 24) return false;
 
 		// Se coge las primeras dos letras y se pasan a números
