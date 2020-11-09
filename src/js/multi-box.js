@@ -946,6 +946,7 @@ function ValidateBox(opts) {
 	this.addErrno = function() { errors.errno++; return self; }
 	this.setErrno = function(errno) { errors.errno = errno; return self; }
 	this.setError = function(name, msg) { errors[name] = msg; return self.addErrno(); }
+	this.setMessage = function(msg) { errors.message = msg; return self.addErrno(); }
 	this.init = function() {
 		for (let k in errors)
 			delete errors[k];

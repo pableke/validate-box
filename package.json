@@ -1,6 +1,6 @@
 {
   "name": "validate-box",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Same I18n validation on server and client",
   "main": "./src/main.js",
   "scripts": {

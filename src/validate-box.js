@@ -176,7 +176,7 @@ module.exports = function(opts) {
 		return self.each(list, el => { el.value = ""; });
 	}
 
-	const errors = { errno: 0 };
+	const errors = { errno: 0 }; //container
 	this.isOk = function() { return errors.errno == 0; }
 	this.isError = function() { return errors.errno > 0; }
 	this.hasError = function(name) { return !!errors[name]; }
@@ -185,6 +185,7 @@ module.exports = function(opts) {
 	this.addErrno = function() { errors.errno++; return self; }
 	this.setErrno = function(errno) { errors.errno = errno; return self; }
 	this.setError = function(name, msg) { errors[name] = msg; return self.addErrno(); }
+	this.setMessage = function(msg) { errors.message = msg; return self.addErrno(); }
 	this.init = function() {
 		for (let k in errors)
 			delete errors[k];
