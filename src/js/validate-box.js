@@ -176,22 +176,36 @@ function ValidateBox(opts) {
 		return self.each(list, el => { el.value = ""; });
 	}
 
+	const errors = { errno: 0 };
+	this.isOk = function() { return errors.errno == 0; }
+	this.isError = function() { return errors.errno > 0; }
+	this.hasError = function(name) { return !!errors[name]; }
+	this.getError = function() { return errors; }
+	this.getErrors = function() { return errors; }
+	this.addErrno = function() { errors.errno++; return self; }
+	this.setErrno = function(errno) { errors.errno = errno; return self; }
+	this.setError = function(name, msg) { errors[name] = msg; return self.addErrno(); }
+	this.init = function() {
+		for (let k in errors)
+			delete errors[k];
+		return self.setErrno(0);
+	}
+
 	this.validate = function(inputs, validators) {
-		validators = validators || opts.validators;
-		let ok = true; //valid indicator
+		self.init().add(validators); //init errors and validators
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			let fn = validators[el.id];
+			let fn = opts.validators[el.id];
 			if (fn && !fn(el.value, el)) {
 				el.classList.add(opts.errInputClass);
-				ok && el.focus(); //focus on first error
-				ok = false; //change indicator
+				self.isOk() && el.focus(); //focus on first error
+				errors.errno++; //change indicator
 			}
 			else
 				el.classList.remove(opts.errInputClass);
 		}
-		return ok;
+		return self.isOk();
 	}
 
 	this.fetch = function(elem, inputs, data) {

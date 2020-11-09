@@ -33,18 +33,15 @@ const server = http.createServer(function(req, res) {
 			console.log("----------", "Validating", "----------");
 			console.log(req.body);
 
-			let error = {}; //err container
 			let fields = req.body; //request fields
-			error.name = valid.vb.size(fields.name, 1, 200) || "Field name ame tot valid";
-			error.subject = valid.vb.size(fields.subject, 0, 200) || "Field subject not valid";
-			error.email = (fields.email && valid.vb.email(fields.email)) || "Invalid email format";
-			error.idUsuario = fields.idUsuario || "User is required";
-			error.id = error.idUsuario ? valid.nb.toFloat(fields.idUsuario) : 0;
-			if (error.id <= 0)
-				error.idUsuario = "User not found";
-			res.end(JSON.stringify(error), "application/json", () => {
+			valid.init().size(fields.name, 1, 200) || valid.setError("name", "Field name ame tot valid");
+			valid.size(fields.subject, 0, 200) || valid.setError("subject", "Field subject not valid");
+			(fields.email && valid.email(fields.email)) || valid.setError("email", "Invalid email format");
+			fields.idUsuario || valid.setError("idUsuario", "User is required");
+
+			res.end(JSON.stringify(valid.getErrors()), "application/json", () => {
 				console.log("----------", "Results", "----------");
-				console.log(error);
+				console.log(valid.getErrors());
 			});
 		});
 	}
