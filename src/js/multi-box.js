@@ -764,9 +764,6 @@ function StringBox() {
 function ValidateBox(opts) {
 	const self = this; //self instance
 	const SETTINGS = { //default configuration
-		//class selectors
-		errInputClass: "is-invalid",
-
 		//RegEx to validators
 		RE_DIGITS: /^\d+$/,
 		RE_IDLIST: /^\d+(,\d+)*$/,
@@ -961,12 +958,9 @@ function ValidateBox(opts) {
 			let el = inputs[i]; //element
 			let fn = opts.validators[el.id];
 			if (fn && !fn(el.value, el)) {
-				el.classList.add(opts.errInputClass);
 				self.isOk() && el.focus(); //focus on first error
 				errors.errno++; //change indicator
 			}
-			else
-				el.classList.remove(opts.errInputClass);
 		}
 		return self.isOk();
 	}
@@ -978,9 +972,11 @@ function ValidateBox(opts) {
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			fd.append(el.name, el.value);
+			if (el.name && el.value)
+				fd.append(el.name, el.value);
 		}
-		for (let k in data) fd.append(k, data[k]); //add extra data to send
+		for (let k in data) //has extra data to send
+			fd.append(k, data[k]); //add extra data
 		let form = elem.closest("form"); //parent form tag
 		if (form) {
 			opts.method = form.getAttribute("method") || "get"; //ajax options
@@ -993,9 +989,17 @@ function ValidateBox(opts) {
 			opts.url = elem.href;
 		}
 		return fetch(opts.url, opts).then(res => {
-			res.ok && self.reset(inputs);
-			self.focus(inputs);
-			return res;
+			const contentType = res.headers.get("content-type");
+			const isJson = (contentType && contentType.indexOf("application/json") !== -1);
+			return new Promise(function(resolve, reject) {
+				self.focus(inputs); //set focus on first element
+				if (res.ok) {
+					self.reset(inputs); //clear inputs
+					(isJson ? res.json() : res.text()).then(resolve);
+				}
+				else
+					(isJson ? res.json() : res.text()).then(reject);
+			});
 		});
 	}
 }
@@ -1045,11 +1049,21 @@ $(document).ready(function() {
 	$.datepicker.setDefaults(dt.getLang());
 	$(".datepicker").datepicker();
 
-	//Show / hide messages in view
+	// Global show / hide messages in view
 	let alerts = $("div.alert").each(function(i, el) {
 		$(".alert-text:not(:empty)", el).length && $(el).removeClass("d-none");
 		$("button", el).click(function() { return !$(el).addClass("d-none"); });
 	});
+	function setDanger(msg) { return !alerts.addClass("d-none").filter(".alert-danger").removeClass("d-none").find(".alert-text").html(""+msg); }
+	function setSuccess(msg) { return !alerts.addClass("d-none").filter(".alert-success").removeClass("d-none").find(".alert-text").html(""+msg); }
+	//set messages functions as global for others .js
+	window.setDanger = setDanger; //global error
+	window.setSuccess = setSuccess; //global success
+	//inputs messages handlers
+	function fnResetForm(inputs) { $(inputs).removeClass("is-invalid").siblings(".invalid-feedback").text(""); return inputs; }
+	function setMsgErr(el, msg) { msg && $(el).focus().addClass("is-invalid").siblings(".invalid-feedback").html(""+msg); return false; }
+	function setError(el, name) { return setMsgErr(el, mb.get(name)); }
+	function fnRequired(val, el) { return val || setError(el, "required"); }
 
 	//Clear the input asociated to X button and give it focus
 	function toggleClear() { $(this).siblings(".clear-input").toggleClass("d-none", !this.value); } //toggle X button
@@ -1059,13 +1073,6 @@ $(document).ready(function() {
 	//Initialize all textarea counter
 	function fnCounter() { $("#counter-" + this.id).text(Math.abs(this.getAttribute("maxlength") - sb.size(this.value))); }
 	$("textarea[maxlength]").keyup(fnCounter).each(fnCounter);
-
-	//messages handlers
-	function setDanger(msg) { return !alerts.addClass("d-none").filter(".alert-danger").removeClass("d-none").find(".alert-text").html(msg); }
-	function setSuccess(msg) { return !alerts.addClass("d-none").filter(".alert-success").removeClass("d-none").find(".alert-text").html(msg); }
-	function setMsgErr(el, msg) { msg && $(el).siblings(".invalid-feedback").html(msg); return false; }
-	function setError(el, name) { return setMsgErr(el, mb.get(name)); }
-	function fnRequired(val, el) { return val || setError(el, "required"); }
 
 	//Autocomplete inputs
 	function fnRender(item) { return item.nif + " - " + item.nombre; } //build text to show
@@ -1128,8 +1135,7 @@ $(document).ready(function() {
 	}).focus(); //Set focus on first visible and editable input
 
 	$("form").submit(function(ev) {
-		$(this.querySelectorAll(".invalid-feedback")).text(""); //clear previous messages
-		return vb.validate(this.elements) ? $(".loading").show() : setDanger(mb.get("form"));
+		return vb.validate(fnResetForm(this.elements)) ? $(".loading").show() : setDanger(mb.get("form"));
 	}).each(function() {
 		//show error messages from server
 		$(this.querySelectorAll(".invalid-feedback:not(:empty)")).siblings(":input").addClass("is-invalid");
@@ -1139,33 +1145,28 @@ $(document).ready(function() {
 		let inputs = this.elements; //list
 		$(".ajax-submit", this).click(function(ev) {
 			function showErrors(errors) {
-				vb.each(inputs, el => { setMsgErr(errors[el.id]); });
-				setDanger(errors.message);
+				vb.each(inputs, el => { setMsgErr(el, errors[el.id]); });
+				setDanger(errors.message || mb.get("form"));
 			}
 
 			ev.preventDefault();
+			fnResetForm(inputs);
 			if (vb.validate(inputs)) {
 				let loading = $(".loading").show();
 				let fn = loaders[this.id] || setSuccess;
-				if (grecaptcha && this.classList.contains("captcha")) {
+				if ((typeof grecaptcha !== "undefined") && this.classList.contains("captcha")) {
 					grecaptcha.ready(function() {
-						grecaptcha.execute("6LeDFNMZAAAAAKssrm7yGbifVaQiy1jwfN8zECZZ", {
-							action: "submit"
-						})
-						.then(token => vb.fetch(ev.target, inputs, { token }).finally(() => loading.fadeOut()))
-						.then(res => { //text spected and load message
-							return res.ok ? res.text().then(fn) : res.text().then(setDanger);
-						})
-						.catch(showErrors);
+						grecaptcha.execute("6LeDFNMZAAAAAKssrm7yGbifVaQiy1jwfN8zECZZ", { action: "submit" })
+							.then(token => vb.fetch(ev.target, inputs, { token }).finally(() => loading.fadeOut()))
+							.then(fn)
+							.catch(showErrors);
 					});
 				}
 				else {
 					vb.fetch(this, inputs)
-					.then(res => { //text spected and load message
-						return res.ok ? res.text().then(fn) : res.text().then(setDanger);
-					})
-					.catch(showErrors)
-					.finally(() => loading.fadeOut()); //allways
+						.then(fn)
+						.catch(showErrors)
+						.finally(() => loading.fadeOut()); //allways
 				}
 			}
 			else
@@ -1182,34 +1183,10 @@ $(document).ready(function() {
 		anchor.addEventListener("click", function(ev) {
 			ev.preventDefault();
 			try {
-				document.querySelector(this.getAttribute("href")).scrollIntoView({
-					behavior: "smooth"
-				});
-			} catch(ex) {}
+				document.querySelector(this.href).scrollIntoView({ behavior: "smooth" });
+			} catch (ex) {
+				console.log("top", ex);
+			}
 		});
-	});
-
-	// SCROLL REVEAL SCRIPT
-	let sr = ScrollReveal();
-	sr.reveal(".header-content-left", {
-		duration: 2000,
-		origin: "top",
-		distance: "300px"
-	});
-	sr.reveal(".header-content-right", {
-		duration: 2000,
-		origin: "right",
-		distance: "300px"
-	});
-	sr.reveal(".header-btn", {
-		duration: 2000,
-		delay: 1000, 
-		origin: "bottom"
-	});
-	sr.reveal("#testimonial div", {
-		duration: 2000,
-		origin: "left",
-		distance: "300px",
-		viewFactor: 0.2
 	});
 });

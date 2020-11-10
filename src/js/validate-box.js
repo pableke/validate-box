@@ -3,9 +3,6 @@
 function ValidateBox(opts) {
 	const self = this; //self instance
 	const SETTINGS = { //default configuration
-		//class selectors
-		errInputClass: "is-invalid",
-
 		//RegEx to validators
 		RE_DIGITS: /^\d+$/,
 		RE_IDLIST: /^\d+(,\d+)*$/,
@@ -200,12 +197,9 @@ function ValidateBox(opts) {
 			let el = inputs[i]; //element
 			let fn = opts.validators[el.id];
 			if (fn && !fn(el.value, el)) {
-				el.classList.add(opts.errInputClass);
 				self.isOk() && el.focus(); //focus on first error
 				errors.errno++; //change indicator
 			}
-			else
-				el.classList.remove(opts.errInputClass);
 		}
 		return self.isOk();
 	}
@@ -217,9 +211,11 @@ function ValidateBox(opts) {
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			fd.append(el.name, el.value);
+			if (el.name && el.value)
+				fd.append(el.name, el.value);
 		}
-		for (let k in data) fd.append(k, data[k]); //add extra data to send
+		for (let k in data) //has extra data to send
+			fd.append(k, data[k]); //add extra data
 		let form = elem.closest("form"); //parent form tag
 		if (form) {
 			opts.method = form.getAttribute("method") || "get"; //ajax options
@@ -232,9 +228,17 @@ function ValidateBox(opts) {
 			opts.url = elem.href;
 		}
 		return fetch(opts.url, opts).then(res => {
-			res.ok && self.reset(inputs);
-			self.focus(inputs);
-			return res;
+			const contentType = res.headers.get("content-type");
+			const isJson = (contentType && contentType.indexOf("application/json") !== -1);
+			return new Promise(function(resolve, reject) {
+				self.focus(inputs); //set focus on first element
+				if (res.ok) {
+					self.reset(inputs); //clear inputs
+					(isJson ? res.json() : res.text()).then(resolve);
+				}
+				else
+					(isJson ? res.json() : res.text()).then(reject);
+			});
 		});
 	}
 }

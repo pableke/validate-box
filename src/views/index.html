@@ -28,102 +28,164 @@
 </head>
 <body>
 
-<div class="jumbotron m-4">
-	<h5>Form</h5>
-	<hr class="my-4"/>
+	<div id="navbarContent" class="collapse navbar-collapse">
+		<ul id="menu" class="navbar-nav">
+			<li id="16" parent="4" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 11">Sub Nav Link 11</a></li>
+			<li id="17" parent="4" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 12">Sub Nav Link 12</a></li>
+			<li id="1" class="nav-item"><a href="/" class="nav-link" title="Nav Link 1">Home</a></li>
+			<li id="2" class="nav-item"><a href="/login.html" class="nav-link" title="Nav Link 1">Login</a></li>
+			<li id="3" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 1">Sub Nav Link 1</a></li>
+			<li id="4" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 2">Sub Nav Link 2</a></li>
+			<li id="5" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 3">Sub Nav Link 3</a></li>
+			<li id="6" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 4">Sub Nav Link 4</a></li>
+			<li id="7" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 5">Sub Nav Link 5</a></li>
+			<li id="8" class="nav-item"><a href="#header" class="nav-link" title="Nav Link 1">Header</a></li>
+			<li id="11" parent="8" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 6">Sub Nav Link 6</a></li>
+			<li id="12" parent="8" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 7">Sub Nav Link 7</a></li>
+			<li id="9" class="nav-item"><a href="#info-one" class="nav-link" title="Nav Link 1">About</a></li>
+			<li id="10" class="nav-item"><a href="#info-two" class="nav-link" title="Nav Link 1">Info 2</a></li>
+			<li id="13" parent="12" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 8">Sub Nav Link 8</a></li>
+			<li id="14" parent="12" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 9">Sub Nav Link 9</a></li>
+			<li id="15" parent="12" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 10">Sub Nav Link 10</a></li>
 
-	<form id="test" action="/test.html?lang=en" method="post">
-		<div class="form-row m-3">
-			<div class="form-group col-md-3">
-				<label for="name" class="required">Name:</label>
+			<li class="nav-item">
+				<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+			</li>
+		</ul>
+	</div>
+
+	<div id="alerts" class="container">
+		<div class="alert alert-success alert-dismissible fade show d-none" role="alert">
+			<span class="alert-text ml-2"></span>
+			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="alert alert-primary alert-dismissible fade show d-none" role="alert">
+			<span class="alert-text ml-2"></span>
+			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="alert alert-warning alert-dismissible fade show d-none" role="alert">
+			<span class="alert-text ml-2"></span>
+			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+			<span class="alert-text ml-2"></span>
+			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+	</div>
+
+	<div class="jumbotron m-4">
+		<h5>Form</h5>
+		<hr class="my-4"/>
+
+		<form id="test" action="/test.html?lang=en" method="post">
+			<div class="form-row m-3">
+				<div class="form-group col-md-3">
+					<label for="name" class="required">Name:</label>
+					<div class="input-group">
+						<input type="text" id="name" name="name" value="" size="40" maxlength="200" class="form-control" tabindex="1" title="User name" placeholder="Joe" />
+						<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fas fa-signature"></i></span></div>
+						<span class="invalid-feedback"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group col-md-5">
+				<label for="email" class="required">E-Mail</label>
 				<div class="input-group">
-					<input type="text" id="name" name="name" value="" size="40" maxlength="200" class="form-control" tabindex="1" title="User name" placeholder="Joe" />
-					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fas fa-signature"></i></span></div>
+					<input type="text" id="email" name="email" value="" size="50" maxlength="200" tabindex="2" class="form-control" title="Type your email" placeholder="xxxx@yyyy.com" />
+					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-envelope"></i></span></div>
+					<div class="invalid-feedback"></div>
+				</div>
+			</div>
+
+			<div class="form-group col-md-6">
+				<label for="ac1" class="required">jQuery Auto Suggest Textbox with Bootstrap 4</label>
+				<div class="input-group">
+					<div class="input-group-prepend"><span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span></div>
+					<input type="text" id="ac1" value="" size="15" tabindex="3" 
+						class="form-control input-lg autocomplete" placeholder="Search..." title="Autocomplete country textbox" />
+					<div class="input-group-append clear-input d-none"><button class="btn btn-outline-secondary" type="button" id="button-addon2">&times;</button></div>
+					<input type="hidden" id="idUsuario" name="idUsuario" value="1,863.06" />
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="date" class="required">Date:</label>
+				<div class="input-group">
+					<input type="text" id="date" name="date" value="" size="40" maxlength="10" tabindex="3" 
+						class="form-control datepicker" placeholder="format-lang" />
+					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fa fa-calendar"></i></span></div>
+					<div class="invalid-feedback"></div>
+				</div>
+				<small>ej: @ejDate;</small>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="time">Time:</label>
+				<div class="input-group">
+					<input id="time" type="text" value="" tabindex="4" class="form-control date datepicker" />
+					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span></div>
+				</div>
+			</div>
+
+			<div class="form-group col-md-6">
+				<label for="f1">Date Range:</label>
+				<div class="input-group">
+					<input type="text" id="f1" name="f1" class="form-control" value="2012-04-05" tabindex="5" />
+					<div class="input-group-append"><span class="input-group-text" id="basic-addon2">...</span></div>
+					<input type="text" id="f2" name="f2" class="form-control" value="2012-04-19" tabindex="6" />
+				</div>
+			</div>
+
+			<div class="form-row m-3">
+				<div class="form-group col-md-3">
+					<label for="asunto" class="required">Subject:</label>
+					<input type="text" id="asunto" name="asunto" value="" size="40" maxlength="200" class="form-control" tabindex="3" placeholder="Type a resume" />
 					<span class="invalid-feedback"></span>
 				</div>
 			</div>
-		</div>
 
-		<div class="form-group col-md-5">
-			<label for="email" class="required">E-Mail</label>
-			<div class="input-group">
-				<input type="text" id="email" name="email" value="" size="50" maxlength="200" tabindex="2" class="form-control" title="Type your email" placeholder="xxxx@yyyy.com" />
-				<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-envelope"></i></span></div>
-				<div class="invalid-feedback"></div>
-			</div>
-		</div>
-
-		<div class="form-group col-md-6">
-			<label for="ac1" class="required">jQuery Auto Suggest Textbox with Bootstrap 4</label>
-			<div class="input-group">
-				<div class="input-group-prepend"><span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span></div>
-				<input type="text" id="ac1" value="" size="15" tabindex="3" 
-					class="form-control input-lg autocomplete" placeholder="Search..." title="Autocomplete country textbox" />
-				<div class="input-group-append clear-input d-none"><button class="btn btn-outline-secondary" type="button" id="button-addon2">&times;</button></div>
-				<input type="hidden" id="idUsuario" name="idUsuario" value="1,863.06" />
-			</div>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="date" class="required">Date:</label>
-			<div class="input-group">
-				<input type="text" id="date" name="date" value="" size="40" maxlength="10" tabindex="3" 
-					class="form-control datepicker" placeholder="format-lang" />
-				<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fa fa-calendar"></i></span></div>
-				<div class="invalid-feedback"></div>
-			</div>
-			<small>ej: @ejDate;</small>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="time">Time:</label>
-			<div class="input-group">
-				<input id="time" type="text" value="" tabindex="4" class="form-control date datepicker" />
-				<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span></div>
-			</div>
-		</div>
-
-		<div class="form-group col-md-6">
-			<label for="f1">Date Range:</label>
-			<div class="input-group">
-				<input type="text" id="f1" name="f1" class="form-control" value="2012-04-05" tabindex="5" />
-				<div class="input-group-append"><span class="input-group-text" id="basic-addon2">...</span></div>
-				<input type="text" id="f2" name="f2" class="form-control" value="2012-04-19" tabindex="6" />
-			</div>
-		</div>
-
-		<div class="form-row m-3">
-			<div class="form-group col-md-3">
-				<label for="subject" class="required">Subject:</label>
-				<input type="text" id="subject" name="subject" value="" size="40" maxlength="200" class="form-control" tabindex="3" placeholder="Type a resume" />
+			<div class="form-group col-md-4">
+				<label for="info" class="required">Comentarios:</label>
+				<textarea id="info" name="info" class="form-control" tabindex="7" cols="62" rows="6" maxlength="600"></textarea>
 				<span class="invalid-feedback"></span>
+				<p>Nº de caracteres restantes = <span id="counter-info">600</span></p>
 			</div>
-		</div>
 
-		<div class="form-group col-md-4">
-			<label for="info" class="required">Comentarios:</label>
-			<textarea id="info" class="form-control" tabindex="7" cols="62" rows="6" maxlength="600"></textarea>
-				<span class="invalid-feedback"></span>
-			<p>Nº de caracteres restantes = <span id="counter-info">600</span></p>
-		</div>
-
-		<hr/>
-		<button type="submit" class="btn btn-primary" tabindex="100">Send &raquo;</button>
-		<button type="reset" class="btn btn-light ml-2" tabindex="101">&olarr; Clear</button>
-		<!-- Example single danger button -->
-		<div class="btn-group ml-2">
-			<button type="button" class="btn btn-danger dropdown-toggle" tabindex="102" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
-			<div class="dropdown-menu">
-				<a class="dropdown-item" href="#">Action</a>
-				<a class="dropdown-item" href="#">Another action</a>
-				<a class="dropdown-item" href="#">Something else here</a>
-				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="#">Separated link</a>
+			<hr/>
+			<button type="submit" class="btn btn-primary" tabindex="100">Send &raquo;</button>
+			<button type="reset" class="btn btn-light ml-2" tabindex="101">&olarr; Clear</button>
+			<!-- Example single danger button -->
+			<div class="btn-group ml-2">
+				<button type="button" class="btn btn-danger dropdown-toggle" tabindex="102" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action</button>
+				<div class="dropdown-menu">
+					<a class="dropdown-item" href="#">Action</a>
+					<a class="dropdown-item" href="#">Another action</a>
+					<a class="dropdown-item" href="#">Something else here</a>
+					<div class="dropdown-divider"></div>
+					<a class="dropdown-item" href="#">Separated link</a>
+				</div>
 			</div>
+			<button href="contact.html?number=14,63" class="ajax-submit btn btn-success ml-2" tabindex="103">Ajax Send &raquo;</button>
+		</form>
+	</div>
+
+	<footer>
+		<div class="text-center loading">
+			<div class="spinner-border text-info loading-content" role="status"><span class="sr-only">Loading...</span></div>
 		</div>
-		<button href="contact.html?number=14,63" class="ajax-submit btn btn-success ml-2" tabindex="103">Ajax Send &raquo;</button>
-	</form>
-</div>
+		<a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top" role="button">
+			<i class="fas fa-chevron-up"></i>
+		</a>
+	</footer>
 
 </body>
 </html>

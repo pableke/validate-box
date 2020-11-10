@@ -6,7 +6,7 @@ const http = require("http"); //http server
 const qs = require("querystring"); //parse post data
 const valid = require("./main"); //validator
 
-const _maxFieldsSize= 20 * 1024 * 1024; //20mb
+const _maxFieldsSize = 20 * 1024 * 1024; //20mb
 
 //create server instance
 const server = http.createServer(function(req, res) {
@@ -35,11 +35,14 @@ const server = http.createServer(function(req, res) {
 
 			let fields = req.body; //request fields
 			valid.init().size(fields.name, 1, 200) || valid.setError("name", "Field name ame tot valid");
-			valid.size(fields.subject, 0, 200) || valid.setError("subject", "Field subject not valid");
 			(fields.email && valid.email(fields.email)) || valid.setError("email", "Invalid email format");
 			fields.idUsuario || valid.setError("idUsuario", "User is required");
+			valid.size(fields.subject, 1, 200) || valid.setError("subject", "Field subject not valid");
+			valid.size(fields.info, 1, 200) || valid.setError("info", "Info field is required");
 
-			res.end(JSON.stringify(valid.getErrors()), "application/json", () => {
+			res.statusCode = valid.isError() ? 500 : 200;
+			res.setHeader("Content-Type", "application/json");
+			res.end(JSON.stringify(valid.getErrors()), "utf-8", () => {
 				console.log("----------", "Results", "----------");
 				console.log(valid.getErrors());
 			});
