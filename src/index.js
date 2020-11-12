@@ -38,7 +38,7 @@ const server = http.createServer(function(req, res) {
 			(fields.email && valid.email(fields.email)) || valid.setError("email", "Invalid email format");
 			fields.idUsuario || valid.setError("idUsuario", "User is required");
 			valid.size(fields.asunto, 1, 200) || valid.setError("asunto", "Field subject not valid");
-			valid.setError("info", "Info field is required");
+			valid.size(fields.info, 1, 200) || valid.setError("info", "Info field is required");
 
 			res.statusCode = valid.isError() ? 500 : 200;
 			res.setHeader("Content-Type", "application/json");
