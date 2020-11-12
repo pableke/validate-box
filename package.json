@@ -1,12 +1,12 @@
 {
   "name": "validate-box",
-  "version": "0.1.4",
+  "version": "0.1.6",
   "description": "Same I18n validation on server and client",
   "main": "./src/main.js",
   "scripts": {
     "static": "gulp",
     "dev": "nodemon ./src/index.js",
-    "zip": "rm validate-box.zip & npm-pack-zip & npm pack",
+    "zip": "rm *.zip & rm *.tgz & npm-pack-zip & npm pack",
     "test": "node ./src/index.js"
   },
   "keywords": [

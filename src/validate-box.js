@@ -184,6 +184,7 @@ module.exports = function ValidateBox(opts) {
 	this.setErrno = function(errno) { errors.errno = errno; return self; }
 	this.setError = function(name, msg) { errors[name] = msg; return self.addErrno(); }
 	this.setMessage = function(msg) { errors.message = msg; return self.addErrno(); }
+	this.endErrors = function(msg) { return self.setMessage(msg || errors.message).getErrors(); }
 	this.init = function() {
 		for (let k in errors)
 			delete errors[k];
