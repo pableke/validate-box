@@ -55,7 +55,7 @@ $(document).ready(function() {
 	window.setSuccess = setSuccess; //global success
 	//inputs messages handlers
 	function fnResetForm(inputs) { $(inputs).removeClass("is-invalid").siblings(".invalid-feedback").text(""); return inputs; }
-	function setMsgErr(el, msg) { msg && $(el).focus().addClass("is-invalid").siblings(".invalid-feedback").html(""+msg); return false; }
+	function setMsgErr(el, msg) { msg && $(el).addClass("is-invalid").siblings(".invalid-feedback").html(""+msg); return false; }
 	function setError(el, name) { return setMsgErr(el, mb.get(name)); }
 	function fnRequired(val, el) { return val || setError(el, "required"); }
 
