@@ -140,6 +140,7 @@ $(document).ready(function() {
 		$(".ajax-submit", this).click(function(ev) {
 			function showErrors(errors) {
 				vb.each(inputs, el => { setMsgErr(el, errors[el.id]); });
+				$(inputs).filter(".is-invalid").first().focus();
 				setDanger(errors.message || mb.get("form"));
 			}
 
