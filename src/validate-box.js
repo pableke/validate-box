@@ -235,10 +235,22 @@ module.exports = function ValidateBox(opts) {
 				self.focus(inputs); //set focus on first element
 				if (res.ok) {
 					self.reset(inputs); //clear inputs
-					(isJson ? res.json() : res.text()).then(resolve);
+					return (isJson ? res.json() : res.text()).then(resolve);
 				}
+				if (isJson)
+					res.json().then(errors => {
+						let size = fnSize(inputs); //length
+						for (let i = 0; i < size; i++) {
+							let el = inputs[i]; //element
+							if (errors[el.id]) { //set focus and stop
+								el.focus();
+								i = size;
+							}
+						}
+						reject(errors);
+					});
 				else
-					(isJson ? res.json() : res.text()).then(reject);
+					res.text().then(reject);
 			});
 		});
 	}
