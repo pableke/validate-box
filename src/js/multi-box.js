@@ -216,6 +216,7 @@ function DateBox(lang) {
 
 	//helpers
 	function intval(val) { return parseInt(val) || 0; }
+	function fnSize(arr) { return arr ? arr.length : 0; }; //string o array
 	function isset(val) { return (typeof val != "undefined") && (val != null); }
 	function nvl(val, def) { return isset(val) ? val : def; } //default
 	function lpad(val) { return (+val < 10) ? ("0" + val) : val; } //always 2 digits
@@ -228,12 +229,19 @@ function DateBox(lang) {
 
 	function range(val, min, max) { return Math.min(Math.max(intval(val), min), max); } //force range
 	function rangeYear(yy) { return (yy < 100) ? ((self.getCentury() * 100) + yy) : nvl(yy, sysdate.getFullYear()); } //autocomplete year=yyyy
-	function rangeDay(y, m, d) { return range(d, 1, daysInMonth(y, m - 1)); } //days in month
-	function range59(val) { return range(val, 0, 59, ); } //en-range min/seg
+	function rangeDay(y, m, d) { return range(intval(d), 1, daysInMonth(y, m - 1)); } //days in month
+	function range59(val) { return range(val, 0, 59); } //en-range min/seg
 
 	function fnSetTime(date, hh, mm, ss, ms) { date && date.setHours(range(hh, 0, 23), range59(mm), range59(ss), ms); return date; }
 	function fnLoadTime(date, parts) { return fnSetTime(date, parts[0], parts[1], parts[2], parts[3]); } //only update time from date
-	function fnSetDate(date, yyyy, mm, dd) { date && date.setFullYear(rangeYear(yyyy), range(mm, 1, 12) - 1, rangeDay(yyyy, +mm, dd)); return date; }
+	function fnSetDate(date, yyyy, mm, dd) {
+		if (date) {
+			mm = range(mm, 1, 12);
+			yyyy = rangeYear(intval(yyyy));
+			date.setFullYear(yyyy, mm - 1, rangeDay(yyyy, mm, dd));
+		}
+		return date;
+	}
 	function fnSetDateTime(date, yyyy, mm, dd, hh, MM, ss, ms) { return fnSetTime(fnSetDate(date, yyyy, mm, dd), hh || 0, MM || 0, ss || 0, ms || 0); }
 
 	function fnMinTime(date) { return lpad(date.getHours()) + ":" + lpad(date.getMinutes()); } //hh:MM
@@ -256,9 +264,9 @@ function DateBox(lang) {
 			dateFormat: "yy-mm-dd", firstDay: 1,
 
 			setDateTime: function(date, yyyy, mm, dd, hh, MM, ss, ms) { fnSetDateTime(date, yyyy, mm, dd, hh, MM, ss, ms); return this; },
-			build: function(parts) { return fnSetDateTime(new Date(), parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]); },
-			toDate: function(str) { return str && this.build(splitDate(str)); }, //build date type
-			parse: function(str) { return str && isNaN(str) ? Date.parse(str) : new Date(+str); }, //parse string to date
+			build: function(parts) { return (fnSize(parts) > 0) ? fnSetDateTime(new Date(), parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]) : null; },
+			toDate: function(str) { return this.build(splitDate(str)); }, //build date type
+			parse: function(str) { return (str && isNaN(str)) ? Date.parse(str) : new Date(+str); }, //parse string to date
 			helper: function(str) { return str && str.replace(/^(\d{4})(\d+)$/g, "$1-$2").replace(/^(\d{4}\-\d\d)(\d+)$/g, "$1-$2").replace(/[^\d\-]/g, ""); },
 			setAll: function(date, parts) { return this.setDateTime(date, parts[0], parts[1], parts[2], parts[3], parts[4], parts[5], parts[6]); },
 			trIsoDate: function(str) { return str ? this.setAll(auxdate, splitDate(str)).isoDate(auxdate) : str; }, //reformat iso string
@@ -283,9 +291,9 @@ function DateBox(lang) {
 			dateFormat: "dd/mm/yy", firstDay: 1,
 
 			setDateTime: function(date, yyyy, mm, dd, hh, MM, ss, ms) { fnSetDateTime(date, yyyy, mm, dd, hh, MM, ss, ms); return this; },
-			build: function(parts) { return fnSetDateTime(new Date(), parts[2], parts[1], parts[0], parts[3], parts[4], parts[5], parts[6]); },
-			toDate: function(str) { return str && this.build(splitDate(str)); }, //build date type
-			parse: function(str) { return str && isNaN(str) ? Date.parse(str) : new Date(+str); }, //parse string to date
+			build: function(parts) { return (fnSize(parts) > 0) ? fnSetDateTime(new Date(), parts[2], parts[1], parts[0], parts[3], parts[4], parts[5], parts[6]) : null; },
+			toDate: function(str) { return this.build(splitDate(str)); }, //build date type
+			parse: function(str) { return (str && isNaN(str)) ? Date.parse(str) : new Date(+str); }, //parse string to date
 			helper: function(str) { return str && str.replace(/^(\d\d)(\d+)$/g, "$1/$2").replace(/^(\d\d\/\d\d)(\d+)$/g, "$1/$2").replace(/[^\d\/]/g, ""); },
 			setAll: function(date, parts) { return this.setDateTime(date, parts[2], parts[1], parts[0], parts[3], parts[4], parts[5], parts[6]); },
 			trIsoDate: function(str) { return str ? this.setAll(auxdate, swap(splitDate(str))).isoDate(auxdate) : str; }, //reformat iso string
