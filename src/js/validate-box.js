@@ -161,8 +161,9 @@ function ValidateBox(opts) {
 		el && el.focus();
 		return self;
 	}
-	this.reset = function(list) {
-		return self.each(list, el => { el.value = ""; });
+	this.reset = function(list, cb) {
+		cb = cb || function fnVoid() {}; //void function
+		return self.each(list, (el, i) => { el.value = ""; cb(el, i); });
 	}
 
 	this.load = function(list, obj, opts) {
