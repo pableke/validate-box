@@ -914,15 +914,6 @@ function ValidateBox(opts) {
 		return self;
 	}
 
-	this.values = function(list, obj) {
-		obj = obj || {};
-		let size = fnSize(list); //length
-		for (let i = 0; i < size; i++) {
-			let el = list[i]; //element
-			obj[el.name] = el.value;
-		}
-		return obj;
-	}
 	this.each = function(list, fn) {
 		Array.prototype.forEach.call(list, fn);
 		return self;
@@ -934,13 +925,33 @@ function ValidateBox(opts) {
 		return Array.prototype.filter.call(list, el => el.matches(selector));
 	}
 	this.focus = function(inputs) { //focus on first visible and editable input
-		inputs = inputs || document.body.querySelectorAll("input,select,textarea");
+		inputs = inputs || document.querySelectorAll("input,select,textarea");
 		let el = self.find(inputs, ":not([type=hidden])[tabindex]:not([readonly])");
 		el && el.focus();
 		return self;
 	}
 	this.reset = function(list) {
 		return self.each(list, el => { el.value = ""; });
+	}
+
+	this.load = function(list, obj, opts) {
+		opts = opts || {}; //default settings
+		let size = fnSize(list); //length
+		for (let i = 0; i < size; i++) {
+			let el = list[i]; //element
+			let fn = opts[el.name]; //formatter
+			el.value = fn ? fn(obj[el.name]) : obj[el.name];
+		}
+		return self;
+	}
+	this.values = function(list, obj) {
+		obj = obj || {};
+		let size = fnSize(list); //length
+		for (let i = 0; i < size; i++) {
+			let el = list[i]; //element
+			obj[el.name] = el.value;
+		}
+		return obj;
 	}
 
 	const errors = { errno: 0 }; //container
@@ -981,7 +992,7 @@ function ValidateBox(opts) {
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			if (el.name && el.value) //has value?
+			if (el.name && el.value)
 				fd.append(el.name, el.value);
 		}
 		for (let k in data) //has extra data to send
@@ -1166,7 +1177,7 @@ $(document).ready(function() {
 		let inputs = this.elements; //list
 		$(".ajax-submit", this).click(function(ev) {
 			function showErrors(errors) {
-				vb.each(inputs, el => { setMsgErr(el, errors[el.id]); });
+				vb.each(inputs, el => { setMsgErr(el, errors[el.name]); });
 				setDanger(errors.message || mb.get("form"));
 			}
 

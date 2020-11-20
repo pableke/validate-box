@@ -139,7 +139,7 @@ $(document).ready(function() {
 		let inputs = this.elements; //list
 		$(".ajax-submit", this).click(function(ev) {
 			function showErrors(errors) {
-				vb.each(inputs, el => { setMsgErr(el, errors[el.id]); });
+				vb.each(inputs, el => { setMsgErr(el, errors[el.name]); });
 				setDanger(errors.message || mb.get("form"));
 			}
 
