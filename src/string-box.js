@@ -3,8 +3,8 @@
 module.exports = function() {
 	const self = this; //self instance
 	//const ZEROS = "0000000000";
-	const tr1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
-	const tr2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY";
+	const tr1 = "àáâãäåāăąAÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěEÈÉĒĔĖĘĚìíîïìĩīĭIÌÍÎÏÌĨĪĬòóôõöōŏőøOÒÓÔÕÖŌŎŐØùúûüũūŭůUÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
+	const tr2 = "aaaaaaaaaaaaaaaaaaaabeeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiiiooooooooooooooooooouuuuuuuuuuuuuuuuuccnnddrryy";
 	const B64 = {
 		xls: "data:application/vnd.ms-excel;base64,",
 		pdf: "data:application/pdf;base64,",
@@ -15,7 +15,6 @@ module.exports = function() {
 	function isstr(val) { return (typeof val === "string") || (val instanceof String); }
 	function fnTrim(str) { return isstr(str) ? str.trim() : str; } //string only
 	function fnSize(str) { return str ? str.length : 0; } //string o array
-	function itr(str) { return tr(fnTrim(str)).toLowerCase(); }
 	function tr(str) {
 		var output = "";
 		var size = fnSize(str);
@@ -27,13 +26,13 @@ module.exports = function() {
 		return output;
 	}
 
-	this.tr = tr;
 	this.isstr = isstr;
 	this.trim = fnTrim;
 	this.size = fnSize;
-	this.eq = function(str1, str2) { return (itr(str1) == itr(str2)); }
+	this.tr = function(str) { return tr(fnTrim(str)); };
+	this.eq = function(str1, str2) { return self.tr(str1) == self.tr(str2); }
 	this.indexOf = function(str1, str2) { return str1 ? str1.indexOf(str2) : -1; }
-	this.iIndexOf = function(str1, str2) { return itr(str1).indexOf(itr(str2)); }
+	this.iIndexOf = function(str1, str2) { return self.tr(str1).indexOf(self.tr(str2)); }
 	this.prevIndexOf = function(str1, str2, i) { return str1 ? str1.substr(0, i).lastIndexOf(str2) : -1; }
 	this.prefix = function(str1, str2) { return str1.startsWith(str2) ? str1 : (str2 + str1); }
 	this.suffix = function(str1, str2) { return str1.endsWith(str2) ? str1 : (str1 + str2); }
