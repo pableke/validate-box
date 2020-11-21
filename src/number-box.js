@@ -7,8 +7,8 @@ module.exports = function NumberBox(lang) {
 	const DOT = ".";
 
 	//helpers
-	function isNumber(val) { return (val !== null) && !isNaN(val); } //ojo: isNaN(null) == false
-	function dNaN(n, d) { return isNumber(n) ? n : d; }
+	function isNumber(val) { return (val !== null) && (val !== "") && !isNaN(val); } //important: isNaN(null) == false and isNaN("") == false
+	function dNaN(n, d) { return isNumber(n) ? n : d; } //default not a number
 	function intval(val) { return parseInt(val) || 0; }
 	function floatval(val) { return parseFloat(val) || 0; }
 	function fnSize(str) { return str ? intval(str.length) : 0; }
