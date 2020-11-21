@@ -3,8 +3,8 @@
 module.exports = function() {
 	const self = this; //self instance
 	//const ZEROS = "0000000000";
-	const tr1 = "àáâãäåāăąAÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěEÈÉĒĔĖĘĚìíîïìĩīĭIÌÍÎÏÌĨĪĬòóôõöōŏőøOÒÓÔÕÖŌŎŐØùúûüũūŭůUÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
-	const tr2 = "aaaaaaaaaaaaaaaaaaaabeeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiiiooooooooooooooooooouuuuuuuuuuuuuuuuuccnnddrryy";
+	const tr1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
+	const tr2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY";
 	const B64 = {
 		xls: "data:application/vnd.ms-excel;base64,",
 		pdf: "data:application/pdf;base64,",
@@ -29,7 +29,7 @@ module.exports = function() {
 	this.isstr = isstr;
 	this.trim = fnTrim;
 	this.size = fnSize;
-	this.tr = function(str) { return tr(fnTrim(str)); };
+	this.tr = function(str) { return tr(fnTrim(str)).toLowerCase(); };
 	this.eq = function(str1, str2) { return self.tr(str1) == self.tr(str2); }
 	this.indexOf = function(str1, str2) { return str1 ? str1.indexOf(str2) : -1; }
 	this.iIndexOf = function(str1, str2) { return self.tr(str1).indexOf(self.tr(str2)); }

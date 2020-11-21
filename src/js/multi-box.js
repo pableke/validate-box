@@ -588,7 +588,8 @@ function NumberBox(lang) {
 	const DOT = ".";
 
 	//helpers
-	function dNaN(n, d) { return isNaN(n) ? d : n; }
+	function isNumber(val) { return (val !== null) && !isNaN(val); }
+	function dNaN(n, d) { return isNumber(n) ? n : d; }
 	function intval(val) { return parseInt(val) || 0; }
 	function floatval(val) { return parseFloat(val) || 0; }
 	function fnSize(str) { return str ? intval(str.length) : 0; }
@@ -655,6 +656,7 @@ function NumberBox(lang) {
 
 	this.intval = intval;
 	this.floatval = floatval;
+	this.isNumber = isNumber;
 	this.toFloat = function(str) { return _lang.toFloat(str); }
 	this.float = function(num, d) { return _lang.float(num, d); }
 	this.integer = function(num) { return _lang.integer(num); }
