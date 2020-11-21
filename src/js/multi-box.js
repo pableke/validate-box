@@ -795,11 +795,8 @@ function ValidateBox(opts) {
 	this.getConfig = function() { return opts; } //get current config
 	this.setConfig = function(data) { Object.assign(opts, data); return self; }
 
-	/*function isnum(str) { return !isNaN(str); } //0 = true
-	function intval(val) { return parseInt(val) || 0; }
-	function floatval(val) { return parseFloat(val) || 0; }
-	function fAttr(elem, name) { return floatval(elem.getAttribute(name)); } //attr value to number*/
 	function fnSize(str) { return str ? str.length : 0; }; //string o array
+	function fnTrim(str) { return str ? str.trim() : str; } //string only
 	function reTest(re, elemval) { //regex test
 		try {
 			return !elemval || re.test(elemval);
@@ -952,7 +949,9 @@ function ValidateBox(opts) {
 		let size = fnSize(list); //length
 		for (let i = 0; i < size; i++) {
 			let el = list[i]; //element
-			obj[el.name] = el.value;
+			let value = fnTrim(el.value);
+			if (el.name && value) //has value
+				obj[el.name] = value;
 		}
 		return obj;
 	}
@@ -980,7 +979,7 @@ function ValidateBox(opts) {
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
 			let fn = opts.validators[el.id];
-			if (fn && !fn(el.value, el)) {
+			if (fn && !fn(fnTrim(el.value), el)) {
 				self.isOk() && el.focus(); //focus on first error
 				errors.errno++; //change indicator
 			}
@@ -995,8 +994,9 @@ function ValidateBox(opts) {
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			if (el.name && el.value)
-				fd.append(el.name, el.value);
+			let value = fnTrim(el.value);
+			if (el.name && value) //has value
+				fd.append(el.name, value);
 		}
 		for (let k in data) //has extra data to send
 			fd.append(k, data[k]); //add extra data
@@ -1025,9 +1025,9 @@ function ValidateBox(opts) {
 						let size = fnSize(inputs); //length
 						for (let i = 0; i < size; i++) {
 							let el = inputs[i]; //element
-							if (errors[el.id]) { //set focus and stop
-								el.focus();
-								i = size;
+							if (errors[el.name]) {
+								el.focus(); //set focus
+								i = size; //srop for
 							}
 						}
 						reject(errors);

@@ -2,6 +2,18 @@
 const valid = require("../src/main");
 
 //https://jestjs.io/docs/en/getting-started.html
+describe("Is Number", () => {
+	test("Multi input value", () => {
+		expect(valid.nb.isNumber()).toBe(false);
+		expect(valid.nb.isNumber(undefined)).toBe(false);
+		expect(valid.nb.isNumber(null)).toBe(false);
+		//Important! isNaN(null) isNaN("") isNaN("   ") == false
+		expect(valid.nb.isNumber("   ")).toBe(true);
+		expect(valid.nb.isNumber("")).toBe(false);
+		expect(valid.nb.isNumber(0)).toBe(true);
+	});
+});
+
 describe("Bilding ES Numbers", () => {
 	test("Flasy Number", () => {
 		valid.setI18n("es");
