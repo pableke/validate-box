@@ -1,12 +1,23 @@
 
-//required node modeules
+/**
+ * @file index.js is the server test file for this module
+ * @author Pablo Rosique Vidal
+ * @see <a href="http://www.upct.es">UPCT</a>
+ */
+
 const fs = require("fs"); //file system
 const url = require("url"); //url parser
 const http = require("http"); //http server
 const qs = require("querystring"); //parse post data
 const valid = require("./main"); //validator
 
-const _maxFieldsSize = 20 * 1024 * 1024; //20mb
+/**
+ * Max fields size allowed in a request
+ * @type {number}
+ * @default 20mb
+ * @const
+ */
+ const _maxFieldsSize = 20 * 1024 * 1024; //20mb
 
 //create server instance
 const server = http.createServer(function(req, res) {
@@ -24,7 +35,7 @@ const server = http.createServer(function(req, res) {
 		req.on("data", function(chunk) {
 			rawData += chunk;
 			if (rawData.length > _maxFieldsSize) { //20mb
-				delete rawData; //free body memory
+				//delete rawData; //free body memory
 				req.connection.destroy(); //FLOOD ATTACK OR FAULTY CLIENT, NUKE REQUEST
 			}
 		});

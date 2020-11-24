@@ -1,4 +1,10 @@
 
+/**
+ * @file main.js is the root file for this module
+ * @author Pablo Rosique Vidal
+ * @see <a href="http://www.upct.es">UPCT</a>
+ */
+
 const DataBox = require("./data-box"); //data structure
 const DateBox = require("./date-box"); //date i18n and transformations
 const NumberBox = require("./number-box"); //number i18n and transformations

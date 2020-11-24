@@ -1,5 +1,8 @@
 
-//Number Box extensions
+/**
+ * Number-Box module
+ * @module Number-Box
+ */
 module.exports = function NumberBox(lang) {
 	const self = this; //self instance
 	const RE_SECTION = /\D+/g; //remove no digits
@@ -7,7 +10,8 @@ module.exports = function NumberBox(lang) {
 	const DOT = ".";
 
 	//helpers
-	function isNumber(val) { return (val !== null) && (val !== "") && !isNaN(val); } //important: isNaN(null) == false and isNaN("") == false
+	//important: isNaN(null) == false and isNaN("") == false
+	function isNumber(val) { return (val !== null) && (val !== "") && !isNaN(val); }
 	function dNaN(n, d) { return isNumber(n) ? n : d; } //default not a number
 	function intval(val) { return parseInt(val) || 0; }
 	function floatval(val) { return parseFloat(val) || 0; }

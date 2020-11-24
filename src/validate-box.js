@@ -1,5 +1,7 @@
-
-//Validations Box extensions
+/**
+ * Validate-Box module
+ * @module Validate-Box
+ */
 module.exports = function ValidateBox(opts) {
 	const self = this; //self instance
 	const SETTINGS = { //default configuration
@@ -173,6 +175,14 @@ module.exports = function ValidateBox(opts) {
 		}
 		return self;
 	}
+
+	/**
+	 * Load result object with the values from list as pairs name / value
+	 *
+	 * @param      {NodeList} list Input list to be translated to an output object as name value pairs
+	 * @param      {Object} obj Initial object container by default is empty object {}
+	 * @return     {Object} Object containing name value pairs from input list
+	 */
 	this.values = function(list, obj) {
 		obj = obj || {};
 		let size = fnSize(list); //length
@@ -185,6 +195,12 @@ module.exports = function ValidateBox(opts) {
 		return obj;
 	}
 
+	/**
+	 * Object that links inputs elements to its message error by name
+	 * 
+	 * @const
+	 * @type {Object}
+	 */
 	const errors = { errno: 0 }; //container
 	this.isOk = function() { return errors.errno == 0; }
 	this.isError = function() { return errors.errno > 0; }
@@ -202,6 +218,14 @@ module.exports = function ValidateBox(opts) {
 		return self.setErrno(0);
 	}
 
+	/**
+	 * Validate each input applying the associate function by key
+	 * 
+	 * @function validate
+	 * @param      {NodeList} inputs Input list to apply validate functions
+	 * @param      {Object} validators Extra functions for validating inputs
+	 * @return     {boolean} Indicates if all input has passed check functions
+	 */
 	this.validate = function(inputs, validators) {
 		self.init().add(validators); //init errors and validators
 		let size = fnSize(inputs); //length
@@ -216,6 +240,16 @@ module.exports = function ValidateBox(opts) {
 		return self.isOk();
 	}
 
+	/**
+	 * Make an AJAX request to server
+	 *
+	 * @async
+	 * @function fetch
+	 * @param      {Element} elem DOM element whitch send request
+	 * @param      {NodeList} inputs DOM inputs elements to be sended to server
+	 * @param      {Object} data Extra data to be added on request
+	 * @return     {Promise} Response from server
+	 */
 	this.fetch = function(elem, inputs, data) {
 		const CT = "application/x-www-form-urlencoded";
 		const opts = { method: "get", headers: { "Content-Type": CT } };  //init options

@@ -1,5 +1,8 @@
 
-//Date-Time Box extensions
+/**
+ * Date-Time module
+ * @module Date-Time
+ */
 module.exports = function DateBox(lang) {
 	const self = this; //self instance
 	const sysdate = new Date(); //global sysdate
