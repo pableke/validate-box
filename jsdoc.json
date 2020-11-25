@@ -5,14 +5,45 @@
     "includePattern": ".js$",
     "excludePattern": "(node_modules/|docs)"
   },
-  "plugins": ["plugins/markdown"],
+  "tags": {
+      "allowUnknownTags": ["category"]
+  },
+  "plugins": [
+      "plugins/markdown",
+      "jsdoc-mermaid",
+      "node_modules/better-docs/component",
+      "node_modules/better-docs/category"
+  ],
   "templates": {
     "cleverLinks": false,
-    "monospaceLinks": false
+    "monospaceLinks": false,
+    "search": true,
+    "default": {
+      "staticFiles": {
+        "include": ["src/css/docs.css", "src/img/upct-azul-logo.png"]
+      }
+    },
+    "better-docs": {
+      "css" : "docs.css",
+      "logo": "upct-azul-logo.png",
+      "name": "Validate-Box",
+      "title": "Validate-Box Documentation",
+      //"trackingCode": "tracking-code-which-will-go-to-the-HEAD",
+      "hideGenerator": false,
+       "navLinks": [
+          {
+              "label": "GitHub",
+              "href": "https://github.com/pableke/validate-box"
+          }
+      ]
+   }
   },
   "opts": {
     "recurse": true,
-    "encoding": "utf8", 
-    "destination": "./docs/"
+    "verbose": true,
+    "encoding": "utf8",
+    "readme": "readme.md",
+    "destination": "./docs/",
+    "template": "node_modules/better-docs"
   }
 }
