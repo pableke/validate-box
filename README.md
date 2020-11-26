@@ -27,9 +27,7 @@ Suitable for web apps with a great variety of forms.
 
 Start http server for validate request examples from client.
 
-1. trees.start():
-
-	<pre>
+<pre>
 	const fs = require("fs"); //file system
 	const url = require("url"); //url parser
 	const http = require("http"); //http server
@@ -83,12 +81,12 @@ Start http server for validate request examples from client.
 				console.log(req.url, "->", "src/views/index.html");
 			});
 	});
-	</pre>
+</pre>
 
 ### test
 
 Lunch jest testing
 
 <pre>
-npm test
+	npm test
 </pre>
