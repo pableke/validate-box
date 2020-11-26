@@ -165,6 +165,15 @@ module.exports = function ValidateBox(opts) {
 		return self.each(list, (el, i) => { el.value = ""; cb(el, i); });
 	}
 
+	/**
+	 * Load inputs with <b>obj</b> values, optionally can apply a function contents in <b>opts</b> param.
+	 *
+	 * @function load
+	 * @param      {NodeList} list Input list to be loaded by <b>obj</b> values
+	 * @param      {Object}  obj Contains name / value pairs to be applied to inputs
+	 * @param      {Object}  opts Functions to by applied by key
+	 * @return     {ValidateBox} self instance
+	 */
 	this.load = function(list, obj, opts) {
 		opts = opts || {}; //default settings
 		let size = fnSize(list); //length
@@ -177,8 +186,9 @@ module.exports = function ValidateBox(opts) {
 	}
 
 	/**
-	 * Load result object with the values from list as pairs name / value
+	 * Return an object with the values from input list as pairs name / value
 	 *
+	 * @function values
 	 * @param      {NodeList} list Input list to be translated to an output object as name value pairs
 	 * @param      {Object} obj Initial object container by default is empty object {}
 	 * @return     {Object} Object containing name value pairs from input list

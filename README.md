@@ -88,5 +88,5 @@ Start http server for validate request examples from client.
 Lunch jest testing
 
 <pre>
-	npm test
+	$ npm test
 </pre>
