@@ -17,9 +17,9 @@ Suitable for web apps with a great variety of forms.
 
 1. Install by npm:
 
-    ```
+    <pre>
     $ npm install validate-box
-    ```
+    </pre>
 
 </details>
 
@@ -29,7 +29,7 @@ Tree-Ss cahe index template, charset and static file age
 
 1. trees.start():
 
-	```
+	<pre>
 	const fs = require("fs"); //file system
 	const url = require("url"); //url parser
 	const http = require("http"); //http server
@@ -83,10 +83,10 @@ Tree-Ss cahe index template, charset and static file age
 				console.log(req.url, "->", "src/views/index.html");
 			});
 	});
-	```
+	</pre>
 
 ### test
 
-```
+<pre>
 npm test
-```
+</pre>

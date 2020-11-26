@@ -10,9 +10,7 @@ module.exports = function NumberBox(lang) {
 	const DOT = ".";
 
 	//helpers
-	//important: isNaN(null) == false and isNaN("") == false
-	function isNumber(val) { return (val !== null) && (val !== "") && !isNaN(val); }
-	function dNaN(n, d) { return isNumber(n) ? n : d; } //default not a number
+	function dNaN(val, def) { return (typeof val == "number") ? val : def; }
 	function intval(val) { return parseInt(val) || 0; }
 	function floatval(val) { return parseFloat(val) || 0; }
 	function fnSize(str) { return str ? intval(str.length) : 0; }
@@ -79,7 +77,40 @@ module.exports = function NumberBox(lang) {
 
 	this.intval = intval;
 	this.floatval = floatval;
-	this.isNumber = isNumber;
+
+	/**
+	 * Determines whether the specified string is number.
+	 * <pre><ul>
+	 * <li>isNaN(null) == false => isNumber(null) == false</li>
+	 * <li>isNaN("") == false => isNumber("") == false</li>
+	 * <li>isNaN("  ") == false => isNumber("  ") == false</li>
+	 * <li>isNaN("0") == true => isNumber("0") == true</li>
+	 * <li>isNaN("3j") == true => isNumber("3j") == false</li>
+	 * </ul></pre>
+	 *
+	 * @function isNumber
+	 * @param      {string}   str String representing a number
+	 * @return     {boolean}  True if the specified string is number, False otherwise.
+	 */
+	this.isNumber = function(str) { return str && !isNaN(str); };
+
+	/**
+	 * Retunr <b>val</b> param if it is number, or <b>def</b> param otherwise.
+	 * <pre><ul>
+	 * <li>isNaN(null) == false => dNaN(null, def) == def</li>
+	 * <li>isNaN("") == false => dNaN("", def) == def</li>
+	 * <li>isNaN("  ") == false => dNaN("  ", def) == def</li>
+	 * <li>isNaN("0") == true => dNaN("0", def) == 0</li>
+	 * <li>isNaN("3j") == true => dNaN("3j", def) == def</li>
+	 * </ul></pre>
+	 *
+	 * @function dNaN
+	 * @param      {string}   val Variable to check if is a number
+	 * @param      {number}   def Default value to return if val is not a number
+	 * @return     {number}  val if it is a number or def if val is not a number
+	 */
+	this.dNaN = dNaN;
+
 	this.toFloat = function(str) { return _lang.toFloat(str); }
 	this.float = function(num, d) { return _lang.float(num, d); }
 	this.integer = function(num) { return _lang.integer(num); }
@@ -88,7 +119,7 @@ module.exports = function NumberBox(lang) {
 	this.helper = function(str, d) { return _lang.helper(str, d); }
 	this.boolval = function(val) { return _lang.boolval(val); }
 
-	this.gt0 = function(num) { return dNan(num, 0) > 0; } //is pk ok?
+	this.gt0 = function(num) { return dNaN(num, 0) > 0; } //is pk ok?
 	this.le0 = function(num) { return isNaN(num) || (num <= 0); } //is pk ok?
 	this.between = function(num, min, max) { min = dNaN(min, num); max = dNaN(max, num); return (min <= num) && (num <= max); }
 	this.range = function(val, min, max) { return Math.max(Math.min(val, max), min); }

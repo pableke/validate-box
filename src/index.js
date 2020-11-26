@@ -1,8 +1,8 @@
 
 /**
- * @file index.js is the server test file for this module
+ * @file index.js is the test file for the http server
  * @author Pablo Rosique Vidal
- * @see <a href="http://www.upct.es">UPCT</a>
+ * @see <a href="https://github.com/pableke/validate-box">validate-box</a>
  */
 
 const fs = require("fs"); //file system

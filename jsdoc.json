@@ -2,6 +2,7 @@
 {
   "source": {
     "include": ["src"],
+    "exclude": ["src/js"],
     "includePattern": ".js$",
     "excludePattern": "(node_modules/|docs)"
   },
@@ -42,7 +43,7 @@
     "recurse": true,
     "verbose": true,
     "encoding": "utf8",
-    "readme": "readme.md",
+    //"readme": "README.md",
     "destination": "./docs/",
     "template": "node_modules/better-docs"
   }

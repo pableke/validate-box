@@ -2,7 +2,7 @@
 /**
  * @file main.js is the root file for this module
  * @author Pablo Rosique Vidal
- * @see <a href="http://www.upct.es">UPCT</a>
+ * @see <a href="https://github.com/pableke/validate-box">validate-box</a>
  */
 
 const DataBox = require("./data-box"); //data structure
