@@ -25,7 +25,7 @@ Suitable for web apps with a great variety of forms.
 
 ## Config
 
-Tree-Ss cahe index template, charset and static file age
+Start http server for validate request examples from client.
 
 1. trees.start():
 
@@ -86,6 +86,8 @@ Tree-Ss cahe index template, charset and static file age
 	</pre>
 
 ### test
+
+Lunch jest testing
 
 <pre>
 npm test

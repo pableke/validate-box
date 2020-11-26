@@ -95,7 +95,7 @@ function NumberBox(lang) {
 	this.isNumber = function(str) { return str && !isNaN(str); };
 
 	/**
-	 * Retunr <b>val</b> param if it is number, or <b>def</b> param otherwise.
+	 * Retunr <b>val</b> param if it is number or <b>def</b> param otherwise.
 	 * <pre><ul>
 	 * <li>isNaN(null) == false => dNaN(null, def) == def</li>
 	 * <li>isNaN("") == false => dNaN("", def) == def</li>
