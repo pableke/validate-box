@@ -5,3 +5,7 @@
 
 .tag-source span a { color: #798897; }
 .tag-source span a:hover { text-decoration: underline; color: #E6282B; }
+
+.member:not(:last-child):after { padding: 5px; }
+table.params { border: none; line-height: normal; }
+table.params thead th { font-weight: bold; background: #dbdbdb; }

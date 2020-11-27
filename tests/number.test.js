@@ -4,24 +4,25 @@ const valid = require("../src/main");
 //https://jestjs.io/docs/en/getting-started.html
 describe("Is Number", () => {
 	test("Multi input value", () => {
-		expect(valid.nb.isNumber()).toBe(false);
-		expect(valid.nb.isNumber(undefined)).toBe(false);
-		expect(valid.nb.isNumber(null)).toBe(false);
+		expect(valid.nb.isNumber()).toBeFalsy();
+		expect(valid.nb.isNumber(undefined)).toBeFalsy();
+		expect(valid.nb.isNumber(null)).toBeFalsy();
 		//Important! isNaN(null) isNaN("") isNaN("   ") == false
-		expect(valid.nb.isNumber("   ")).toBe(true);
-		expect(valid.nb.isNumber("")).toBe(false);
-		expect(valid.nb.isNumber(0)).toBe(true);
+		expect(valid.nb.isNumber("   ")).toBeFalsy();
+		expect(valid.nb.isNumber("")).toBeFalsy();
+		expect(valid.nb.isNumber("0")).toBe(true);
+		expect(valid.nb.isNumber("3j")).toBe(false);
 	});
 });
 
 describe("Bilding ES Numbers", () => {
 	test("Flasy Number", () => {
 		valid.setI18n("es");
-		expect(valid.nb.toFloat()).toBe(0);
-		expect(valid.nb.toFloat(undefined)).toBe(0);
-		expect(valid.nb.toFloat(null)).toBe(0);
-		expect(valid.nb.toFloat("")).toBe(0);
-		expect(valid.nb.toFloat(0)).toBe(0);
+		expect(valid.nb.toFloat()).toBeNull();
+		expect(valid.nb.toFloat(undefined)).toBeNull();
+		expect(valid.nb.toFloat(null)).toBeNull();
+		expect(valid.nb.toFloat("")).toBeNull();
+		expect(valid.nb.toFloat("0")).toBe(0);
 	});
 
 	const LONG = "5.398.245.163,75";
@@ -43,11 +44,11 @@ describe("Bilding ES Numbers", () => {
 describe("Bilding EN Numbers", () => {
 	test("Flasy Number", () => {
 		valid.setI18n("en");
-		expect(valid.nb.toFloat()).toBe(0);
-		expect(valid.nb.toFloat(undefined)).toBe(0);
-		expect(valid.nb.toFloat(null)).toBe(0);
-		expect(valid.nb.toFloat("")).toBe(0);
-		expect(valid.nb.toFloat(0)).toBe(0);
+		expect(valid.nb.toFloat()).toBeNull();
+		expect(valid.nb.toFloat(undefined)).toBeNull();
+		expect(valid.nb.toFloat(null)).toBeNull();
+		expect(valid.nb.toFloat("")).toBeNull();
+		expect(valid.nb.toFloat("0")).toBe(0);
 	});
 
 	const LONG = "5,398,245,163.75";

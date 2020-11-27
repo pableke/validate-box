@@ -1,6 +1,6 @@
 
 /**
- * Date-Time module
+ * Date-Time module for internationalization
  * @module Date-Time
  */
 module.exports = function DateBox(lang) {
@@ -124,13 +124,50 @@ module.exports = function DateBox(lang) {
 			dateFormat: "yy-mm-dd", firstDay: 1
 		}
 	}
-
-	//public functions
 	var _lang = langs.es; //default
+
+	/**
+	 * Gets currents system date.
+	 *
+	 * @return     {Date} Current system Date
+	 */
 	this.sysdate = function() { return sysdate; }
+
+	/**
+	 * Gets the object language associated to <b>lang</b> param, or current language if <b>lang</b> does not exists.
+	 *
+	 * @function getLang
+	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @return     {Object} The object containing all language operators.
+	 */
 	this.getLang = function(lang) { return lang ? langs[lang] : _lang; }
+
+	/**
+	 * Sets data object parameter as language associated to <b>lang</b> param.
+	 *
+	 * @function setLang
+	 * @param      {string}  lang The language string identificator: "en", "es", etc.
+	 * @param      {Object}  data The object containing all language operators.
+	 * @return     {DateBox} self instace of DateBox
+	 */
 	this.setLang = function(lang, data) { langs[lang] = data; return self; }
+
+	/**
+	 * Gets the object language associated to <b>lang</b> param, or default language if <b>lang</b> does not exists.
+	 *
+	 * @function getI18n
+	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @return     {Object} The object containing all language operators.
+	 */
 	this.getI18n = function(lang) { return langs[lang] || (lang && langs[lang.substr(0, 2)]) || langs.es; }
+
+	/**
+	 * Sets as current language, the object associated to <b>lang</b> param, or sets default language if <b>lang</b> does not exists.
+	 *
+	 * @function setI18n
+	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @return     {DateBox} self instace of DateBox
+	 */
 	this.setI18n = function(lang) { _lang = self.getI18n(lang); return self; }
 
 	this.valid = function(d) { return d && (d instanceof Date) && !isNaN(d.getTime()); }
