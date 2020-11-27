@@ -144,8 +144,7 @@ $(document).ready(function() {
 			}
 
 			ev.preventDefault();
-			fnResetForm(inputs);
-			if (vb.validate(inputs)) {
+			if (vb.validate(fnResetForm(inputs))) {
 				let loading = $(".loading").show();
 				let fn = loaders[this.id] || setSuccess;
 				if ((typeof grecaptcha !== "undefined") && this.classList.contains("captcha")) {
@@ -178,9 +177,14 @@ $(document).ready(function() {
 			ev.preventDefault();
 			try {
 				document.querySelector(this.href).scrollIntoView({ behavior: "smooth" });
-			} catch (ex) {
-				console.log("top", ex);
-			}
+			} catch (ex) {}
 		});
 	});
+
+	// SCROLL REVEAL SCRIPT
+	let sr = ScrollReveal();
+	sr.reveal(".header-content-left", { duration: 2000, origin: "top", distance: "300px" });
+	sr.reveal(".header-content-right", { duration: 2000, origin: "right", distance: "300px" });
+	sr.reveal(".header-btn", { duration: 2000, delay: 1000, origin: "bottom" });
+	sr.reveal("#testimonial div", { duration: 2000, origin: "left", distance: "300px", viewFactor: 0.2 });
 });

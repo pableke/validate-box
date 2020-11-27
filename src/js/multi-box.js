@@ -599,7 +599,6 @@ function NumberBox(lang) {
 	function fnTrim(str) { return isstr(str) ? str.trim() : str; } //string only
 	function fnSize(str) { return str ? str.length : 0; } //string o array
 	function boolval(val) { return val && (val !== "false") && (val !== "0"); }
-	function fnRound(num, d) { d = dNaN(d, 2); return +(Math.round(num + "e" + d) + "e-" + d); }
 	function rtl(str, size) {
 		var result = []; //parts container
 		for (var i = fnSize(str); i > size; i -= size)
@@ -657,7 +656,7 @@ function NumberBox(lang) {
 	 * Gets the object language associated to <b>lang</b> param, or current language if <b>lang</b> does not exists.
 	 *
 	 * @function getLang
-	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @param      {string} lang     The language string identificator: "en", "es", etc.
 	 * @return     {Object} The object containing all language operators.
 	 */
 	this.getLang = function(lang) { return lang ? langs[lang] : _lang; }
@@ -666,8 +665,8 @@ function NumberBox(lang) {
 	 * Sets data object parameter as language associated to <b>lang</b> param.
 	 *
 	 * @function setLang
-	 * @param      {string}  lang The language string identificator: "en", "es", etc.
-	 * @param      {Object}  data The object containing all language operators.
+	 * @param      {string}  lang     The language string identificator: "en", "es", etc.
+	 * @param      {Object}  data     The object containing all language operators.
 	 * @return     {NumberBox} self instace of NumberBox
 	 */
 	this.setLang = function(lang, data) { langs[lang] = data; return self; }
@@ -676,7 +675,7 @@ function NumberBox(lang) {
 	 * Gets the object language associated to <b>lang</b> param, or default language if <b>lang</b> does not exists.
 	 *
 	 * @function getI18n
-	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @param      {string} lang     The language string identificator: "en", "es", etc.
 	 * @return     {Object} The object containing all language operators.
 	 */
 	this.getI18n = function(lang) { return langs[lang] || (lang && langs[lang.substr(0, 2)]) || langs.es; }
@@ -685,7 +684,7 @@ function NumberBox(lang) {
 	 * Sets as current language, the object associated to <b>lang</b> param, or sets default language if <b>lang</b> does not exists.
 	 *
 	 * @function setI18n
-	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @param      {string} lang     The language string identificator: "en", "es", etc.
 	 * @return     {NumberBox} self instace of NumberBox
 	 */
 	this.setI18n = function(lang) { _lang = self.getI18n(lang); return self; }
@@ -701,7 +700,7 @@ function NumberBox(lang) {
 	 * </ul></pre>
 	 *
 	 * @function isNumber
-	 * @param      {string} str String representing a number
+	 * @param      {string} str     String representing a number
 	 * @return     {boolean} True if the specified string is number, False otherwise.
 	 */
 	this.isNumber = function(str) {
@@ -721,9 +720,9 @@ function NumberBox(lang) {
 	 * </ul></pre>
 	 *
 	 * @function dNaN
-	 * @param      {string} val Variable to check if is a number
-	 * @param      {number} def Default value to return if val is not a number
-	 * @return     {number} val if it is a number or def if val is not a number
+	 * @param      {string} val     Variable to check if is a number
+	 * @param      {number} def     Default value to return if val is not a number
+	 * @return     {number} val if it is a number or def otherwise
 	 */
 	function dNaN(val, def) { return isnum(val) ? val : def; }
 	this.dNaN = dNaN;
@@ -740,7 +739,7 @@ function NumberBox(lang) {
 	 * Check if <b>num</b> is number and greater than 0.
 	 *
 	 * @function gt0
-	 * @param      {number} num The number value
+	 * @param      {number} num     The number value
 	 * @return     {boolean} True if is number and greater than 0, False otherwise.
 	 */
 	this.gt0 = function(num) { return dNaN(num, 0) > 0; }
@@ -749,7 +748,7 @@ function NumberBox(lang) {
 	 * Check if <b>num</b> is not number or less than 0.
 	 *
 	 * @function le0
-	 * @param      {number} num Value
+	 * @param      {number} num     The value
 	 * @return     {boolean} True if is not number or is less than 0, False otherwise.
 	 */
 	this.le0 = function(num) { return isNaN(num) || (num <= 0); } //is pk ok?
@@ -762,7 +761,7 @@ function NumberBox(lang) {
 	 * <li>max < min => between == max</li>
 	 * </ul></pre>
 	 *
-	 * @function
+	 * @function between
 	 * @param      {number}   num     The number
 	 * @param      {number}   min     The minimum value
 	 * @param      {number}   max     The maximum value
@@ -773,7 +772,7 @@ function NumberBox(lang) {
 	/**
 	 * Gets an aleatorian value between [min..max] values.
 	 *
-	 * @function
+	 * @function range
 	 * @param      {number}   num     The number
 	 * @param      {number}   min     The minimum value
 	 * @param      {number}   max     The maximum value
@@ -784,14 +783,40 @@ function NumberBox(lang) {
 	/**
 	 * Gets an aleatorian value between [min..max] values.
 	 *
-	 * @function
+	 * @function rand
 	 * @param      {number}  min     The minimum value
 	 * @param      {number}  max     The maximum value
 	 * @return     {number}  Aleatory number between [min..max] values
 	 */
 	this.rand = function(min, max) { return Math.random() * (max - min) + min; }
+
+	/**
+	 * Parse <b>val</b> to integer, or 0 if is NaN
+	 *
+	 * @function intval
+	 * @param      {variable} val The value
+	 * @return     {number} The integer represents val param
+	 */
 	this.intval = function(val) { return parseInt(val) || 0; }
+
+	/**
+	 * Parse <b>val</b> to float, or 0 if is NaN
+	 *
+	 * @function floatval
+	 * @param      {variable} val     The value
+	 * @return     {number} The float represents val param
+	 */
 	this.floatval = function(val) { return parseFloat(val) || 0; }
+
+	/**
+	 * Round the specified number to a determinate scale
+	 *
+	 * @function round
+	 * @param      {number} num     The number to be rounded
+	 * @param      {number} dec     Number of decimals for rounding num @default 2
+	 * @return     {number} Number rounded
+	 */
+	function fnRound(num, dec) { dec = dNaN(dec, 2); return +(Math.round(num + "e" + dec) + "e-" + dec); }
 	this.round = fnRound;
 
 	//load default language
@@ -1306,8 +1331,7 @@ $(document).ready(function() {
 			}
 
 			ev.preventDefault();
-			fnResetForm(inputs);
-			if (vb.validate(inputs)) {
+			if (vb.validate(fnResetForm(inputs))) {
 				let loading = $(".loading").show();
 				let fn = loaders[this.id] || setSuccess;
 				if ((typeof grecaptcha !== "undefined") && this.classList.contains("captcha")) {
@@ -1340,9 +1364,14 @@ $(document).ready(function() {
 			ev.preventDefault();
 			try {
 				document.querySelector(this.href).scrollIntoView({ behavior: "smooth" });
-			} catch (ex) {
-				console.log("top", ex);
-			}
+			} catch (ex) {}
 		});
 	});
+
+	// SCROLL REVEAL SCRIPT
+	let sr = ScrollReveal();
+	sr.reveal(".header-content-left", { duration: 2000, origin: "top", distance: "300px" });
+	sr.reveal(".header-content-right", { duration: 2000, origin: "right", distance: "300px" });
+	sr.reveal(".header-btn", { duration: 2000, delay: 1000, origin: "bottom" });
+	sr.reveal("#testimonial div", { duration: 2000, origin: "left", distance: "300px", viewFactor: 0.2 });
 });
