@@ -1135,7 +1135,13 @@ function ValidateBox(opts) {
 
 	this.fetch = function(elem, inputs, data) {
 		const CT = "application/x-www-form-urlencoded";
-		const opts = { method: "get", headers: { "Content-Type": CT } };  //init options
+		const opts = { //init options
+			method: "get",
+			headers: {
+				"x-requested-with": "XMLHttpRequest",
+				"Content-Type": CT
+			}
+		};
 		let fd = new FormData(); //build pair key/value
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
@@ -1162,10 +1168,8 @@ function ValidateBox(opts) {
 			const isJson = (contentType && contentType.indexOf("application/json") !== -1);
 			return new Promise(function(resolve, reject) {
 				self.focus(inputs); //set focus on first element
-				if (res.ok) {
-					self.reset(inputs); //clear inputs
+				if (res.ok)
 					return (isJson ? res.json() : res.text()).then(resolve);
-				}
 				if (isJson)
 					res.json().then(errors => {
 						let size = fnSize(inputs); //length
