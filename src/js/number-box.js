@@ -4,8 +4,17 @@
  * @module Number-Box
  */
 function NumberBox(lang) {
-	const self = this; //self instance
-	const RE_SECTION = /\D+/g; //remove no digits
+	/**
+	 * Self instance = this
+	 * @const
+	 */
+	const self = this;
+
+	/**
+	 * Regular Expresion to remove no digits inputs
+	 * @const
+	 */
+	const RE_SECTION = /\D+/g;
 	const EMPTY = "";
 	const DOT = ".";
 
@@ -22,6 +31,17 @@ function NumberBox(lang) {
 		(i > 0) && result.unshift(str.substr(0, i));
 		return result;
 	}
+
+	/**
+	 * Format <b>num</b> parameter applying the specific configuration
+	 *
+	 * @function _format
+	 * @param      {number}  num     The number to be formatted
+	 * @param      {string}  s       Section separator, default = "."
+	 * @param      {string}  d       Decimal separator, default = ","
+	 * @param      {number}  n       Decimal part length (scale), default = 2
+	 * @return     {string}  Formated string representing the input number
+	 */
 	function _format(num, s, d, n) {
 		if (!isnum(num)) return EMPTY;
 		n = dNaN(n, 2); //default 2 decimals
@@ -34,7 +54,17 @@ function NumberBox(lang) {
 								? (rtl(strval, 3).join(s) + (decimals ? (d + "0".repeat(n)) : EMPTY))
 								: (rtl(strval.substr(0, separator), 3).join(s) + (decimals ? (d + strval.substr(separator + 1).padEnd(n, "0")) : EMPTY)));
 	}
-	function toNumber(str, d, n) {
+
+	/**
+	 * Parse <b>str</b> string parameter to number.
+	 *
+	 * @function _toNumber
+	 * @param      {string}  str     String representing a number
+	 * @param      {string}  d       Decimal separator, default = ","
+	 * @param      {number}  n       Decimal part length (scale), default = 2
+	 * @return     {number}  The number parsered
+	 */
+	function _toNumber(str, d, n) {
 		str = fnTrim(str);
 		if (!str) return null;
 		var separator = str.lastIndexOf(d);
@@ -45,9 +75,13 @@ function NumberBox(lang) {
 		return fnRound(num, n); //default 2 decimals
 	}
 
+	/**
+	 * Predefined languages
+	 * @const
+	 */
 	const langs = {
 		en: { //english
-			toFloat: function(str) { return toNumber(str, DOT); }, //build number
+			toFloat: function(str) { return _toNumber(str, DOT); }, //build number
 			float: function(num, d) { return _format(num, ",", DOT, d); }, //float format without decimals
 			integer: function(num) { return _format(num, ",", DOT, 0); }, //int format without decimals
 			trIsoFloat: function(str, d) { return str ? this.float(parseFloat(str), d) : str; }, //reformat iso string
@@ -57,7 +91,7 @@ function NumberBox(lang) {
 		},
 
 		es: { //spanish
-			toFloat: function(str) { return toNumber(str, ","); }, //build number
+			toFloat: function(str) { return _toNumber(str, ","); }, //build number
 			float: function(num, d) { return _format(num, DOT, ",", d); }, //float format without decimals
 			integer: function(num) { return _format(num, DOT, ",", 0); }, //int format without decimals
 			trIsoFloat: function(str, d) { return str ? this.float(parseFloat(str), d) : str; }, //reformat iso string
@@ -66,44 +100,64 @@ function NumberBox(lang) {
 			boolval: function(val) { return boolval(val) ? "Sí" : "No"; } //boolean spainish
 		}
 	};
-	var _lang = langs.es; //default
 
 	/**
-	 * Gets the object language associated to <b>lang</b> param, or current language if <b>lang</b> does not exists.
+	 * Default language defined by setI18n function
+	 * @see setI18n
+	 */
+	var _lang = langs.es;
+
+	/**
+	 * Gets the object language associated to <b>lang</b> parameter, or current language if <b>lang</b> is falsy.
+	 * @see langs
 	 *
 	 * @function getLang
-	 * @param      {string} lang     The language string identificator: "en", "es", etc.
+	 * @param      {string} lang     The language string identificator: "en", "es", etc. If is falsy return current language
 	 * @return     {Object} The object containing all language operators.
 	 */
-	this.getLang = function(lang) { return lang ? langs[lang] : _lang; }
+	this.getLang = function(lang) {
+		return lang ? langs[lang] : _lang;
+	}
 
 	/**
-	 * Sets data object parameter as language associated to <b>lang</b> param.
+	 * Sets <b>data</b> object as language associated to <b>lang</b> parameter in langs container.
+	 * @see langs
 	 *
 	 * @function setLang
 	 * @param      {string}  lang     The language string identificator: "en", "es", etc.
 	 * @param      {Object}  data     The object containing all language operators.
 	 * @return     {NumberBox} self instace of NumberBox
 	 */
-	this.setLang = function(lang, data) { langs[lang] = data; return self; }
+	this.setLang = function(lang, data) {
+		langs[lang] = data;
+		return self;
+	}
 
 	/**
-	 * Gets the object language associated to <b>lang</b> param, or default language if <b>lang</b> does not exists.
+	 * Gets the object language associated to <b>lang</b> param, or default language if <b>lang</b> does not exists (default = "es").
+	 * @see langs
 	 *
 	 * @function getI18n
 	 * @param      {string} lang     The language string identificator: "en", "es", etc.
 	 * @return     {Object} The object containing all language operators.
 	 */
-	this.getI18n = function(lang) { return langs[lang] || (lang && langs[lang.substr(0, 2)]) || langs.es; }
+	this.getI18n = function(lang) {
+		return langs[lang] || (lang && langs[lang.substr(0, 2)]) || langs.es;
+	}
 
 	/**
-	 * Sets as current language, the object associated to <b>lang</b> param, or sets default language if <b>lang</b> does not exists.
+	 * Sets the object associated to <b>lang</b> parameter in langs container as current language, or sets default language if <b>lang</b> does not exists in langs.
+	 * @see langs
+	 * @see getI18n
 	 *
 	 * @function setI18n
-	 * @param      {string} lang     The language string identificator: "en", "es", etc.
+	 * @param      {string}    lang     The language string identificator: "en", "es", etc.
 	 * @return     {NumberBox} self instace of NumberBox
 	 */
-	this.setI18n = function(lang) { _lang = self.getI18n(lang); return self; }
+	this.setI18n = function(lang) {
+		_lang = self.getI18n(lang);
+		return self;
+	}
 
 	/**
 	 * Determines whether the specified string is number.
@@ -140,10 +194,36 @@ function NumberBox(lang) {
 	 * @param      {number} def     Default value to return if val is not a number
 	 * @return     {number} val if it is a number or def otherwise
 	 */
-	function dNaN(val, def) { return isnum(val) ? val : def; }
+	function dNaN(val, def) {
+		return isnum(val) ? val : def;
+	}
 	this.dNaN = dNaN;
 
+	/**
+	 * Apply _toNumber parser with language configuration specified by setI18n
+	 * @see langs
+	 * @see _toNumber
+	 * @see setI18n
+	 *
+	 * @function toFloat
+	 * @param      {string}  str     String representing a number
+	 * @param      {string}  d       Decimal separator, default = ","
+	 * @param      {number}  n       Decimal part length (scale), default = 2
+	 * @return     {number}  The number parsered
+	 */
 	this.toFloat = function(str) { return _lang.toFloat(str); }
+
+	/**
+	 * Apply _format function for styling output number applying language configuration defined by setI18n
+	 * @see langs
+	 * @see _format
+	 * @see setI18n
+	 *
+	 * @function float
+	 * @param      {number}  num     Number to be formated to a string
+	 * @param      {number}  d       Decimal separator, default = ","
+	 * @return     {string}  The formatted string associated to number parameter
+	 */
 	this.float = function(num, d) { return _lang.float(num, d); }
 	this.integer = function(num) { return _lang.integer(num); }
 	this.trIsoFloat = function(num, d) { return _lang.trIsoFloat(num, d); }
@@ -158,7 +238,9 @@ function NumberBox(lang) {
 	 * @param      {number} num     The number value
 	 * @return     {boolean} True if is number and greater than 0, False otherwise.
 	 */
-	this.gt0 = function(num) { return dNaN(num, 0) > 0; }
+	this.gt0 = function(num) {
+		return dNaN(num, 0) > 0;
+	}
 
 	/**
 	 * Check if <b>num</b> is not number or less than 0.
@@ -167,7 +249,9 @@ function NumberBox(lang) {
 	 * @param      {number} num     The value
 	 * @return     {boolean} True if is not number or is less than 0, False otherwise.
 	 */
-	this.le0 = function(num) { return isNaN(num) || (num <= 0); } //is pk ok?
+	this.le0 = function(num) {
+		return isNaN(num) || (num <= 0);
+	}
 
 	/**
 	 * Close <b>num</b> between [min..max] values.
@@ -183,7 +267,11 @@ function NumberBox(lang) {
 	 * @param      {number}   max     The maximum value
 	 * @return     {boolean}  True if num is between [min..max], False otherwise 
 	 */
-	this.between = function(num, min, max) { min = dNaN(min, num); max = dNaN(max, num); return (min <= num) && (num <= max); }
+	this.between = function(num, min, max) {
+		min = dNaN(min, num);
+		max = dNaN(max, num);
+		return (min <= num) && (num <= max);
+	}
 
 	/**
 	 * Gets an aleatorian value between [min..max] values.
@@ -194,7 +282,9 @@ function NumberBox(lang) {
 	 * @param      {number}   max     The maximum value
 	 * @return     {boolean}  True if num is between [min..max], False otherwise 
 	 */
-	this.range = function(val, min, max) { return Math.max(Math.min(val, max), min); }
+	this.range = function(val, min, max) {
+		return Math.max(Math.min(val, max), min);
+	}
 
 	/**
 	 * Gets an aleatorian value between [min..max] values.
@@ -204,7 +294,9 @@ function NumberBox(lang) {
 	 * @param      {number}  max     The maximum value
 	 * @return     {number}  Aleatory number between [min..max] values
 	 */
-	this.rand = function(min, max) { return Math.random() * (max - min) + min; }
+	this.rand = function(min, max) {
+		return Math.random() * (max - min) + min;
+	}
 
 	/**
 	 * Parse <b>val</b> to integer, or 0 if is NaN
@@ -213,7 +305,9 @@ function NumberBox(lang) {
 	 * @param      {variable} val The value
 	 * @return     {number} The integer represents val param
 	 */
-	this.intval = function(val) { return parseInt(val) || 0; }
+	this.intval = function(val) {
+		return parseInt(val) || 0;
+	}
 
 	/**
 	 * Parse <b>val</b> to float, or 0 if is NaN
@@ -222,7 +316,9 @@ function NumberBox(lang) {
 	 * @param      {variable} val     The value
 	 * @return     {number} The float represents val param
 	 */
-	this.floatval = function(val) { return parseFloat(val) || 0; }
+	this.floatval = function(val) {
+		return parseFloat(val) || 0;
+	}
 
 	/**
 	 * Round the specified number to a determinate scale
@@ -232,7 +328,9 @@ function NumberBox(lang) {
 	 * @param      {number} dec     Number of decimals for rounding num @default 2
 	 * @return     {number} Number rounded
 	 */
-	function fnRound(num, dec) { dec = dNaN(dec, 2); return +(Math.round(num + "e" + dec) + "e-" + dec); }
+	function fnRound(num, dec) {
+		dec = dNaN(dec, 2); return +(Math.round(num + "e" + dec) + "e-" + dec);
+	}
 	this.round = fnRound;
 
 	//load default language

@@ -42,6 +42,10 @@ module.exports = function DateBox(lang) {
 	function fnMinTime(date) { return lpad(date.getHours()) + ":" + lpad(date.getMinutes()); } //hh:MM
 	function fnIsoTime(date) { return fnMinTime(date) + ":" + lpad(date.getSeconds()); } //hh:MM:ss
 
+	/**
+	 * Predefined languages
+	 * @const
+	 */
 	const langs = {
 		en: { //english
 			closeText: "close", prevText: "prev", nextText: "next", currentText: "current",
@@ -124,51 +128,71 @@ module.exports = function DateBox(lang) {
 			dateFormat: "yy-mm-dd", firstDay: 1
 		}
 	}
-	var _lang = langs.es; //default
 
 	/**
-	 * Gets currents system date.
+	 * Default language defined by setI18n function
+	 * @see setI18n
+	 */
+	var _lang = langs.es;
+
+	/**
+	 * Gets currents system date object.
 	 *
 	 * @return     {Date} Current system Date
 	 */
 	this.sysdate = function() { return sysdate; }
 
 	/**
-	 * Gets the object language associated to <b>lang</b> param, or current language if <b>lang</b> does not exists.
+	 * Gets the object language associated to <b>lang</b> parameter, or current language if <b>lang</b> is falsy.
+	 * @see langs
 	 *
 	 * @function getLang
-	 * @param      {string} lang The language string identificator: "en", "es", etc.
+	 * @param      {string} lang     The language string identificator: "en", "es", etc. If is falsy return current language
 	 * @return     {Object} The object containing all language operators.
 	 */
-	this.getLang = function(lang) { return lang ? langs[lang] : _lang; }
+	this.getLang = function(lang) {
+		return lang ? langs[lang] : _lang;
+	}
 
 	/**
-	 * Sets data object parameter as language associated to <b>lang</b> param.
+	 * Sets <b>data</b> object as language associated to <b>lang</b> parameter in langs container.
+	 * @see langs
 	 *
 	 * @function setLang
 	 * @param      {string}  lang The language string identificator: "en", "es", etc.
 	 * @param      {Object}  data The object containing all language operators.
 	 * @return     {DateBox} self instace of DateBox
 	 */
-	this.setLang = function(lang, data) { langs[lang] = data; return self; }
+	this.setLang = function(lang, data) {
+		langs[lang] = data;
+		return self;
+	}
 
 	/**
-	 * Gets the object language associated to <b>lang</b> param, or default language if <b>lang</b> does not exists.
+	 * Gets the object language associated to <b>lang</b> param, or default language if <b>lang</b> does not exists (default = "es").
+	 * @see langs
 	 *
 	 * @function getI18n
 	 * @param      {string} lang The language string identificator: "en", "es", etc.
 	 * @return     {Object} The object containing all language operators.
 	 */
-	this.getI18n = function(lang) { return langs[lang] || (lang && langs[lang.substr(0, 2)]) || langs.es; }
+	this.getI18n = function(lang) {
+		return langs[lang] || (lang && langs[lang.substr(0, 2)]) || langs.es;
+	}
 
 	/**
-	 * Sets as current language, the object associated to <b>lang</b> param, or sets default language if <b>lang</b> does not exists.
+	 * Sets the object associated to <b>lang</b> parameter in langs container as current language, or sets default language if <b>lang</b> does not exists in langs.
+	 * @see langs
+	 * @see getI18n
 	 *
 	 * @function setI18n
 	 * @param      {string} lang The language string identificator: "en", "es", etc.
 	 * @return     {DateBox} self instace of DateBox
 	 */
-	this.setI18n = function(lang) { _lang = self.getI18n(lang); return self; }
+	this.setI18n = function(lang) {
+		_lang = self.getI18n(lang);
+		return self;
+	}
 
 	this.valid = function(d) { return d && (d instanceof Date) && !isNaN(d.getTime()); }
 	this.setTime = function(date, hh, mm, ss, ms) { fnSetTime(date, hh, mm, ss, ms); return self; }
