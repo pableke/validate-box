@@ -17,6 +17,7 @@ vb.ds = new DataBox();
 vb.dt = new DateBox();
 vb.nb = new NumberBox();
 vb.sb = new StringBox();
+
 vb.setI18n = function(lang) {
 	this.dt.setI18n(lang);
 	this.nb.setI18n(lang);

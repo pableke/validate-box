@@ -4,8 +4,10 @@
  */
 module.exports = function ValidateBox(opts) {
 	const self = this; //self instance
-	const SETTINGS = { //default configuration
-		//RegEx to validators
+	const MESSAGES = {}; //messages container
+	const VALIDATORS = {}; //validators container
+	const SETTINGS = { //default config
+		//RegEx for validating
 		RE_DIGITS: /^\d+$/,
 		RE_IDLIST: /^\d+(,\d+)*$/,
 		RE_MAIL: /\w+[^\s@]+@[^\s@]+\.[^\s@]+/,
@@ -16,15 +18,14 @@ module.exports = function ValidateBox(opts) {
 		RE_URL: /(http|fttextp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
 		RE_DNI: /^(\d{8})([A-Z])$/,
 		RE_CIF: /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/,
-		RE_NIE: /^[XYZ]\d{7,8}[A-Z]$/,
-
-		//container
-		validators: {}
+		RE_NIE: /^[XYZ]\d{7,8}[A-Z]$/
 	}
 
 	opts = Object.assign({}, SETTINGS, opts); //congig is optional
-	this.getConfig = function() { return opts; } //get current config
-	this.setConfig = function(data) { Object.assign(opts, data); return self; }
+	this.getSettings = function() { return opts; } //get current config
+	this.setSettings = function(data) { Object.assign(opts, data); return self; }
+	this.getMessages = function() { return MESSAGES; } //get current config
+	this.setMessages = function(data) { MESSAGES = data || MESSAGES; return self; }
 
 	function fnSize(str) { return str ? str.length : 0; }; //string o array
 	function fnTrim(str) { return str ? str.trim() : str; } //string only
@@ -133,14 +134,14 @@ module.exports = function ValidateBox(opts) {
 	}
 
 	this.get = function(name) {
-		return name ? opts.validators[name] : opts.validators;
+		return name ? VALIDATORS[name] : VALIDATORS;
 	}
 	this.set = function(name, fn) {
-		opts.validators[name] = fn;
+		VALIDATORS[name] = fn;
 		return self;
 	}
 	this.add = function(extra) {
-		Object.assign(opts.validators, extra);
+		Object.assign(VALIDATORS, extra);
 		return self;
 	}
 
@@ -211,21 +212,25 @@ module.exports = function ValidateBox(opts) {
 	 * @const
 	 * @type {Object}
 	 */
-	const errors = { errno: 0 }; //container
-	this.isOk = function() { return errors.errno == 0; }
-	this.isError = function() { return errors.errno > 0; }
-	this.hasError = function(name) { return !!errors[name]; }
-	this.getError = function() { return errors; }
-	this.getErrors = function() { return errors; }
-	this.addErrno = function() { errors.errno++; return self; }
-	this.setErrno = function(errno) { errors.errno = errno; return self; }
-	this.setError = function(name, msg) { errors[name] = msg; return self.addErrno(); }
-	this.setMessage = function(msg) { errors.message = msg; return self.addErrno(); }
-	this.endErrors = function(msg) { return self.setMessage(msg || errors.message).getErrors(); }
+	const ERRORS = { errno: 0 }; //container
+	this.isOk = function() { return ERRORS.errno == 0; }
+	this.isError = function() { return ERRORS.errno > 0; }
+	this.hasError = function(name) { return !!ERRORS[name]; }
+	this.getError = function() { return ERRORS; }
+	this.getErrors = function() { return ERRORS; }
+	this.addErrno = function() { ERRORS.errno++; return self; }
+	this.setErrno = function(errno) { ERRORS.errno = errno; return self; }
+	this.setError = function(name, msg) { ERRORS[name] = msg; return self.addErrno(); }
+	this.setErrI18n = function(name, key) { return self.setError(name, MESSAGES[key]); }
+	this.setMessage = function(msg) { ERRORS.message = msg; return self.addErrno(); }
+	this.setMsgI18n = function(key) { return self.setMessage(MESSAGES[key]); }
 	this.init = function() {
-		for (let k in errors)
-			delete errors[k];
+		for (let k in ERRORS)
+			delete ERRORS[k];
 		return self.setErrno(0);
+	}
+	this.close = function(msg) {
+		return self.setMessage(MESSAGES[msg] || ERRORS.message || msg).getErrors();
 	}
 
 	/**
@@ -241,7 +246,7 @@ module.exports = function ValidateBox(opts) {
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			let fn = opts.validators[el.id];
+			let fn = VALIDATORS[el.id];
 			if (fn && !fn(fnTrim(el.value), el)) {
 				self.isOk() && el.focus(); //focus on first error
 				errors.errno++; //change indicator

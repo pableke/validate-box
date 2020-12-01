@@ -1017,8 +1017,10 @@ function StringBox() {
 //Validations Box extensions
 function ValidateBox(opts) {
 	const self = this; //self instance
-	const SETTINGS = { //default configuration
-		//RegEx to validators
+	const MESSAGES = {}; //messages container
+	const VALIDATORS = {}; //validators container
+	const SETTINGS = { //default config
+		//RegEx for validating
 		RE_DIGITS: /^\d+$/,
 		RE_IDLIST: /^\d+(,\d+)*$/,
 		RE_MAIL: /\w+[^\s@]+@[^\s@]+\.[^\s@]+/,
@@ -1029,15 +1031,14 @@ function ValidateBox(opts) {
 		RE_URL: /(http|fttextp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
 		RE_DNI: /^(\d{8})([A-Z])$/,
 		RE_CIF: /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/,
-		RE_NIE: /^[XYZ]\d{7,8}[A-Z]$/,
-
-		//container
-		validators: {}
+		RE_NIE: /^[XYZ]\d{7,8}[A-Z]$/
 	}
 
 	opts = Object.assign({}, SETTINGS, opts); //congig is optional
-	this.getConfig = function() { return opts; } //get current config
-	this.setConfig = function(data) { Object.assign(opts, data); return self; }
+	this.getSettings = function() { return opts; } //get current config
+	this.setSettings = function(data) { Object.assign(opts, data); return self; }
+	this.getMessages = function() { return MESSAGES; } //get current config
+	this.setMessages = function(data) { MESSAGES = data || MESSAGES; return self; }
 
 	function fnSize(str) { return str ? str.length : 0; }; //string o array
 	function fnTrim(str) { return str ? str.trim() : str; } //string only
@@ -1146,14 +1147,14 @@ function ValidateBox(opts) {
 	}
 
 	this.get = function(name) {
-		return name ? opts.validators[name] : opts.validators;
+		return name ? VALIDATORS[name] : VALIDATORS;
 	}
 	this.set = function(name, fn) {
-		opts.validators[name] = fn;
+		VALIDATORS[name] = fn;
 		return self;
 	}
 	this.add = function(extra) {
-		Object.assign(opts.validators, extra);
+		Object.assign(VALIDATORS, extra);
 		return self;
 	}
 
@@ -1178,6 +1179,15 @@ function ValidateBox(opts) {
 		return self.each(list, (el, i) => { el.value = ""; cb(el, i); });
 	}
 
+	/**
+	 * Load inputs with <b>obj</b> values, optionally can apply a function contents in <b>opts</b> param.
+	 *
+	 * @function load
+	 * @param      {NodeList} list Input list to be loaded by <b>obj</b> values
+	 * @param      {Object}  obj Contains name / value pairs to be applied to inputs
+	 * @param      {Object}  opts Functions to by applied by key
+	 * @return     {ValidateBox} self instance
+	 */
 	this.load = function(list, obj, opts) {
 		opts = opts || {}; //default settings
 		let size = fnSize(list); //length
@@ -1188,6 +1198,15 @@ function ValidateBox(opts) {
 		}
 		return self;
 	}
+
+	/**
+	 * Return an object with the values from input list as pairs name / value
+	 *
+	 * @function values
+	 * @param      {NodeList} list Input list to be translated to an output object as name value pairs
+	 * @param      {Object} obj Initial object container by default is empty object {}
+	 * @return     {Object} Object containing name value pairs from input list
+	 */
 	this.values = function(list, obj) {
 		obj = obj || {};
 		let size = fnSize(list); //length
@@ -1200,29 +1219,47 @@ function ValidateBox(opts) {
 		return obj;
 	}
 
-	const errors = { errno: 0 }; //container
-	this.isOk = function() { return errors.errno == 0; }
-	this.isError = function() { return errors.errno > 0; }
-	this.hasError = function(name) { return !!errors[name]; }
-	this.getError = function() { return errors; }
-	this.getErrors = function() { return errors; }
-	this.addErrno = function() { errors.errno++; return self; }
-	this.setErrno = function(errno) { errors.errno = errno; return self; }
-	this.setError = function(name, msg) { errors[name] = msg; return self.addErrno(); }
-	this.setMessage = function(msg) { errors.message = msg; return self.addErrno(); }
-	this.endErrors = function(msg) { return self.setMessage(msg || errors.message).getErrors(); }
+	/**
+	 * Object that links inputs elements to its message error by name
+	 * 
+	 * @const
+	 * @type {Object}
+	 */
+	const ERRORS = { errno: 0 }; //container
+	this.isOk = function() { return ERRORS.errno == 0; }
+	this.isError = function() { return ERRORS.errno > 0; }
+	this.hasError = function(name) { return !!ERRORS[name]; }
+	this.getError = function() { return ERRORS; }
+	this.getErrors = function() { return ERRORS; }
+	this.addErrno = function() { ERRORS.errno++; return self; }
+	this.setErrno = function(errno) { ERRORS.errno = errno; return self; }
+	this.setError = function(name, msg) { ERRORS[name] = msg; return self.addErrno(); }
+	this.setErrI18n = function(name, key) { return self.setError(name, MESSAGES[key]); }
+	this.setMessage = function(msg) { ERRORS.message = msg; return self.addErrno(); }
+	this.setMsgI18n = function(key) { return self.setMessage(MESSAGES[key]); }
 	this.init = function() {
-		for (let k in errors)
-			delete errors[k];
+		for (let k in ERRORS)
+			delete ERRORS[k];
 		return self.setErrno(0);
 	}
+	this.close = function(msg) {
+		return self.setMessage(MESSAGES[msg] || ERRORS.message || msg).getErrors();
+	}
 
+	/**
+	 * Validate each input applying the associate function by key
+	 * 
+	 * @function validate
+	 * @param      {NodeList} inputs Input list to apply validate functions
+	 * @param      {Object} validators Extra functions for validating inputs
+	 * @return     {boolean} Indicates if all input has passed check functions
+	 */
 	this.validate = function(inputs, validators) {
 		self.init().add(validators); //init errors and validators
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
-			let fn = opts.validators[el.id];
+			let fn = VALIDATORS[el.id];
 			if (fn && !fn(fnTrim(el.value), el)) {
 				self.isOk() && el.focus(); //focus on first error
 				errors.errno++; //change indicator
@@ -1231,6 +1268,16 @@ function ValidateBox(opts) {
 		return self.isOk();
 	}
 
+	/**
+	 * Make an AJAX request to server
+	 *
+	 * @async
+	 * @function fetch
+	 * @param      {Element} elem DOM element whitch send request
+	 * @param      {NodeList} inputs DOM inputs elements to be sended to server
+	 * @param      {Object} data Extra data to be added on request
+	 * @return     {Promise} Response from server
+	 */
 	this.fetch = function(elem, inputs, data) {
 		const CT = "application/x-www-form-urlencoded";
 		const opts = { //init options
