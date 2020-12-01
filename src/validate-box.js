@@ -1,3 +1,4 @@
+
 /**
  * Validate-Box module
  * @module Validate-Box
@@ -221,16 +222,16 @@ module.exports = function ValidateBox(opts) {
 	this.addErrno = function() { ERRORS.errno++; return self; }
 	this.setErrno = function(errno) { ERRORS.errno = errno; return self; }
 	this.setError = function(name, msg) { ERRORS[name] = msg; return self.addErrno(); }
-	this.setErrI18n = function(name, key) { return self.setError(name, MESSAGES[key]); }
+	this.i18nError = function(name, key) { return self.setError(name, MESSAGES[key]); }
 	this.setMessage = function(msg) { ERRORS.message = msg; return self.addErrno(); }
-	this.setMsgI18n = function(key) { return self.setMessage(MESSAGES[key]); }
+	this.i18nMessage = function(key) { return self.setMessage(MESSAGES[key]); }
 	this.init = function() {
 		for (let k in ERRORS)
 			delete ERRORS[k];
 		return self.setErrno(0);
 	}
 	this.close = function(msg) {
-		return self.setMessage(MESSAGES[msg] || ERRORS.message || msg).getErrors();
+		return self.setMessage(MESSAGES[msg] || msg).getErrors();
 	}
 
 	/**
