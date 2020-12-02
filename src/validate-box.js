@@ -250,7 +250,7 @@ module.exports = function ValidateBox(opts) {
 			let fn = VALIDATORS[el.id];
 			if (fn && !fn(fnTrim(el.value), el)) {
 				self.isOk() && el.focus(); //focus on first error
-				errors.errno++; //change indicator
+				ERRORS.errno++; //change indicator
 			}
 		}
 		return self.isOk();

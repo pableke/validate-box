@@ -124,7 +124,7 @@ $(document).ready(function() {
 		nif: (val, el) => {
 			return fnRequired(val, el) && (vb.esId(val.toUpperCase()) || setError(el, "regex"));
 		}
-	}).set("email", (val, el) => {
+	}).set("correo", (val, el) => {
 		return fnRequired(val, el) && (vb.email(val, el) || setError(el, "regex"));
 	}).focus(); //Set focus on first visible and editable input
 

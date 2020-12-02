@@ -1265,7 +1265,7 @@ function ValidateBox(opts) {
 			let fn = VALIDATORS[el.id];
 			if (fn && !fn(fnTrim(el.value), el)) {
 				self.isOk() && el.focus(); //focus on first error
-				errors.errno++; //change indicator
+				ERRORS.errno++; //change indicator
 			}
 		}
 		return self.isOk();
@@ -1463,7 +1463,7 @@ $(document).ready(function() {
 		nif: (val, el) => {
 			return fnRequired(val, el) && (vb.esId(val.toUpperCase()) || setError(el, "regex"));
 		}
-	}).set("email", (val, el) => {
+	}).set("correo", (val, el) => {
 		return fnRequired(val, el) && (vb.email(val, el) || setError(el, "regex"));
 	}).focus(); //Set focus on first visible and editable input
 
