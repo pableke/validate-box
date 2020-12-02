@@ -5,7 +5,6 @@
  */
 function ValidateBox(opts) {
 	const self = this; //self instance
-	const MESSAGES = {}; //messages container
 	const VALIDATORS = {}; //validators container
 	const SETTINGS = { //default config
 		//RegEx for validating
@@ -21,6 +20,7 @@ function ValidateBox(opts) {
 		RE_CIF: /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/,
 		RE_NIE: /^[XYZ]\d{7,8}[A-Z]$/
 	}
+	let MESSAGES = {}; //messages container
 
 	opts = Object.assign({}, SETTINGS, opts); //congig is optional
 	this.getSettings = function() { return opts; } //get current config
