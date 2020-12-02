@@ -5,7 +5,7 @@ $(document).ready(function() {
 	let dt = new DateBox(lang);
 	let nb = new NumberBox(lang);
 	let mb = new MessageBox(lang);
-	let vb = new ValidateBox();
+	let vb = new ValidateBox(mb);
 	let sb = new StringBox();
 
 	$("ul#menu").each(function(i, menu) { //build tree for the menu

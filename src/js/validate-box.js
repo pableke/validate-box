@@ -3,30 +3,22 @@
  * Validate-Box module
  * @module Validate-Box
  */
-function ValidateBox(opts) {
+function ValidateBox(mb) {
 	const self = this; //self instance
 	const VALIDATORS = {}; //validators container
-	const SETTINGS = { //default config
-		//RegEx for validating
-		RE_DIGITS: /^\d+$/,
-		RE_IDLIST: /^\d+(,\d+)*$/,
-		RE_MAIL: /\w+[^\s@]+@[^\s@]+\.[^\s@]+/,
-		RE_LOGIN: /^[\w#@&°!§%;:=\^\/\(\)\?\*\+\~\.\,\-\$]{6,}$/,
-		RE_IPv4: /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$/,
-		RE_IPv6: /^([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}$/,
-		RE_SWIFT: /^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$/, //SWIFT / BIC
-		RE_URL: /(http|fttextp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/,
-		RE_DNI: /^(\d{8})([A-Z])$/,
-		RE_CIF: /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/,
-		RE_NIE: /^[XYZ]\d{7,8}[A-Z]$/
-	}
-	let MESSAGES = {}; //messages container
 
-	opts = Object.assign({}, SETTINGS, opts); //congig is optional
-	this.getSettings = function() { return opts; } //get current config
-	this.setSettings = function(data) { Object.assign(opts, data); return self; }
-	this.getMessages = function() { return MESSAGES; } //get current config
-	this.setMessages = function(data) { MESSAGES = data || MESSAGES; return self; }
+	//RegEx for validating
+	const RE_DIGITS = /^\d+$/;
+	const RE_IDLIST = /^\d+(,\d+)*$/;
+	const RE_MAIL = /\w+[^\s@]+@[^\s@]+\.[^\s@]+/;
+	const RE_LOGIN = /^[\w#@&°!§%;:=\^\/\(\)\?\*\+\~\.\,\-\$]{6,}$/;
+	const RE_IPv4 = /^([0-9]{1,3}\.){3}[0-9]{1,3}(\/([0-9]|[1-2][0-9]|3[0-2]))?$/;
+	const RE_IPv6 = /^([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}$/;
+	const RE_SWIFT = /^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$/; //SWIFT / BIC
+	const RE_URL = /(http|fttextp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+	const RE_DNI = /^(\d{8})([A-Z])$/;
+	const RE_CIF = /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/;
+	const RE_NIE = /^[XYZ]\d{7,8}[A-Z]$/;
 
 	function fnSize(str) { return str ? str.length : 0; }; //string o array
 	function fnTrim(str) { return str ? str.trim() : str; } //string only
@@ -44,16 +36,16 @@ function ValidateBox(opts) {
 	}
 
 	this.regex = function(re, value) { return reTest(re, value); }
-	this.login = function(elemval) { return reTest(opts.RE_LOGIN, elemval); }
-	this.email = function(elemval) { return reTest(opts.RE_MAIL, elemval); }
-	this.digits = function(elemval) { return reTest(opts.RE_DIGITS, elemval); }
-	this.idlist = function(elemval) { return reTest(opts.RE_IDLIST, elemval); }
+	this.login = function(elemval) { return reTest(RE_LOGIN, elemval); }
+	this.email = function(elemval) { return reTest(RE_MAIL, elemval); }
+	this.digits = function(elemval) { return reTest(RE_DIGITS, elemval); }
+	this.idlist = function(elemval) { return reTest(RE_IDLIST, elemval); }
 	this.array = function(elemval) { return elemval ? Array.isArray(elemval) : true; }
 
 	this.esId = function(str) {
-		return reTest(opts.RE_DNI, str) ? self.dni(str)
-				: reTest(opts.RE_CIF, str) ? self.cif(str)
-				: reTest(opts.RE_NIE, str) ? self.nie(str)
+		return reTest(RE_DNI, str) ? self.dni(str)
+				: reTest(RE_CIF, str) ? self.cif(str)
+				: reTest(RE_NIE, str) ? self.nie(str)
 				: false;
 	}
 	this.dni = function(dni) {
@@ -62,7 +54,7 @@ function ValidateBox(opts) {
 		return (letra == dni.charAt(8));
 	}
 	this.cif = function(cif) {
-		var match = cif.match(opts.RE_CIF);
+		var match = cif.match(RE_CIF);
 		var letter = match[1];
 		var number  = match[2];
 		var control = match[3];
@@ -208,52 +200,24 @@ function ValidateBox(opts) {
 	}
 
 	/**
-	 * Object that links inputs elements to its message error by name
-	 * 
-	 * @const
-	 * @type {Object}
-	 */
-	const ERRORS = { errno: 0 }; //container
-	this.isOk = function() { return ERRORS.errno == 0; }
-	this.isError = function() { return ERRORS.errno > 0; }
-	this.hasError = function(name) { return !!ERRORS[name]; }
-	this.getError = function() { return ERRORS; }
-	this.getErrors = function() { return ERRORS; }
-	this.addErrno = function() { ERRORS.errno++; return self; }
-	this.setErrno = function(errno) { ERRORS.errno = errno; return self; }
-	this.setError = function(name, msg) { ERRORS[name] = msg; return self.addErrno(); }
-	this.i18nError = function(name, key) { return self.setError(name, MESSAGES[key]); }
-	this.setMessage = function(msg) { ERRORS.message = msg; return self.addErrno(); }
-	this.i18nMessage = function(key) { return self.setMessage(MESSAGES[key]); }
-	this.init = function() {
-		for (let k in ERRORS)
-			delete ERRORS[k];
-		return self.setErrno(0);
-	}
-	this.close = function(msg) {
-		return self.setMessage(MESSAGES[msg] || msg).getErrors();
-	}
-
-	/**
 	 * Validate each input applying the associate function by key
 	 * 
 	 * @function validate
 	 * @param      {NodeList} inputs Input list to apply validate functions
-	 * @param      {Object} validators Extra functions for validating inputs
 	 * @return     {boolean} Indicates if all input has passed check functions
 	 */
-	this.validate = function(inputs, validators) {
-		self.init().add(validators); //init errors and validators
+	this.validate = function(inputs) {
+		mb.init(); //init errors
 		let size = fnSize(inputs); //length
 		for (let i = 0; i < size; i++) {
 			let el = inputs[i]; //element
 			let fn = VALIDATORS[el.id];
 			if (fn && !fn(fnTrim(el.value), el)) {
-				self.isOk() && el.focus(); //focus on first error
-				ERRORS.errno++; //change indicator
+				mb.isOk() && el.focus(); //focus on first error
+				mb.addErrno(); //change indicator
 			}
 		}
-		return self.isOk();
+		return mb.isOk();
 	}
 
 	/**

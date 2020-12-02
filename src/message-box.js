@@ -3,7 +3,7 @@
  * Message-Box module
  * @module Message-Box
  */
-function MessageBox(lang) {
+module.exports = function MessageBox(lang) {
 	const self = this; //self instance
 	const langs = {
 		en: { //english

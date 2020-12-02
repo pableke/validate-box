@@ -7,21 +7,25 @@
 
 const DataBox = require("./data-box"); //data structure
 const DateBox = require("./date-box"); //date i18n and transformations
+const MessageBox = require("./message-box"); //validation messages
 const NumberBox = require("./number-box"); //number i18n and transformations
 const StringBox = require("./string-box"); //string extensions
 const ValidateBox = require("./validate-box"); //validators
 
-const vb = new ValidateBox();
+const mb = new MessageBox();
+const vb = new ValidateBox(mb);
 
 vb.ds = new DataBox();
 vb.dt = new DateBox();
+vb.mb = mb;
 vb.nb = new NumberBox();
 vb.sb = new StringBox();
 
 vb.setI18n = function(lang) {
-	this.dt.setI18n(lang);
-	this.nb.setI18n(lang);
-	return this;
+	vb.dt.setI18n(lang);
+	vb.mb.setI18n(lang);
+	vb.nb.setI18n(lang);
+	return vb;
 }
 
 module.exports = vb;
