@@ -122,7 +122,7 @@ $(document).ready(function() {
 			return (dt.sysdate() > f) ? true : setError(el, "range");
 		},
 		nif: (val, el) => {
-			return fnRequired(val, el) && (vb.esId(val.toUpperCase()) || setError(el, "regex"));
+			return fnRequired(val, el) && (vb.esId(val) || setError(el, "regex"));
 		}
 	}).set("correo", (val, el) => {
 		return fnRequired(val, el) && (vb.email(val, el) || setError(el, "regex"));

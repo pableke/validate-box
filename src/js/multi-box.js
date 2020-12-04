@@ -1072,12 +1072,21 @@ function ValidateBox(mb) {
 	const RE_IPv6 = /^([0-9A-Fa-f]{1,4}:){7}[0-9A-Fa-f]{1,4}$/;
 	const RE_SWIFT = /^[A-Z]{6,6}[A-Z2-9][A-NP-Z0-9]([A-Z0-9]{3,3}){0,1}$/; //SWIFT / BIC
 	const RE_URL = /(http|fttextp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
+	// Spanish Id's
 	const RE_DNI = /^(\d{8})([A-Z])$/;
 	const RE_CIF = /^([ABCDEFGHJKLMNPQRSUVW])(\d{7})([0-9A-J])$/;
 	const RE_NIE = /^[XYZ]\d{7,8}[A-Z]$/;
+	// Cards Numbers
+	const RE_VISA = /^(?:4[0-9]{12}(?:[0-9]{3})?)$/;
+	const RE_MASTER_CARD = /^(?:5[1-5][0-9]{14})$/;
+	const RE_AMEX = /^(?:3[47][0-9]{13})$/;
+	const RE_DISCOVER = /^(?:6(?:011|5[0-9][0-9])[0-9]{12})$/;
+	const RE_DINER_CLUB = /^(?:3(?:0[0-5]|[68][0-9])[0-9]{11})$/;
+	const RE_JCB = /^(?:(?:2131|1800|35\d{3})\d{11})$/;
 
 	function fnSize(str) { return str ? str.length : 0; }; //string o array
 	function fnTrim(str) { return str ? str.trim() : str; } //string only
+	function minify(str) { return str ? str.trim().replace(/\s+/g, "").toUpperCase() : str; }; //remove spaces and upper
 	function reTest(re, elemval) { //regex test
 		try {
 			return !elemval || re.test(elemval);
@@ -1099,10 +1108,16 @@ function ValidateBox(mb) {
 	this.array = function(elemval) { return elemval ? Array.isArray(elemval) : true; }
 
 	this.esId = function(str) {
-		return reTest(RE_DNI, str) ? self.dni(str)
-				: reTest(RE_CIF, str) ? self.cif(str)
-				: reTest(RE_NIE, str) ? self.nie(str)
-				: false;
+		str = minify(str);
+		if (!str)
+			return false;
+		if (reTest(RE_DNI, str))
+			return self.dni(str)
+		if (reTest(RE_CIF, str))
+			return self.cif(str)
+		if (reTest(RE_NIE, str))
+			return self.nie(str)
+		return false;
 	}
 	this.dni = function(dni) {
 		var letras = "TRWAGMYFPDXBNJZSQVHLCKE";
@@ -1142,10 +1157,9 @@ function ValidateBox(mb) {
 	}
 
 	this.iban = function(IBAN) {
-		if (fnSize(IBAN) < 24) return false;
-		//Se pasa a Mayusculas y se quita los espacios en blanco
-		IBAN = IBAN.trim().replace(/\s+/g, "").toUpperCase();
-		if (fnSize(IBAN) != 24) return false;
+		IBAN = minify(IBAN);
+		if (fnSize(IBAN) != 24)
+			return false;
 
 		// Se coge las primeras dos letras y se pasan a números
 		const LETRAS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -1157,11 +1171,31 @@ function ValidateBox(mb) {
 		aux = aux.substring(6) + aux.substring(0,6);
 
 		//Se calcula el resto modulo 97
-		var resto = "";
-		var parts = Math.ceil(aux.length/7);
+		let resto = "";
+		let parts = Math.ceil(aux.length/7);
 		for (let i = 1; i <= parts; i++)
 			resto = String(parseFloat(resto + aux.substr((i-1)*7, 7))%97);
-		return (resto == 1);
+		return (1 == resto);
+	}
+
+	this.creditCardNumber = function(cardNo) { //Luhn check algorithm
+		cardNo = minify(cardNo);
+		if (fnSize(cardNo) != 16)
+			return false;
+
+		let s = 0;
+		let doubleDigit = false;
+		cardNo = cardNo.trim().replace(/\s+/g, ""); //remove spaces
+		for (let i = 15; i >= 0; i--) {
+			let digit = +cardNo[i];
+			if (doubleDigit) {
+				digit *= 2;
+				digit -= (digit > 9) ? 9 : 0;
+			}
+			s += digit;
+			doubleDigit = !doubleDigit;
+		}
+		return ((s % 10) == 0);
 	}
 
 	this.generatePassword = function(size, charSet) {
@@ -1466,7 +1500,7 @@ $(document).ready(function() {
 			return (dt.sysdate() > f) ? true : setError(el, "range");
 		},
 		nif: (val, el) => {
-			return fnRequired(val, el) && (vb.esId(val.toUpperCase()) || setError(el, "regex"));
+			return fnRequired(val, el) && (vb.esId(val) || setError(el, "regex"));
 		}
 	}).set("correo", (val, el) => {
 		return fnRequired(val, el) && (vb.email(val, el) || setError(el, "regex"));
