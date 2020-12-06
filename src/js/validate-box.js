@@ -30,10 +30,10 @@ function ValidateBox(mb) {
 
 	function fnSize(str) { return str ? str.length : 0; }; //string o array
 	function fnTrim(str) { return str ? str.trim() : str; } //string only
-	function minify(str) { return str ? str.trim().replace(/\s+/g, "").toUpperCase() : str; }; //remove spaces and upper
+	function minify(str) { return str ? str.trim().replace(/\W+/g, "").toUpperCase() : str; }; //remove spaces and upper
 	function reTest(re, elemval) { //regex test
 		try {
-			return !elemval || re.test(elemval);
+			return re.test(elemval);
 		} catch(e) {}
 		return false;
 	}

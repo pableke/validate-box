@@ -10,7 +10,7 @@ describe("Validators and messages", () => {
 	});
 
 	test("Loggin RegExp", () => {
-		expect(valid.login(null)).toBeTruthy();
+		expect(valid.login(null)).toBeFalsy();
 		expect(valid.login("0,13")).toBe(false);
 	});
 
@@ -18,14 +18,18 @@ describe("Validators and messages", () => {
 		expect(valid.esId()).toBeFalsy();
 		expect(valid.esId(null)).toBeFalsy();
 		expect(valid.esId("")).toBeFalsy();
+		expect(valid.esId("   ")).toBeFalsy();
 		expect(valid.esId("asdklñfj asdf")).toBeFalsy();
 		expect(valid.esId("0,13")).toBe(false);
+		expect(valid.esId("11111111j")).toBe(false);
 		expect(valid.esId("11111111h")).toBe(true);
-		expect(valid.esId("11111111H")).toBe(true);
+		expect(valid.esId("11111111-H")).toBe(true);
+		expect(valid.esId("23024374 v")).toBe(true);
 	});
 
 	test("IBAN", () => {
 		expect(valid.iban()).toBeFalsy();
+		expect(valid.iban("  ")).toBeFalsy();
 		expect(valid.iban(null)).toBeFalsy();
 		expect(valid.iban("0,13")).toBe(false);
 		expect(valid.iban(" es34 4000056655665556 ")).toBe(false);
