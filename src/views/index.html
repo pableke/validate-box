@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+	<base href="../">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
 
 	<!-- google fonts -->
 	<link href="https://fonts.googleapis.com/css2?family=Titillium+Web&display=swap" rel="stylesheet">
@@ -28,31 +29,72 @@
 </head>
 <body>
 
-	<div id="navbarContent" class="collapse navbar-collapse">
-		<ul id="menu" class="navbar-nav">
-			<li id="16" parent="4" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 11">Sub Nav Link 11</a></li>
-			<li id="17" parent="4" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 12">Sub Nav Link 12</a></li>
-			<li id="1" class="nav-item"><a href="/" class="nav-link" title="Nav Link 1">Home</a></li>
-			<li id="2" class="nav-item"><a href="/login.html" class="nav-link" title="Nav Link 1">Login</a></li>
-			<li id="3" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 1">Sub Nav Link 1</a></li>
-			<li id="4" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 2">Sub Nav Link 2</a></li>
-			<li id="5" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 3">Sub Nav Link 3</a></li>
-			<li id="6" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 4">Sub Nav Link 4</a></li>
-			<li id="7" parent="2" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 5">Sub Nav Link 5</a></li>
-			<li id="8" class="nav-item"><a href="#header" class="nav-link" title="Nav Link 1">Header</a></li>
-			<li id="11" parent="8" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 6">Sub Nav Link 6</a></li>
-			<li id="12" parent="8" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 7">Sub Nav Link 7</a></li>
-			<li id="9" class="nav-item"><a href="#info-one" class="nav-link" title="Nav Link 1">About</a></li>
-			<li id="10" class="nav-item"><a href="#info-two" class="nav-link" title="Nav Link 1">Info 2</a></li>
-			<li id="13" parent="12" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 8">Sub Nav Link 8</a></li>
-			<li id="14" parent="12" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 9">Sub Nav Link 9</a></li>
-			<li id="15" parent="12" class="nav-item"><a href="#" class="nav-link" title="Sub Nav Link 10">Sub Nav Link 10</a></li>
+	<nav>
+	<div class="navbar bg-light sticky-top d-phone">
+		<a href="#" class="nav-item nav-main sidebar-toggle">
+			<img src="img/svg/book.svg" class="sidebar-icon" width="32" height="32" />
+			<img src="img/svg/arrow-left.svg" class="sidebar-icon d-none" width="32" height="32" />
+			Empresa
+		</a>
 
-			<li class="nav-item">
+		<div id="sidebar" class="p-2 bg-light">
+			<ul class="menu menu-left">
+				<li id="16" parent="4"><a href="#" title="Sub Nav Link 11">Sub Nav Link 11</a></li>
+				<li id="17" parent="4"><a href="#" title="Sub Nav Link 12">Sub Nav Link 12</a></li>
+				<li id="1"><a href="/" title="Nav Link 1">Home</a></li>
+				<li id="2"><a href="/login.html" title="Nav Link 1">Login</a></li>
+				<li id="3" parent="2"><a href="#" title="Sub Nav Link 1">Sub Nav Link 1</a></li>
+				<li id="4" parent="2"><a href="#" title="Sub Nav Link 2">Sub Nav Link 2</a></li>
+				<li id="5" parent="2"><a href="#" title="Sub Nav Link 3">Sub Nav Link 3</a></li>
+				<li id="6" parent="2"><a href="#" title="Sub Nav Link 4">Sub Nav Link 4</a></li>
+				<li id="7" parent="2"><a href="#" title="Sub Nav Link 5">Sub Nav Link 5</a></li>
+				<li id="8"><a href="#header" title="Nav Link 1">Header</a></li>
+				<li id="11" parent="8"><a href="#" title="Sub Nav Link 6">Sub Nav Link 6</a></li>
+				<li id="12" parent="8"><a href="#" title="Sub Nav Link 7">Sub Nav Link 7</a></li>
+				<li id="9"><a href="#info-one" title="Nav Link 1">About</a></li>
+				<li id="10"><a href="#info-two" title="Nav Link 1">Info 2</a></li>
+				<li id="13" parent="12"><a href="#" title="Sub Nav Link 8">Sub Nav Link 8</a></li>
+				<li id="14" parent="12"><a href="#" title="Sub Nav Link 9">Sub Nav Link 9</a></li>
+				<li id="15" parent="12"><a href="#" title="Sub Nav Link 10">Sub Nav Link 10</a></li>
+
+				<li>
+					<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="navbar bg-light sticky-top d-none-phone">
+		<a href="#" class="nav-item nav-main">
+			<img src="img/svg/book.svg" class="sidebar-icon" width="32" height="32" />
+			Empresa
+		</a>
+
+		<ul class="menu menu-top">
+			<li id="16" parent="4"><a href="#" title="Sub Nav Link 11">Sub Nav Link 11</a></li>
+			<li id="17" parent="4"><a href="#" title="Sub Nav Link 12">Sub Nav Link 12</a></li>
+			<li id="1"><a href="/" title="Nav Link 1">Home</a></li>
+			<li id="2"><a href="/login.html" title="Nav Link 1">Login</a></li>
+			<li id="3" parent="2"><a href="#" title="Sub Nav Link 1">Sub Nav Link 1</a></li>
+			<li id="4" parent="2"><a href="#" title="Sub Nav Link 2">Sub Nav Link 2</a></li>
+			<li id="5" parent="2"><a href="#" title="Sub Nav Link 3">Sub Nav Link 3</a></li>
+			<li id="6" parent="2"><a href="#" title="Sub Nav Link 4">Sub Nav Link 4</a></li>
+			<li id="7" parent="2"><a href="#" title="Sub Nav Link 5">Sub Nav Link 5</a></li>
+			<li id="8"><a href="#header" title="Nav Link 1">Header</a></li>
+			<li id="11" parent="8"><a href="#" title="Sub Nav Link 6">Sub Nav Link 6</a></li>
+			<li id="12" parent="8"><a href="#" title="Sub Nav Link 7">Sub Nav Link 7</a></li>
+			<li id="9"><a href="#info-one" title="Nav Link 1">About</a></li>
+			<li id="10"><a href="#info-two" title="Nav Link 1">Info 2</a></li>
+			<li id="13" parent="12"><a href="#" title="Sub Nav Link 8">Sub Nav Link 8</a></li>
+			<li id="14" parent="12"><a href="#" title="Sub Nav Link 9">Sub Nav Link 9</a></li>
+			<li id="15" parent="12"><a href="#" title="Sub Nav Link 10">Sub Nav Link 10</a></li>
+
+			<li>
 				<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
 			</li>
 		</ul>
 	</div>
+	</nav>
 
 	<div id="alerts" class="container">
 		<div class="alert alert-success alert-dismissible fade show d-none" role="alert">

@@ -8,26 +8,42 @@ $(document).ready(function() {
 	let vb = new ValidateBox(mb);
 	let sb = new StringBox();
 
-	$("ul#menu").each(function(i, menu) { //build tree for the menu
+	// Build all menus as UL > Li
+	$("ul.menu").each(function(i, menu) {
+		// Build menuu as tree
 		$(menu.children).filter("[parent][parent!='']").each((i, child) => {
 			let node = $("#" + $(child).attr("parent"), menu); //get parent node
-			node.children().last().is(menu.tagName) || node.append('<ul class="sub-menu"></ul>');
+			node.children().last().is(menu.tagName)
+				|| node.append('<ul class="sub-menu"></ul>').children("a").append('<b class="nav-tri">&rtrif;</b>');
 			node.children().last().append(child);
 		});
-		//add triangles in the second tree level deep
-		let triangles = $("li>ul", menu).find("ul.sub-menu").prev().append(' <b class="nav-tri">&rtrif;</b>').find("b.nav-tri");
-		$(menu.children, menu).remove("[parent][parent!='']"); //remove sub-levels
-		$("a.nav-link", menu).hover(function() {
-			triangles.html("&rtrif;");
-			$("b.nav-tri", this).html("&dtrif;");
-			$(this).parents("ul.sub-menu").each(function() {
-				$(this).prev().find("b.nav-tri").html("&dtrif;");
-			});
-		}).filter("[disabled]").each(function() {
+
+		// Remove empty sub-levels
+		$(menu.children).remove("[parent][parent!='']");
+
+		// Add triangles mark for submenu items
+		let triangles = $("b.nav-tri", menu); //find all marks
+		triangles.parent().click(function(ev) {
+			$(this.parentNode).toggleClass("active");
+			ev.preventDefault(); //not navigate when click on parent
+		});
+		$("li", menu).hover(function() {
+			triangles.html("&rtrif;"); //initialize triangles state
+			$(this).children("a").find("b.nav-tri").html("&dtrif;"); //down
+			$(this).parents("ul.sub-menu").prev().find("b.nav-tri").html("&dtrif;"); //up
+		});
+
+		// Disables links
+		$("[disabled]", menu).each(function() {
 			let mask = parseInt(this.getAttribute("disabled")) || 0;
 			$(this).toggleClass("disabled", (mask & 3) !== 3);
 		}).removeAttr("disabled");
-	}).children().fadeIn(200);
+	}).children().fadeIn(200); //show level=1
+	$(".sidebar-toggle").click(ev => {
+		$("#sidebar").toggleClass("active");
+		$(".sidebar-icon", ev.target.parentNode).toggleClass("d-none");
+		ev.preventDefault();
+	});
 
 	//Helpers and reformat numbers and dates by i18n
 	let booleans = document.querySelectorAll(".boolean");
