@@ -29,15 +29,14 @@
 </head>
 <body>
 
-	<nav>
-	<div class="navbar bg-light sticky-top d-phone">
-		<a href="#" class="nav-item nav-main sidebar-toggle">
+	<nav class="navbar">
+		<a href="#" class="nav-item nav-main sidebar-toggle d-phone">
 			<img src="img/svg/book.svg" class="sidebar-icon" width="32" height="32" />
 			<img src="img/svg/arrow-left.svg" class="sidebar-icon d-none" width="32" height="32" />
 			Empresa
 		</a>
 
-		<div id="sidebar" class="p-2 bg-light">
+		<div id="sidebar">
 			<ul class="menu menu-left">
 				<li id="16" parent="4"><a href="#" title="Sub Nav Link 11">Sub Nav Link 11</a></li>
 				<li id="17" parent="4"><a href="#" title="Sub Nav Link 12">Sub Nav Link 12</a></li>
@@ -62,15 +61,13 @@
 				</li>
 			</ul>
 		</div>
-	</div>
 
-	<div class="navbar bg-light sticky-top d-none-phone">
-		<a href="#" class="nav-item nav-main">
+		<a href="#" class="nav-item nav-main d-none-phone">
 			<img src="img/svg/book.svg" class="sidebar-icon" width="32" height="32" />
 			Empresa
 		</a>
 
-		<ul class="menu menu-top">
+		<ul class="menu menu-top d-none-phone">
 			<li id="16" parent="4"><a href="#" title="Sub Nav Link 11">Sub Nav Link 11</a></li>
 			<li id="17" parent="4"><a href="#" title="Sub Nav Link 12">Sub Nav Link 12</a></li>
 			<li id="1"><a href="/" title="Nav Link 1">Home</a></li>
@@ -93,33 +90,27 @@
 				<a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
 			</li>
 		</ul>
-	</div>
 	</nav>
 
-	<div id="alerts" class="container">
-		<div class="alert alert-success alert-dismissible fade show d-none" role="alert">
-			<span class="alert-text ml-2"></span>
-			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
-				<span aria-hidden="true">&times;</span>
-			</button>
+	<ul class="breadcrumb">
+		<li><a href="#">Home</a></li>
+		<li><a href="#">Pictures</a></li>
+		<li><a href="#">Summer 15</a></li>
+		<li>Italy</li>
+	</ul>
+
+	<div id="alerts">
+		<div class="alert alert-success">
+			<p class="alert-text"> asdf sdaf sadf sadfsdaf sda fsdaf sdaf sdaf sad</p>
+			<span class="alert-close">&times;</span>
 		</div>
-		<div class="alert alert-primary alert-dismissible fade show d-none" role="alert">
-			<span class="alert-text ml-2"></span>
-			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
-				<span aria-hidden="true">&times;</span>
-			</button>
+		<div class="alert alert-warn">
+			<p class="alert-text"><b>Prueba:</b> sdaf asdfasdfadf sadfasdf asfasd sdaf asd fasdf sdai fsdasd sdafa sdsaf asdf asdf asdf ffdsaf ñlkafñlkj assdñlkajlkf afdjk asdñlkafhk añfhñ asksdjñkafh ñassdñ akjñkafdjñkñl</p>
+			<span class="alert-close">&times;</span>
 		</div>
-		<div class="alert alert-warning alert-dismissible fade show d-none" role="alert">
-			<span class="alert-text ml-2"></span>
-			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
-				<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<div class="alert alert-danger alert-dismissible fade show d-none" role="alert">
-			<span class="alert-text ml-2"></span>
-			<button type="button" class="close" data-dismiss="alert" aria-label="@lblCerrar;">
-				<span aria-hidden="true">&times;</span>
-			</button>
+		<div class="alert alert-danger d-none">
+			<p class="alert-text"></p>
+			<span class="alert-close">&times;</span>
 		</div>
 	</div>
 
@@ -128,38 +119,28 @@
 		<hr class="my-4"/>
 
 		<form id="test" action="/test.html?lang=en" method="post">
-			<div class="form-row m-3">
-				<div class="form-group col-md-3">
-					<label for="nombre" class="required">Name:</label>
-					<div class="input-group">
-						<input type="text" id="nombre" name="nombre" value="" size="40" maxlength="200" class="form-control" tabindex="1" title="User name" placeholder="Joe" />
-						<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="fas fa-signature"></i></span></div>
-						<span class="invalid-feedback"></span>
-					</div>
-				</div>
+			<div class="input-group">
+				<label for="nombre" class="required">Name:</label>
+				<input type="text" id="nombre" name="nombre" value="" size="20" maxlength="200" class="input-item input-control " tabindex="1" title="User name" placeholder="Joe" />
+				<i class="input-item input-icon fas fa-signature"></i>
+				<span class="invalid-feedback"></span>
 			</div>
 
-			<div class="form-group col-md-5">
+			<div class="input-group">
 				<label for="email" class="required">E-Mail</label>
-				<div class="input-group">
-					<input type="text" id="email" name="email" value="" size="50" maxlength="200" tabindex="2" class="form-control" title="Type your email" placeholder="xxxx@yyyy.com" />
-					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-envelope"></i></span></div>
-					<div class="invalid-feedback"></div>
-				</div>
+				<input type="text" id="email" name="email" value="" size="40" maxlength="200" tabindex="2" class="input-item input-control clearable" title="Type your email" placeholder="xxxx@yyyy.com" />
+				<i class="input-item input-icon far fa-envelope"></i>
+				<div class="invalid-feedback"></div>
 			</div>
 
-			<div class="form-group col-md-6">
+			<div class="input-group">
 				<label for="ac1" class="required">jQuery Auto Suggest Textbox with Bootstrap 4</label>
-				<div class="input-group">
-					<div class="input-group-prepend"><span class="input-group-text" id="basic-addon2"><i class="fa fa-search"></i></span></div>
-					<input type="text" id="ac1" value="" size="15" tabindex="3" 
-						class="form-control input-lg autocomplete" placeholder="Search..." title="Autocomplete country textbox" />
-					<div class="input-group-append clear-input d-none"><button class="btn btn-outline-secondary" type="button" id="button-addon2">&times;</button></div>
-					<input type="hidden" id="idUsuario" name="idUsuario" value="1,863.06" />
-				</div>
+				<input type="text" id="ac1" value="" size="40" tabindex="3" class="input-item input-control clearable autocomplete" placeholder="Search..." title="Autocomplete country textbox" />
+				<input type="hidden" id="idUsuario" name="idUsuario" value="1,863.06" />
+				<i class="input-item input-icon fa fa-search"></i>
 			</div>
 
-			<div class="form-group col-md-3">
+			<div class="form-group">
 				<label for="date" class="required">Date:</label>
 				<div class="input-group">
 					<input type="text" id="date" name="date" value="" size="40" maxlength="10" tabindex="3" 
@@ -170,15 +151,15 @@
 				<small>ej: @ejDate;</small>
 			</div>
 
-			<div class="form-group col-md-3">
+			<div class="form-group">
 				<label for="time">Time:</label>
 				<div class="input-group">
 					<input id="time" type="text" value="" tabindex="4" class="form-control date datepicker" />
-					<div class="input-group-append"><span class="input-group-text" id="basic-addon2"><i class="far fa-clock"></i></span></div>
+					<i class="input-icon far fa-clock"></i>
 				</div>
 			</div>
 
-			<div class="form-group col-md-6">
+			<div class="form-group">
 				<label for="f1">Date Range:</label>
 				<div class="input-group">
 					<input type="text" id="f1" name="f1" class="form-control" value="2012-04-05" tabindex="5" />
@@ -187,12 +168,10 @@
 				</div>
 			</div>
 
-			<div class="form-row m-3">
-				<div class="form-group col-md-3">
-					<label for="asunto" class="required">Subject:</label>
-					<input type="text" id="asunto" name="asunto" value="" size="40" maxlength="200" class="form-control" tabindex="3" placeholder="Type a resume" />
-					<span class="invalid-feedback"></span>
-				</div>
+			<div class="input-group">
+				<label for="asunto" class="required">Subject:</label>
+				<input type="text" id="asunto" name="asunto" value="" size="40" maxlength="200" class="input-item input-control" tabindex="3" placeholder="Type a resume" />
+				<span class="invalid-feedback"></span>
 			</div>
 
 			<div class="form-group col-md-4">
@@ -217,6 +196,8 @@
 				</div>
 			</div>
 			<button href="contact.html?number=14,63" class="ajax-submit btn btn-success ml-2" tabindex="103">Ajax Send &raquo;</button>
+			<button href="contact.html?number=14,63" class="ajax-submit btn btn-warn ml-2" tabindex="103">Warning &raquo;</button>
+			<button href="contact.html?number=14,63" class="ajax-submit btn btn-dark ml-2" tabindex="103">Dark &raquo;</button>
 		</form>
 	</div>
 
@@ -224,7 +205,7 @@
 		<div class="text-center loading">
 			<div class="spinner-border text-info loading-content" role="status"><span class="sr-only">Loading...</span></div>
 		</div>
-		<a id="back-to-top" href="#" class="btn btn-light btn-lg back-to-top" role="button">
+		<a id="back-to-top" href="#" class="back-to-top" role="button">
 			<i class="fas fa-chevron-up"></i>
 		</a>
 	</footer>

@@ -1,0 +1,96 @@
+
+label { font-weight: bold; display: block; margin: 2px; width: 100%; }
+label.inline { font-weight: normal; display: inline-table; margin-right: 5px; }
+label.required:after { color: #e32; content: " *"; }
+fieldset { padding: 5px; margin-top: 5px; border-radius: 8px; }
+fieldset label { font-weight: normal; display: inline; }
+legend { padding: 4px; margin-left: 5px; font-weight: bold; }
+
+/* Inputs */
+.input-group {
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	width: 100%;
+	margin-bottom: 1rem;
+}
+.input-item {
+	display: inline-block;
+	height: calc(1.5em + .75rem + 2px);
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	font-weight: 400;
+	line-height: 1.5;
+	color: #495057;
+	border-radius: .25rem;
+}
+.input-control { background-color: #fff; background-clip: padding-box; }
+.input-control:focus { border: 2px solid #80bdff; outline: 0; }
+.input-icon { padding: .6rem .75rem; text-align: center; border: 1px solid #ced4da; background-color: #e9ecef; }
+/* Inputs */
+
+/* Clearable text inputs */
+.clearable {
+	background: #fff no-repeat right -20px center;
+	background-image: url("data:image/svg+xml;base64,PHN2ZyBhcmlhLWhpZGRlbj0idHJ1ZSIgZm9jdXNhYmxlPSJmYWxzZSIgZGF0YS1wcmVmaXg9ImZhcyIgZGF0YS1pY29uPSJ0aW1lcy1jaXJjbGUiIGNsYXNzPSJzdmctaW5saW5lLS1mYSBmYS10aW1lcy1jaXJjbGUgZmEtdy0xNiIgcm9sZT0iaW1nIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48cGF0aCBmaWxsPSJjdXJyZW50Q29sb3IiIGZpbGwtb3BhY2l0eT0iNDAlIiBkPSJNMjU2IDhDMTE5IDggOCAxMTkgOCAyNTZzMTExIDI0OCAyNDggMjQ4IDI0OC0xMTEgMjQ4LTI0OFMzOTMgOCAyNTYgOHptMTIxLjYgMzEzLjFjNC43IDQuNyA0LjcgMTIuMyAwIDE3TDMzOCAzNzcuNmMtNC43IDQuNy0xMi4zIDQuNy0xNyAwTDI1NiAzMTJsLTY1LjEgNjUuNmMtNC43IDQuNy0xMi4zIDQuNy0xNyAwTDEzNC40IDMzOGMtNC43LTQuNy00LjctMTIuMyAwLTE3bDY1LjYtNjUtNjUuNi02NS4xYy00LjctNC43LTQuNy0xMi4zIDAtMTdsMzkuNi0zOS42YzQuNy00LjcgMTIuMy00LjcgMTcgMGw2NSA2NS43IDY1LjEtNjUuNmM0LjctNC43IDEyLjMtNC43IDE3IDBsMzkuNiAzOS42YzQuNyA0LjcgNC43IDEyLjMgMCAxN0wzMTIgMjU2bDY1LjYgNjUuMXoiPjwvcGF0aD48L3N2Zz4=");
+	background-size: 20px 20px;
+	border: 1px solid #999;
+	padding: 3px 20px 3px 4px; /* Use the same right padding in jQ! */
+	border-radius: 3px;
+	transition: background 0.4s;
+}
+.clearable.x  { background-position: right 5px center; } /* (jQ) Show icon */
+.clearable.onX{ cursor: pointer; } /* (jQ) hover cursor style */
+.clearable::-ms-clear { display: none; width:0; height:0;} /* Remove IE default X */
+/* Clearable text inputs */
+
+/* Buttons */
+.btn {
+	display: inline-block;
+	margin: .1em;
+	padding: .3em 1.2em;
+	border-radius: 6px;
+	box-sizing: border-box;
+	text-decoration: none;
+	color: #fff;
+	text-align: center;
+	transition: all 0.2s;
+}
+.btn-primary { background-color: #007bff; }
+.btn-primary:hover { background-color: #0069d9; border-color: #0060c7; }
+.btn-secondary { background-color: #6c757d; }
+.btn-secondary:hover { background-color: #5a6268; border-color: #545b62; }
+.btn-light { color: #212529; background-color: #f8f9fa; }
+.btn-light:hover { background-color: #e2e6ea; border-color: #dae0e5; }
+.btn-success { background-color: #28a745; }
+.btn-success:hover { background-color: #218838; border-color: #1e7e34; }
+.btn-danger { background-color: #dc3545; }
+.btn-danger:hover { background-color: #c82333; border-color: #bd2130; }
+.btn-warn { color: #212529; background-color: #ffc107; }
+.btn-warn:hover { background-color: #e0a800; border-color: #d39e00; }
+.btn-info { background-color: #4e9af1; }
+.btn-dark { background-color: #343a40; }
+/* Buttons */
+
+/* Alerts */
+.alert {
+	position: relative;
+	margin: 1rem;
+	padding: .8rem 1rem;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+}
+.alert-text { padding-right: 2rem; display: inline-block; }
+.alert-close {
+	position: absolute;
+	display: block;
+	top: 0;
+	right: 0;
+	padding: .6rem 1rem;
+	cursor: pointer;
+}
+.alert-close:hover { color: #000; }
+.alert-success { color: #155724; background-color: #d4edda; border-color: #c3e6cb; }
+.alert-warn { color: #212529; background-color: #fff3cd; border-color: #ffeeba; }
+/* Alerts */
