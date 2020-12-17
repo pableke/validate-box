@@ -13,6 +13,7 @@ const valid = require("./main"); //validator
 
 /**
  * Max fields size allowed in a request
+ * 
  * @type {number}
  * @default 20mb
  * @const

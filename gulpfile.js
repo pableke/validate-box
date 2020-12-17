@@ -5,14 +5,14 @@ const minify = require("gulp-minify");
 const concat = require("gulp-concat");
 const css = require("gulp-clean-css");
 
-const STYLES = [ "src/css/style.css" ];
+const STYLES = [ "src/css/form.css", "src/css/menu.css", "src/css/style.css" ];
 const JS_FILES = [
 	"src/js/data-box.js", "src/js/date-box.js", "src/js/message-box.js", "src/js/number-box.js", 
 	"src/js/string-box.js", "src/js/validate-box.js", "src/js/util.js"
 ];
 
 gulp.task("pack-css", () => {    
-	return gulp.src("src/css/style.css")
+	return gulp.src(STYLES)
 				.pipe(concat("style.min.css"))
 				.pipe(css())
 				.pipe(gulp.dest("src/css"));

@@ -1,0 +1,80 @@
+
+/* Navbars */
+.navbar {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+
+	padding: .5rem .8rem;
+	background-color: #f8f9fa;
+}
+.nav-item { display: inline-block; margin-left: 5px; padding: .5rem .8rem; white-space: nowrap; color: rgba(0, 0, 0, .9); }
+.nav-main { font-size: 1.3rem; text-decoration: none; }
+.nav-main:hover { text-decoration: none; color: rgba(0, 0, 0, .9); }
+
+/* Menu-Top dropdown */
+ul.menu-top { margin: 0; margin-left: 5px; margin-right: auto!important; padding: 0; z-index: 1; }
+/* First li level: starts hide and after fadeIn by JS */
+ul.menu-top > li { display: none; float: left; }
+/* Next deep level in tree */
+ul.menu-top ul li { width: 100%!important; } /* Sublines expand over all ul parent space */
+ul.menu-top li { position: relative; list-style: none; color: rgba(0, 0, 0, .9); }
+ul.menu-top li:hover { background: #2c3e50; color: #fff; text-decoration: none; color: #fff; }
+/* All nav-links elements:; inherit from li (a same state as it's li) */
+ul.menu-top a { display: block; padding: .5rem .8rem; color: inherit!important; white-space: nowrap; }
+ul.menu-top a:hover { color: inherit!important; text-decoration: none; }
+ul.menu-top .nav-icon { display: inline-block; margin-right: 6px; }
+ul.menu-top .nav-tri { display: inline-block; margin-left: 10px; }
+/* This hides all dropdowns */
+ul.menu-top ul { display: none; position: absolute; left: 0; margin: 0; padding: 0; background: #f8f9fa; }
+/* Display the next dropdown */
+ul.menu-top li:hover > ul { display: block; border-left: 2px solid #2c3e50; }
+/* Displays second level dropdowns to the right of the first level dropdown */
+ul.menu-top ul ul { top: 1%; left: 99%; }
+/* Menu-Top dropdown */
+
+/* Sidebar left */
+#sidebar {
+	position: fixed;
+	z-index: 1;
+	top: 50px;
+	left: -240px;
+	width: 240px;
+	height: 100%;
+	padding: 1px;
+	min-height: 100vh;
+	background-color: #f8f9fa;
+	transition: all 500ms linear;
+}
+#sidebar.active {
+	left: 0px;
+}
+/* Sidebar left */
+
+/* Menu-Left dropdown */
+ul.menu-left { margin: 0; padding: 0; }
+ul.menu-left li { max-width: 240px; list-style: none; color: rgba(0, 0, 0, .9); }
+ul.menu-left li:hover { background: #2c3e50; color: #fff; text-decoration: none; }
+/* All nav-links elements:; inherit from li (a same state as it's li) */
+ul.menu-left a { display: block; padding: .5rem .8rem; color: inherit!important; white-space: nowrap; }
+ul.menu-left a:hover { color: inherit!important; text-decoration: none; }
+ul.menu-left .nav-icon { display: inline-block; margin-right: 6px; }
+ul.menu-left .nav-tri { display: inline-block; float: right; margin-left: 10px; }
+/* This hides all dropdowns */
+ul.menu-left ul { display: none; margin: 0; padding: 0; background: #f8f9fa; }
+/* Display the next dropdown */
+ul.menu-left li.active > ul { display: block; border: 1px solid rgba(100, 100, 100, .3); border-bottom: 2px solid #2c3e50; }
+/* Menu-Left dropdown */
+
+/* Breadcrumb pagination */
+ul.breadcrumb { padding: 10px 16px; list-style: none; background-color: #eee; }
+ul.breadcrumb li { display: inline; font-size: 12px; }
+ul.breadcrumb li+li:before { padding: 8px; color: black; content: "/\00a0"; }
+ul.breadcrumb li a { color: #0275d8; text-decoration: none; }
+ul.breadcrumb li a:hover { color: #01447e; text-decoration: underline; }
+/* Breadcrumb pagination */

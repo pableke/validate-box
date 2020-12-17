@@ -1423,6 +1423,17 @@ $(document).ready(function() {
 		ev.preventDefault();
 	});
 
+	// Clearable text inputs
+	function tog(v) { return v ? "addClass" : "removeClass"; }
+	$(document).on("input", ".clearable", function() {
+		$(this)[tog(this.value)]("x");
+	}).on("mousemove", ".x", function(ev) {
+		$(this)[tog(this.offsetWidth-28 < ev.clientX-this.getBoundingClientRect().left)]("onX");
+	}).on("touchstart click", ".onX", function(ev) {
+		ev.preventDefault();
+		$(this).removeClass("x onX").val("").change();
+	});
+
 	//Helpers and reformat numbers and dates by i18n
 	let booleans = document.querySelectorAll(".boolean");
 	$(document.querySelectorAll("input.float")).change(function() { this.value = nb.helper(this.value); });
@@ -1438,12 +1449,12 @@ $(document).ready(function() {
 	$(".datepicker").datepicker();
 
 	// Global show / hide messages in view
-	let alerts = $("div.alert").each(function(i, el) {
-		$(".alert-text:not(:empty)", el).length && $(el).removeClass("d-none");
-		$("button", el).click(function() { return !$(el).addClass("d-none"); });
+	let alerts = document.querySelectorAll("div.alert").forEach(el => {
+		el.querySelector(".alert-text:not(:empty)") && el.classList.remove("d-none");
+		el.querySelector(".alert-close").addEventListener("click", ev => !el.classList.add("d-none"));
 	});
-	function setDanger(msg) { return !alerts.addClass("d-none").filter(".alert-danger").removeClass("d-none").find(".alert-text").html(""+msg); }
-	function setSuccess(msg) { return !alerts.addClass("d-none").filter(".alert-success").removeClass("d-none").find(".alert-text").html(""+msg); }
+	function setDanger(msg) { return !$(alerts).addClass("d-none").filter(".alert-danger").removeClass("d-none").find(".alert-text").html(""+msg); }
+	function setSuccess(msg) { return !$(alerts).addClass("d-none").filter(".alert-success").removeClass("d-none").find(".alert-text").html(""+msg); }
 	//set messages functions as global for others .js
 	window.setDanger = setDanger; //global error
 	window.setSuccess = setSuccess; //global success

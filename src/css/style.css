@@ -6,81 +6,21 @@ body {
 	background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
 
-label { font-weight: bold; display: block; margin: 2px; }
-label.inline { font-weight: normal; display: inline-table; margin-right: 5px; }
-label.required:after { color: #e32; content: " *"; }
-fieldset { padding: 5px; margin-top: 5px; border-radius: 8px; }
-fieldset label { font-weight: normal; display: inline; }
-legend { padding: 4px; margin-left: 5px; font-weight: bold; }
-
-/* Navbars */
-.navbar { position: relative; display: flex; flex-wrap: wrap; padding: .5rem .8rem; align-items: center; justify-content: space-between; }
-.nav-item { display: inline-block; margin-left: 5px; padding: .5rem .8rem; white-space: nowrap; color: rgba(0, 0, 0, .9); }
-.nav-main { font-size: 1.3rem; text-decoration: none; }
-.nav-main:hover { text-decoration: none; color: rgba(0, 0, 0, .9); }
-
-/* Menu-Top dropdown */
-ul.menu-top { margin: 0; margin-left: 5px; margin-right: auto; padding: 0; z-index: 1; }
-/* First li level: starts hide and after fadeIn by JS */
-ul.menu-top > li { display: none; float: left; }
-/* Next deep level in tree */
-ul.menu-top ul li { width: 100%; } /* Sublines expand over all ul parent space */
-ul.menu-top li { position: relative; list-style: none; color: rgba(0, 0, 0, .9); }
-ul.menu-top li:hover { background: #2c3e50; color: #fff; text-decoration: none; color: #fff; }
-/* All nav-links elements inherit from its li (each a has the same state as its li) !important */
-ul.menu-top a { display: block; padding: .5rem .8rem; color: inherit; white-space: nowrap; }
-ul.menu-top a:hover { color: inherit; text-decoration: none; }
-ul.menu-top .nav-tri { display: inline-block; margin-left: 10px; }
-/* This hides all dropdowns */
-ul.menu-top ul { display: none; position: absolute; left: 0; margin: 0; padding: 0; background: #f8f9fa; }
-/* Display the next dropdown */
-ul.menu-top li:hover > ul { display: block; border-left: 2px solid #2c3e50; }
-/* Displays second level dropdowns to the right of the first level dropdown */
-ul.menu-top ul ul { top: 1%; left: 99%; }
-/* Menu-Top dropdown */
-
-/* Sidebar left */
-#sidebar {
-	position: fixed;
-	z-index: 1;
-	top: 50px;
-	left: -240px;
-	width: 240px;
-	height: 100%;
-	min-height: 100vh;
-	transition: all 500ms linear;
-}
-#sidebar.active {
-	left: 0px;
-}
-/* Sidebar left */
-
-/* Menu-Left dropdown */
-ul.menu-left { margin: 0; padding: 0; }
-ul.menu-left li { max-width: 240px; list-style: none; color: rgba(0, 0, 0, .9); }
-ul.menu-left li:hover { background: #2c3e50; color: #fff; text-decoration: none; }
-/* All nav-links elements inherit from its li (each a has the same state as its li) !important */
-ul.menu-left a { display: block; padding: .5rem .8rem; color: inherit; white-space: nowrap; }
-ul.menu-left a:hover { color: inherit; text-decoration: none; }
-ul.menu-left .nav-tri { display: inline-block; float: right; margin-left: 10px; }
-/* This hides all dropdowns */
-ul.menu-left ul { display: none; margin: 0; padding: 0; background: #f8f9fa; }
-/* Display the next dropdown */
-ul.menu-left li.active > ul { display: block; border: 1px solid rgba(100, 100, 100, .3); border-left: 2px solid #2c3e50; }
-/* Menu-Left dropdown */
-
 /* Cards clases */
 .card { border-left: 6px solid #1976D2; }
 .card h1 { margin: 1em; color: #1976D2; border-bottom: 1px solid #1976D2; }
 
 /* Specific styles */
-.hide { display: none; }
+.hide, .d-none { display: none; }
 .mw-300 { width: 300px; max-width: 300px; }
 .disabled { opacity: 0.5; pointer-events: none; text-decoration: none; }
 .simple { background-color: transparent; border-color: transparent; text-decoration: none; }
+
 .loading { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999; background-color: rgba(255, 255, 255, .8); display: none; }
 .loading-content { position: absolute; top: 50%; left: 50%; text-align: center; z-index: 100; }
-.back-to-top { position: fixed; bottom: 25px; right: 25px; display: none; }
+
+.back-to-top { position: fixed; bottom: 25px; right: 25px; display: none; padding: .5rem 1rem; font-size: 1.25rem; border-radius: .3rem; background-color: #f8f9fa; }
+.back-to-top:hover { background-color: #e2e6ea; border-color: #dae0e5; }
 
 /* Extra small devices (portrait phones, less than 576px) */
 @media screen and (max-width: 575.98px) {
