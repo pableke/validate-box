@@ -1396,8 +1396,11 @@ $(document).ready(function() {
 			node.children().last().append(child);
 		});
 
-		// Remove empty sub-levels
+		// Remove empty sub-levels and empty icons
 		$(menu.children).remove("[parent][parent!='']");
+		menu.querySelectorAll("i").forEach(i => {
+			(i.classList.length <= 1) && i.parentNode.removeChild(i);
+		});
 
 		// Add triangles mark for submenu items
 		let triangles = $("b.nav-tri", menu); //find all marks
