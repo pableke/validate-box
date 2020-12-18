@@ -1,4 +1,9 @@
 
+* {
+	margin: 0;
+	padding: 0;
+}
+
 body {
 	color: #000;
 	background: #8e9eab; /* fallback for old browsers */
@@ -16,8 +21,8 @@ body {
 .disabled { opacity: 0.5; pointer-events: none; text-decoration: none; }
 .simple { background-color: transparent; border-color: transparent; text-decoration: none; }
 
-.loading { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9999; background-color: rgba(255, 255, 255, .8); display: none; }
-.loading-content { position: absolute; top: 50%; left: 50%; text-align: center; z-index: 100; }
+.loading { position: fixed; left: 0px; top: 0px; width: 100%; height: 100%; z-index: 9; background-color: rgba(255, 255, 255, .8); display: none; }
+.loading-content { position: absolute; top: 50%; left: 50%; text-align: center; z-index: 8; }
 
 .back-to-top { position: fixed; bottom: 25px; right: 25px; display: none; padding: .5rem 1rem; font-size: 1.25rem; border-radius: .3rem; background-color: #f8f9fa; }
 .back-to-top:hover { background-color: #e2e6ea; border-color: #dae0e5; }

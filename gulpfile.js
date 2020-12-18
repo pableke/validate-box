@@ -8,10 +8,10 @@ const css = require("gulp-clean-css");
 const STYLES = [ "src/css/form.css", "src/css/menu.css", "src/css/style.css" ];
 const JS_FILES = [
 	"src/js/data-box.js", "src/js/date-box.js", "src/js/message-box.js", "src/js/number-box.js", 
-	"src/js/string-box.js", "src/js/validate-box.js", "src/js/util.js"
+	"src/js/string-box.js", "src/js/validate-box.js", "src/js/form.js", "src/js/menu.js"
 ];
 
-gulp.task("pack-css", () => {    
+gulp.task("pack-css", () => {
 	return gulp.src(STYLES)
 				.pipe(concat("style.min.css"))
 				.pipe(css())
@@ -26,8 +26,8 @@ gulp.task("pack-js", () => {
 });
 
 gulp.task("watch", () => {
-	gulp.watch(STYLES, gulp.series("pack-css")); 
-	gulp.watch(JS_FILES, gulp.series("pack-js")); 
+	gulp.watch(STYLES, gulp.series("pack-css"));
+	gulp.watch(JS_FILES, gulp.series("pack-js"));
 	// Other watchers ...
 });
 

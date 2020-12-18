@@ -1386,57 +1386,6 @@ $(document).ready(function() {
 	let vb = new ValidateBox(mb);
 	let sb = new StringBox();
 
-	// Build all menus as UL > Li
-	$("ul.menu").each(function(i, menu) {
-		// Build menuu as tree
-		$(menu.children).filter("[parent][parent!='']").each((i, child) => {
-			let node = $("#" + $(child).attr("parent"), menu); //get parent node
-			node.children().last().is(menu.tagName)
-				|| node.append('<ul class="sub-menu"></ul>').children("a").append('<b class="nav-tri">&rtrif;</b>');
-			node.children().last().append(child);
-		});
-
-		// Remove empty sub-levels and empty icons
-		$(menu.children).remove("[parent][parent!='']");
-		menu.querySelectorAll("i").forEach(i => {
-			(i.classList.length <= 1) && i.parentNode.removeChild(i);
-		});
-
-		// Add triangles mark for submenu items
-		let triangles = $("b.nav-tri", menu); //find all marks
-		triangles.parent().click(function(ev) {
-			$(this.parentNode).toggleClass("active");
-			ev.preventDefault(); //not navigate when click on parent
-		});
-		$("li", menu).hover(function() {
-			triangles.html("&rtrif;"); //initialize triangles state
-			$(this).children("a").find("b.nav-tri").html("&dtrif;"); //down
-			$(this).parents("ul.sub-menu").prev().find("b.nav-tri").html("&dtrif;"); //up
-		});
-
-		// Disables links
-		$("[disabled]", menu).each(function() {
-			let mask = parseInt(this.getAttribute("disabled")) || 0;
-			$(this).toggleClass("disabled", (mask & 3) !== 3);
-		}).removeAttr("disabled");
-	}).children().fadeIn(200); //show level=1
-	$(".sidebar-toggle").click(ev => {
-		$("#sidebar").toggleClass("active");
-		$(".sidebar-icon", ev.target.parentNode).toggleClass("d-none");
-		ev.preventDefault();
-	});
-
-	// Clearable text inputs
-	function tog(v) { return v ? "addClass" : "removeClass"; }
-	$(document).on("input", ".clearable", function() {
-		$(this)[tog(this.value)]("x");
-	}).on("mousemove", ".x", function(ev) {
-		$(this)[tog(this.offsetWidth-28 < ev.clientX-this.getBoundingClientRect().left)]("onX");
-	}).on("touchstart click", ".onX", function(ev) {
-		ev.preventDefault();
-		$(this).removeClass("x onX").val("").change();
-	});
-
 	//Helpers and reformat numbers and dates by i18n
 	let booleans = document.querySelectorAll(".boolean");
 	$(document.querySelectorAll("input.float")).change(function() { this.value = nb.helper(this.value); });
@@ -1467,10 +1416,16 @@ $(document).ready(function() {
 	function setError(el, name) { return setMsgErr(el, mb.get(name)); }
 	function fnRequired(val, el) { return val || setError(el, "required"); }
 
-	//Clear the input asociated to X button and give it focus
-	function toggleClear() { $(this).siblings(".clear-input").toggleClass("d-none", !this.value); } //toggle X button
-	$(".clear-input").click(function() { $(this).addClass("d-none").siblings("input").val("").focus(); })
-					.siblings("input").each(toggleClear).keyup(toggleClear);
+	// Clearable text inputs
+	function tog(v) { return v ? "addClass" : "removeClass"; }
+	$(document).on("input", ".clearable", function() {
+		$(this)[tog(this.value)]("x");
+	}).on("mousemove", ".x", function(ev) {
+		$(this)[tog(this.offsetWidth-28 < ev.clientX-this.getBoundingClientRect().left)]("onX");
+	}).on("touchstart click", ".onX", function(ev) {
+		ev.preventDefault();
+		$(this).removeClass("x onX").val("").change();
+	});
 
 	//Initialize all textarea counter
 	function fnCounter() { $("#counter-" + this.id).text(Math.abs(this.getAttribute("maxlength") - sb.size(this.value))); }
@@ -1572,6 +1527,68 @@ $(document).ready(function() {
 			}
 			else
 				setDanger(mb.get("form"));
+		});
+	});
+});
+
+
+//DOM is fully loaded
+$(document).ready(function() {
+	// Build all menus as UL > Li
+	$("ul.menu").each(function(i, menu) {
+		// Build menuu as tree
+		$(menu.children).filter("[parent][parent!='']").each((i, child) => {
+			let node = $("#" + $(child).attr("parent"), menu); //get parent node
+			node.children().last().is(menu.tagName)
+				|| node.append('<ul class="sub-menu"></ul>').children("a").append('<b class="nav-tri">&rtrif;</b>');
+			node.children().last().append(child);
+		});
+
+		// Remove empty sub-levels and empty icons
+		$(menu.children).remove("[parent][parent!='']");
+		menu.querySelectorAll("i").forEach(i => {
+			(i.classList.length <= 1) && i.parentNode.removeChild(i);
+		});
+
+		// Add triangles mark for submenu items
+		let triangles = $("b.nav-tri", menu); //find all marks
+		triangles.parent().click(function(ev) {
+			$(this.parentNode).toggleClass("active");
+			ev.preventDefault(); //not navigate when click on parent
+		});
+		$("li", menu).hover(function() {
+			triangles.html("&rtrif;"); //initialize triangles state
+			$(this).children("a").find("b.nav-tri").html("&dtrif;"); //down
+			$(this).parents("ul.sub-menu").prev().find("b.nav-tri").html("&dtrif;"); //up
+		});
+
+		// Disables links
+		$("[disabled]", menu).each(function() {
+			let mask = parseInt(this.getAttribute("disabled")) || 0;
+			$(this).toggleClass("disabled", (mask & 3) !== 3);
+		}).removeAttr("disabled");
+	}).children().fadeIn(200); //show level=1
+
+	// Show/Hide sidebar
+	$(".sidebar-toggle").click(ev => {
+		$("#sidebar").toggleClass("active");
+		$(".sidebar-icon", this.parentNode).toggleClass("d-none");
+		ev.preventDefault();
+	});
+
+	// Dropdown menu events
+	document.querySelectorAll(".dropdown").forEach(el => {
+		el.addEventListener("click", ev => {
+			ev.preventDefault();
+			let rect = el.getBoundingClientRect();
+			let $el = $(el).siblings(".dropdown-menu").toggleClass("active");
+			if ((rect.left + rect.width) > window.innerWidth)
+				$el.css("right", rect.right);
+			else
+				$el.css("left", rect.left);
+		});
+		el.addEventListener("focusout", ev => {
+			$(el).siblings(".dropdown-menu").removeClass("active");
 		});
 	});
 
