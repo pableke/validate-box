@@ -4,12 +4,32 @@
 	padding: 0;
 }
 
+html {
+	font-family: sans-serif;
+}
+
 body {
 	color: #000;
 	background: #8e9eab; /* fallback for old browsers */
 	background: -webkit-linear-gradient(to right, #eef2f3, #8e9eab); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(to right, #eef2f3, #8e9eab); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
+
+
+h1, h2, h3, h4, h5, h6 { margin-bottom: .5rem; }
+hr { margin: 1rem 0; border: 0; border-top: 1px solid rgba(0,0,0,.1); }
+img { vertical-align: middle; border-style: none; }
+
+/* Container */
+.container {
+	margin: auto;
+	padding: 2rem 1rem;
+	margin-bottom: 2rem;
+	background-color: #e9ecef;
+	border-radius: .3rem;
+	width: 90%;
+}
+/* Container */
 
 /* Cards clases */
 .card { border-left: 6px solid #1976D2; }

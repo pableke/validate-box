@@ -26,7 +26,7 @@ ul.menu-top ul li { width: 100%!important; } /* Sublines expand over all ul pare
 ul.menu-top li { position: relative; list-style: none; color: rgba(0, 0, 0, .9); }
 ul.menu-top li:hover { background: #2c3e50; color: #fff; text-decoration: none; color: #fff; }
 /* All nav-links elements:; inherit from li (a same state as it's li) */
-ul.menu-top a { display: block; padding: .5rem .8rem; color: inherit!important; white-space: nowrap; }
+ul.menu-top a { display: block; padding: .5rem .8rem; color: inherit!important; white-space: nowrap; text-decoration: none; }
 ul.menu-top a:hover { color: inherit!important; text-decoration: none; }
 ul.menu-top .nav-icon { display: inline-block; margin-right: 6px; }
 ul.menu-top .nav-tri { display: inline-block; margin-left: 10px; }
@@ -61,7 +61,7 @@ ul.menu-left { margin: 0; padding: 0; }
 ul.menu-left li { max-width: 240px; list-style: none; color: rgba(0, 0, 0, .9); }
 ul.menu-left li:hover { background: #2c3e50; color: #fff; text-decoration: none; }
 /* All nav-links elements:; inherit from li (a same state as it's li) */
-ul.menu-left a { display: block; padding: .5rem .8rem; color: inherit!important; white-space: nowrap; }
+ul.menu-left a { display: block; padding: .5rem .8rem; color: inherit!important; white-space: nowrap; text-decoration: none; }
 ul.menu-left a:hover { color: inherit!important; text-decoration: none; }
 ul.menu-left .nav-icon { display: inline-block; margin-right: 6px; }
 ul.menu-left .nav-tri { display: inline-block; float: right; margin-left: 10px; }
@@ -79,29 +79,27 @@ ul.menu-left li.active > ul { display: block; border: 1px solid rgba(100, 100, 1
 	float: left;
 	z-index: 1;
 	min-width: 10rem;
-	padding: .5rem 0;
-	margin: .125rem 0 0;
+	padding: .5rem;
+	margin: .125rem 0;
 	font-size: 1rem;
 	color: #212529;
 	text-align: left;
 	list-style: none;
 	background-color: #fff;
-	background-clip: padding-box;
 	border: 1px solid rgba(0,0,0,.15);
 	border-radius: .25rem;
 }
-.dropdown-menu.active {
-	display: block;
-}
+.dropdown-menu.active { display: block; }
+.dropdown-item:hover { color: #16181b; background-color: #f8f9fa; }
 .dropdown-item {
 	display: block;
 	width: 100%;
-	padding: .25rem 1.5rem;
-	clear: both;
+	padding: .2rem;
 	font-weight: 400;
 	color: #212529;
 	text-align: inherit;
 	white-space: nowrap;
+	text-decoration: none;
 	background-color: transparent;
 	border: 0;
 }
