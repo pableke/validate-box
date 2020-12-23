@@ -48,11 +48,11 @@ $(document).ready(function() {
 		el.addEventListener("click", ev => {
 			ev.preventDefault();
 			let rect = el.getBoundingClientRect();
-			let $el = $(el).siblings(".dropdown-menu").toggleClass("active");
-			if ((rect.left + rect.width) > window.innerWidth)
-				$el.css("right", rect.right);
+			let menu = $(el).siblings(".dropdown-menu").toggleClass("active");
+			if ((rect.left > menu.outerWidth()) && ((rect.left + menu.outerWidth()) > window.innerWidth))
+				menu.css("left", rect.right - menu.innerWidth()); //default pixels px
 			else
-				$el.css("left", rect.left);
+				menu.css("left", rect.left); //default pixels px
 		});
 		el.addEventListener("focusout", ev => {
 			$(el).siblings(".dropdown-menu").removeClass("active");
