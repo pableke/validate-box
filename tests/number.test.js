@@ -23,6 +23,10 @@ describe("Bilding ES Numbers", () => {
 		expect(valid.nb.toFloat(null)).toBeNull();
 		expect(valid.nb.toFloat("")).toBeNull();
 		expect(valid.nb.toFloat("0")).toBe(0);
+		expect(valid.nb.toFloat("3j")).toBe(3);
+		expect(valid.nb.toFloat("wrj")).toBe(null);
+		expect(valid.nb.toFloat("dfa88wrj")).toBe(88);
+		expect(valid.nb.toFloat("dfa88wrj,9ij")).toBe(88.9);
 	});
 
 	const LONG = "5.398.245.163,75";

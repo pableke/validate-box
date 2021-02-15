@@ -67,12 +67,12 @@ function NumberBox(lang) {
 	function _toNumber(str, d, n) {
 		str = fnTrim(str);
 		if (!str) return null;
-		var separator = str.lastIndexOf(d);
-		var sign = (str.charAt(0) == "-") ? "-" : EMPTY;
-		var num = parseFloat(sign + ((separator < 0)
-										? str.replace(RE_SECTION, EMPTY) 
-										: (str.substr(0, separator).replace(RE_SECTION, EMPTY) + DOT + str.substr(separator + 1))));
-		return fnRound(num, n); //default 2 decimals
+		let separator = str.lastIndexOf(d);
+		let sign = (str.charAt(0) == "-") ? "-" : EMPTY;
+		let whole = (separator < 0) ? str : str.substr(0, separator); //extract whole part
+		let decimal = (separator < 0) ? EMPTY : (DOT + str.substring(separator + 1)); //decimal part
+		let num = parseFloat(sign + whole.replace(RE_SECTION, EMPTY) + decimal);
+		return isNaN(num) ? null : fnRound(num, n); //default 2 decimals
 	}
 
 	/**
