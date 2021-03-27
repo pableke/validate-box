@@ -47,7 +47,7 @@ function StringBox() {
 	this.replaceAt = function(str1, str2, i, n) { return (i < 0) ? str1 : (str1.substr(0, i) + str2 + str1.substr(i + n)); }
 	this.replaceLast = function(str1, find, str2) { return str1 ? str1.replaceAt(str1.lastIndexOf(find), find.length, str2) : str2; }
 	this.wrapAt = function(str, i, n, open, close) { return (i < 0) ? str : self.insertAt(self.insertAt(str, open, i), close, i + open.length + n); }
-	this.iwrap = function(str1, str2, open, close) { return self.wrapAt(str1, self.iIndexOf(str1, str2), str1.length, open || "<u><b>", close || "</u></b>"); }
+	this.iwrap = function(str1, str2, open, close) { return str1 && str2 && self.wrapAt(str1, self.iIndexOf(str1, str2), str2.length, open || "<u><b>", close || "</b></u>"); }
 	this.rand = function(size) { return Math.random().toString(36).substr(2, size || 8); } //random char
 	this.lopd = function(str) { return str ? ("***" + str.substr(3, 4) + "**") : str; }; //hide protect chars
 
