@@ -54,38 +54,27 @@ $(document).ready(function() {
 	$("textarea[maxlength]").keyup(fnCounter).each(fnCounter);
 
 	//Autocomplete inputs
-	function fnRender(item) { return item.nif + " - " + item.nombre; } //build text to show
-	function fnSelect(el, item) { $(el).siblings("[type=hidden]").val(item && item.idUsuario); return this; }
-	const autocompletes = {
-		source: false, //call source event
-		ac1: { url: "/usuarios.html", select: fnSelect, render: fnRender },
-		ac2: { url: "/usuarios.html", select: fnSelect, render: fnRender }
-	};
-	let acOpts;
-	let acList = $(".autocomplete").autocomplete({
+	function fnRenderUser(item) { return item.nif + " - " + item.nombre; }
+	function fnAcLoad(el, id, txt) { return !$(el).val(txt).siblings("[type=hidden]").val(id); }
+	$(".autocomplete").autocomplete({ //autocomplete for users
 		minLength: 3,
 		source: function(req, res) {
 			let loading = $(".loading").show();
-			fetch(acOpts.url + "?term=" + req.term, { method: "GET" }) //js ajax call
+			this.element.autocomplete("instance")._renderItem = function(ul, item) {
+				return $("<li></li>").append("<div>" + fnRenderUser(item) + "</div>").appendTo(ul);
+			}
+			fetch("/usuarios.html?term=" + req.term, { method: "GET" }) //js ajax call
 				.then(res => res.json()) //default response allways json
 				.then(data => { res(data.slice(0, 10)); }) //maxResults = 10
 				.catch(setDanger) //error handler
 				.finally(() => loading.fadeOut()); //allways
 		},
 		focus: function() { return false; }, //no change focus on select
-		search: function(ev, ui) { return autocompletes.source; }, //lunch source
-		select: function(ev, ui) { return !$(this).val(acOpts.select(this, ui.item).render(ui.item)); }
-	}).keydown(function(ev) {
-		acOpts = autocompletes[this.id]; //get ajax config for each element (fetch)
-		autocompletes.source = ((ev.keyCode == 8) || (ev.keyCode == 46))
-											? !!acOpts.select(this) //BACKSPACE or DELETE => reset previous id
-											: ((47 < ev.keyCode) && (ev.keyCode < 171)); //is alphanumeric? 48='0'... 170='*'
+		search: function(ev, ui) { return false; }, //lunch source
+		select: function(ev, ui) { return fnAcLoad(this, ui.item.nif, fnRenderUser(ui.item)); }
+	}).change(function(ev) {
+		this.value || fnAcLoad(this, "", "");
 	});
-	if (acList.length) {
-		acList.autocomplete("instance")._renderItem = function(ul, item) {
-			return $("<li></li>").append("<div>" + acOpts.render(item) + "</div>").appendTo(ul);
-		};
-	}
 
 	vb.add({ //add extra validators
 		usuario: fnRequired, clave: fnRequired, 
