@@ -4,13 +4,12 @@ function StringBox() {
 	const self = this; //self instance
 	//const ZEROS = "0000000000";
 	const TR1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
-	const TR2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY"; //case sensitive
-	const TR3 = "aaaaaaaaaaaaaaaaaaabeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiioooooooooooooooooouuuuuuuuuuuuuuuuccnnddrryy"; //case insensitive
-	const B64 = {
+	const TR2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY";
+	/*const B64 = {
 		xls: "data:application/vnd.ms-excel;base64,",
 		pdf: "data:application/pdf;base64,",
 		txt: "data:text/plain;base64,"
-	}
+	}*/
 
 	//helpers
 	function isstr(val) { return (typeof val === "string") || (val instanceof String); }
@@ -22,9 +21,9 @@ function StringBox() {
 		for (var i = 0; i < size; i++) {
 			var chr = str.charAt(i);
 			var j = TR1.indexOf(chr);
-			output += (j < 0) ? chr : TR3.charAt(j);
+			output += (j < 0) ? chr : TR2.charAt(j);
 		}
-		return output;
+		return output.toLowerCase();
 	}
 
 	this.isstr = isstr;
