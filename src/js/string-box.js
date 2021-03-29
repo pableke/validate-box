@@ -3,8 +3,9 @@
 function StringBox() {
 	const self = this; //self instance
 	//const ZEROS = "0000000000";
-	const tr1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
-	const tr2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY";
+	const TR1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
+	const TR2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY"; //case sensitive
+	const TR3 = "aaaaaaaaaaaaaaaaaaabeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiioooooooooooooooooouuuuuuuuuuuuuuuuccnnddrryy"; //case insensitive
 	const B64 = {
 		xls: "data:application/vnd.ms-excel;base64,",
 		pdf: "data:application/pdf;base64,",
@@ -17,11 +18,11 @@ function StringBox() {
 	function fnSize(str) { return str ? str.length : 0; } //string o array
 	function tr(str) {
 		var output = "";
-		var size = fnSize(str);
+		var size = fnSize(fnTrim(str));
 		for (var i = 0; i < size; i++) {
 			var chr = str.charAt(i);
-			var j = tr1.indexOf(chr);
-			output += (j < 0) ? chr : tr2.charAt(j);
+			var j = TR1.indexOf(chr);
+			output += (j < 0) ? chr : TR3.charAt(j);
 		}
 		return output;
 	}
@@ -29,10 +30,9 @@ function StringBox() {
 	this.isstr = isstr;
 	this.trim = fnTrim;
 	this.size = fnSize;
-	this.tr = function(str) { return tr(fnTrim(str)).toLowerCase(); };
-	this.eq = function(str1, str2) { return self.tr(str1) == self.tr(str2); }
+	this.eq = function(str1, str2) { return tr(str1) == tr(str2); }
 	this.indexOf = function(str1, str2) { return str1 ? str1.indexOf(str2) : -1; }
-	this.iIndexOf = function(str1, str2) { return self.tr(str1).indexOf(self.tr(str2)); }
+	this.iIndexOf = function(str1, str2) { return tr(str1).indexOf(tr(str2)); }
 	this.prevIndexOf = function(str1, str2, i) { return str1 ? str1.substr(0, i).lastIndexOf(str2) : -1; }
 	this.prefix = function(str1, str2) { return str1.startsWith(str2) ? str1 : (str2 + str1); }
 	this.suffix = function(str1, str2) { return str1.endsWith(str2) ? str1 : (str1 + str2); }

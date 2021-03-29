@@ -967,8 +967,9 @@ function NumberBox(lang) {
 function StringBox() {
 	const self = this; //self instance
 	//const ZEROS = "0000000000";
-	const tr1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
-	const tr2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY";
+	const TR1 = "àáâãäåāăąÀÁÂÃÄÅĀĂĄÆßèéêëēĕėęěÈÉĒĔĖĘĚìíîïìĩīĭÌÍÎÏÌĨĪĬòóôõöōŏőøÒÓÔÕÖŌŎŐØùúûüũūŭůÙÚÛÜŨŪŬŮçÇñÑþÐŔŕÿÝ";
+	const TR2 = "aaaaaaaaaAAAAAAAAAABeeeeeeeeeEEEEEEEiiiiiiiiIIIIIIIIoooooooooOOOOOOOOOuuuuuuuuUUUUUUUUcCnNdDRryY"; //case sensitive
+	const TR3 = "aaaaaaaaaaaaaaaaaaabeeeeeeeeeeeeeeeeiiiiiiiiiiiiiiiioooooooooooooooooouuuuuuuuuuuuuuuuccnnddrryy"; //case insensitive
 	const B64 = {
 		xls: "data:application/vnd.ms-excel;base64,",
 		pdf: "data:application/pdf;base64,",
@@ -981,11 +982,11 @@ function StringBox() {
 	function fnSize(str) { return str ? str.length : 0; } //string o array
 	function tr(str) {
 		var output = "";
-		var size = fnSize(str);
+		var size = fnSize(fnTrim(str));
 		for (var i = 0; i < size; i++) {
 			var chr = str.charAt(i);
-			var j = tr1.indexOf(chr);
-			output += (j < 0) ? chr : tr2.charAt(j);
+			var j = TR1.indexOf(chr);
+			output += (j < 0) ? chr : TR3.charAt(j);
 		}
 		return output;
 	}
@@ -993,10 +994,9 @@ function StringBox() {
 	this.isstr = isstr;
 	this.trim = fnTrim;
 	this.size = fnSize;
-	this.tr = function(str) { return tr(fnTrim(str)).toLowerCase(); };
-	this.eq = function(str1, str2) { return self.tr(str1) == self.tr(str2); }
+	this.eq = function(str1, str2) { return tr(str1) == tr(str2); }
 	this.indexOf = function(str1, str2) { return str1 ? str1.indexOf(str2) : -1; }
-	this.iIndexOf = function(str1, str2) { return self.tr(str1).indexOf(self.tr(str2)); }
+	this.iIndexOf = function(str1, str2) { return tr(str1).indexOf(tr(str2)); }
 	this.prevIndexOf = function(str1, str2, i) { return str1 ? str1.substr(0, i).lastIndexOf(str2) : -1; }
 	this.prefix = function(str1, str2) { return str1.startsWith(str2) ? str1 : (str2 + str1); }
 	this.suffix = function(str1, str2) { return str1.endsWith(str2) ? str1 : (str1 + str2); }
@@ -1011,7 +1011,7 @@ function StringBox() {
 	this.replaceAt = function(str1, str2, i, n) { return (i < 0) ? str1 : (str1.substr(0, i) + str2 + str1.substr(i + n)); }
 	this.replaceLast = function(str1, find, str2) { return str1 ? str1.replaceAt(str1.lastIndexOf(find), find.length, str2) : str2; }
 	this.wrapAt = function(str, i, n, open, close) { return (i < 0) ? str : self.insertAt(self.insertAt(str, open, i), close, i + open.length + n); }
-	this.iwrap = function(str1, str2, open, close) { return self.wrapAt(str1, self.iIndexOf(str1, str2), str1.length, open || "<u><b>", close || "</u></b>"); }
+	this.iwrap = function(str1, str2, open, close) { return str1 && str2 && self.wrapAt(str1, self.iIndexOf(str1, str2), str2.length, open || "<u><b>", close || "</b></u>"); }
 	this.rand = function(size) { return Math.random().toString(36).substr(2, size || 8); } //random char
 	this.lopd = function(str) { return str ? ("***" + str.substr(3, 4) + "**") : str; }; //hide protect chars
 
@@ -1432,38 +1432,27 @@ $(document).ready(function() {
 	$("textarea[maxlength]").keyup(fnCounter).each(fnCounter);
 
 	//Autocomplete inputs
-	function fnRender(item) { return item.nif + " - " + item.nombre; } //build text to show
-	function fnSelect(el, item) { $(el).siblings("[type=hidden]").val(item && item.idUsuario); return this; }
-	const autocompletes = {
-		source: false, //call source event
-		ac1: { url: "/usuarios.html", select: fnSelect, render: fnRender },
-		ac2: { url: "/usuarios.html", select: fnSelect, render: fnRender }
-	};
-	let acOpts;
-	let acList = $(".autocomplete").autocomplete({
+	function fnRenderUser(item) { return item.nif + " - " + item.nombre; }
+	function fnAcLoad(el, id, txt) { return !$(el).val(txt).siblings("[type=hidden]").val(id); }
+	$(".autocomplete").autocomplete({ //autocomplete for users
 		minLength: 3,
 		source: function(req, res) {
 			let loading = $(".loading").show();
-			fetch(acOpts.url + "?term=" + req.term, { method: "GET" }) //js ajax call
+			this.element.autocomplete("instance")._renderItem = function(ul, item) {
+				return $("<li></li>").append("<div>" + fnRenderUser(item) + "</div>").appendTo(ul);
+			}
+			fetch("/usuarios.html?term=" + req.term, { method: "GET" }) //js ajax call
 				.then(res => res.json()) //default response allways json
 				.then(data => { res(data.slice(0, 10)); }) //maxResults = 10
 				.catch(setDanger) //error handler
 				.finally(() => loading.fadeOut()); //allways
 		},
 		focus: function() { return false; }, //no change focus on select
-		search: function(ev, ui) { return autocompletes.source; }, //lunch source
-		select: function(ev, ui) { return !$(this).val(acOpts.select(this, ui.item).render(ui.item)); }
-	}).keydown(function(ev) {
-		acOpts = autocompletes[this.id]; //get ajax config for each element (fetch)
-		autocompletes.source = ((ev.keyCode == 8) || (ev.keyCode == 46))
-											? !!acOpts.select(this) //BACKSPACE or DELETE => reset previous id
-											: ((47 < ev.keyCode) && (ev.keyCode < 171)); //is alphanumeric? 48='0'... 170='*'
+		search: function(ev, ui) { return false; }, //lunch source
+		select: function(ev, ui) { return fnAcLoad(this, ui.item.nif, fnRenderUser(ui.item)); }
+	}).change(function(ev) {
+		this.value || fnAcLoad(this, "", "");
 	});
-	if (acList.length) {
-		acList.autocomplete("instance")._renderItem = function(ul, item) {
-			return $("<li></li>").append("<div>" + acOpts.render(item) + "</div>").appendTo(ul);
-		};
-	}
 
 	vb.add({ //add extra validators
 		usuario: fnRequired, clave: fnRequired, 
